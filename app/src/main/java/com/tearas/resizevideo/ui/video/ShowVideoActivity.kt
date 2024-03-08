@@ -22,12 +22,8 @@ class ShowVideoActivity : BaseActivity<ActivityShowVideoBinding>() {
                 getString(R.string.player),
                 getDrawable(R.drawable.baseline_arrow_back_24)!!
             )
-            val path = intent.getStringExtra("path")
-            val mediaController = MediaController(this@ShowVideoActivity)
-            mediaController.setAnchorView(video)
-            video.setMediaController(mediaController)
-            video.setVideoPath(path)
-            video.start()
+            val path = intent.getStringExtra("path")!!
+            video.setPathVideo(path)
         }
     }
 

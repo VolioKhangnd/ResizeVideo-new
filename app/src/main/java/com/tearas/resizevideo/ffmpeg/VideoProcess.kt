@@ -51,12 +51,19 @@ class VideoProcess {
             mediaInfo: MediaInformation,
             executionId: Long,
             pathOutput: String,
-         ): MediaInfo {
+        ): MediaInfo {
             val filename = mediaInfo.filename.substringAfterLast("/")
             val size = mediaInfo.size.toLong()
-            val resolution = if (optionMedia.mediaAction != MediaAction.JoinVideo) {
-                Resolution(mediaInfo.streams[0].width.toInt(), mediaInfo.streams[0].height.toInt())
-            } else null
+            val resolution = try {
+                if (optionMedia.mediaAction != MediaAction.JoinVideo) {
+                    Resolution(
+                        mediaInfo.streams[0].width.toInt(),
+                        mediaInfo.streams[0].height.toInt()
+                    )
+                } else null
+            } catch (e: NullPointerException) {
+                Resolution(0, 0)
+            }
             val durationFormatted = Utils.formatTime(duration.toLong() * 1000)
             val extension = pathOutput.substringAfterLast(".")
             val bitrate = mediaInfo.bitrate.toFloat().toLong()
@@ -186,7 +193,7 @@ class VideoProcess {
                             session.sessionId,
                             pathOutput,
 
-                        )
+                            )
                     )
                     countSuccess += 1
                     iProcess.processElement(currentIndex, 100)

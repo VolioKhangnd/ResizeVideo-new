@@ -11,6 +11,9 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import com.arthenica.ffmpegkit.FFprobeKit
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
+import com.google.android.material.tabs.TabLayoutMediator
 import com.jaygoo.widget.OnRangeChangedListener
 import com.jaygoo.widget.RangeSeekBar
 import com.tearas.resizevideo.ui.main.MainActivity
@@ -19,6 +22,7 @@ import com.tearas.resizevideo.R
 import com.tearas.resizevideo.databinding.ActivityCutTrimBinding
 import com.tearas.resizevideo.ffmpeg.MediaAction
 import com.tearas.resizevideo.model.OptionMedia
+import com.tearas.resizevideo.ui.OnControllerVideo
 import com.tearas.resizevideo.ui.select_compress.SelectCompressActivity
 import com.tearas.resizevideo.utils.IntentUtils.getActionMedia
 import com.tearas.resizevideo.utils.IntentUtils.getOptionMedia
@@ -33,13 +37,13 @@ class CutTrimActivity : BaseActivity<ActivityCutTrimBinding>() {
         return ActivityCutTrimBinding.inflate(layoutInflater)
     }
 
-    private var idButtonClicked: Int = R.id.trim
     private var left = 0f
     private var right = 0f
     private var isPlaying: Boolean = false
     private lateinit var path: String
     private lateinit var optionMedia: OptionMedia
     private lateinit var runnable: Runnable
+    private var idClick = R.id.cutVideo
     override fun initData() {
         optionMedia = intent.getOptionMedia()!!
         val media = optionMedia.dataOriginal[0]
@@ -50,7 +54,6 @@ class CutTrimActivity : BaseActivity<ActivityCutTrimBinding>() {
     override fun initView() {
 
         binding.apply {
-//            includeCutTrim.mCutTrim.setBackgroundColor(getColorConfig())
             setToolbar(
                 binding.toolbar,
                 "Edit Video",
@@ -59,23 +62,54 @@ class CutTrimActivity : BaseActivity<ActivityCutTrimBinding>() {
 
             setUpDefaultRangeSeekBar(path)
             setAdapterFrameVideo()
-            video.setVideoPath(path)
-            handleButtonClick(R.anim.trim_transition, ::setUpUITrimVideo, trim, cut)
+            video.setPathVideo(path)
+            video.setOnVideoListener(object : OnControllerVideo{
+                override fun onPause() {
+                    handler.removeCallbacksAndMessages(null)
+                }
 
-            cut.setOnClickListener {
-                handleButtonClick(R.anim.cut_transition, ::setUpUICutVideo, cut, trim)
-            }
+                override fun onStart() {
+                    handler.removeCallbacksAndMessages(null)
+                    handler.post(runnable)
+                }
 
-            trim.setOnClickListener {
-                handleButtonClick(R.anim.trim_transition, ::setUpUITrimVideo, trim, cut)
+            })
+            setColorIndicator(idClick)
+            setUpUICutVideo()
+            setColorIndicator(idClick)
+            handler.removeCallbacksAndMessages(null)
+            handler.post(runnable)
+            cutVideo.setOnClickListener {
+                idClick = it.id
+                setUpUICutVideo()
+                setColorIndicator(idClick)
+                handler.removeCallbacksAndMessages(null)
+                handler.post(runnable)
             }
-            trim.performClick()
-            frameLayout.setOnClickListener {
-                isPlaying = !isPlaying
-                isVisibilityPlaying()
-                if (isPlaying) video.start() else video.pause()
+            trimVideo.setOnClickListener {
+                idClick = it.id
+                setUpUITrimVideo()
+                setColorIndicator(idClick)
+                handler.removeCallbacksAndMessages(null)
+                handler.post(runnable)
             }
         }
+    }
+
+    private fun setColorIndicator(id: Int) {
+        val color1: Int
+        val color2: Int
+
+        if (id != R.id.trimVideo) {
+            color1 = getColor(R.color.buttonTintCb)
+            color2 = getColor(R.color.bg_click)
+        } else {
+            color1 = getColor(R.color.bg_click)
+            color2 = getColor(R.color.buttonTintCb)
+        }
+
+        binding.indicator1.setBackgroundColor(color1)
+        binding.indicator2.setBackgroundColor(color2)
     }
 
     override fun getMenu(): Int {
@@ -105,7 +139,7 @@ class CutTrimActivity : BaseActivity<ActivityCutTrimBinding>() {
     private fun createOptionMedia(): OptionMedia {
         return OptionMedia(
             dataOriginal = optionMedia.dataOriginal,
-            mediaAction = if (idButtonClicked == R.id.trim) MediaAction.CutOrTrim.TrimVideo else MediaAction.CutOrTrim.CutVideo,
+            mediaAction = if (idClick == R.id.trimVideo) MediaAction.CutOrTrim.TrimVideo else MediaAction.CutOrTrim.CutVideo,
             endTime = (right / 1000).toLong(),
             startTime = (left / 1000).toLong()
         )
@@ -118,12 +152,13 @@ class CutTrimActivity : BaseActivity<ActivityCutTrimBinding>() {
             handler.post(runnable)
         }
         runnable = Runnable {
-            if (idButtonClicked == R.id.trim) {
-                binding.video.seekTo(left.toInt())
+            if (idClick == R.id.trimVideo) {
+                binding.video.setCurrentProgress(left.toInt())
                 handler.postDelayed(runnable1, (right - left).toLong())
             } else {
                 val duration =
-                    FFprobeKit.getMediaInformation(path).mediaInformation.duration.toFloat().toLong() * 1000
+                    FFprobeKit.getMediaInformation(path).mediaInformation.duration.toFloat()
+                        .toLong() * 1000
                 var firstPartStartTime = 0L
                 var firstPartEndTime = 0L
                 var secondPartStartTime = 0L
@@ -141,9 +176,9 @@ class CutTrimActivity : BaseActivity<ActivityCutTrimBinding>() {
                     secondPartEndTime = duration
                 }
 
-                binding.video.seekTo(firstPartStartTime.toInt())
+                binding.video.setCurrentProgress(firstPartStartTime.toInt())
                 handler.postDelayed({
-                    binding.video.seekTo(secondPartStartTime.toInt())
+                    binding.video.setCurrentProgress(secondPartStartTime.toInt())
                 }, firstPartEndTime)
 
                 handler.postDelayed({
@@ -151,33 +186,6 @@ class CutTrimActivity : BaseActivity<ActivityCutTrimBinding>() {
                 }, secondPartEndTime)
             }
         }
-    }
-
-    private fun handleButtonClick(
-        transitionResId: Int,
-        uiSetupFunction: () -> Unit,
-        activeButton: MaterialButton,
-        inactiveButton: MaterialButton,
-    ) {
-        if (idButtonClicked != activeButton.id) {
-            val animation = AnimationUtils.loadAnimation(this@CutTrimActivity, transitionResId)
-            binding.overlay.startAnimation(animation)
-
-
-            activeButton.setTextColor(Color.WHITE)
-            activeButton.iconTint = ColorStateList.valueOf(Color.WHITE)
-
-            inactiveButton.setTextColor(Color.GRAY)
-            inactiveButton.iconTint = ColorStateList.valueOf(Color.GRAY)
-            uiSetupFunction()
-            idButtonClicked = activeButton.id
-            handler.removeCallbacksAndMessages(null)
-            handler.post(runnable)
-        }
-    }
-
-    private fun isVisibilityPlaying() {
-        binding.play.visibility = if (isPlaying) View.GONE else View.VISIBLE
     }
 
     private fun setUpUICutVideo() {
@@ -212,9 +220,9 @@ class CutTrimActivity : BaseActivity<ActivityCutTrimBinding>() {
     private fun setThumbAndColorProgress(isTrim: Boolean) {
         binding.includeCutTrim.apply {
             rangeProgress.leftSeekBar.thumbDrawableId =
-                if (isTrim) R.drawable.custom_thumb else R.drawable.custom_thumb_1
+                if (isTrim) R.drawable.custom_thumb else R.drawable.custom_thumb
             rangeProgress.rightSeekBar.thumbDrawableId =
-                if (!isTrim) R.drawable.custom_thumb else R.drawable.custom_thumb_1
+                if (!isTrim) R.drawable.custom_thumb else R.drawable.custom_thumb
             if (isTrim) {
                 rangeProgress.setProgressColor(getColor(R.color.maintream1), Color.TRANSPARENT)
             } else {
@@ -227,7 +235,7 @@ class CutTrimActivity : BaseActivity<ActivityCutTrimBinding>() {
         if (isDarkMode()) {
             getColor(R.color.bg_dark_screen_2)
         } else {
-            Color.WHITE
+            Color.parseColor("#FF9800")
         }
 
     private fun setProgress() {
@@ -310,7 +318,7 @@ class CutTrimActivity : BaseActivity<ActivityCutTrimBinding>() {
         binding.includeCutTrim.apply {
             val array = arrayOf(rangeTop, rangeBottom, rangeProgress, rangeTime)
             array.forEach {
-                it.setRange(0f, timeSecond);
+                it.setRange(0f, timeSecond)
                 it.setProgress(0f, timeSecond)
             }
         }
