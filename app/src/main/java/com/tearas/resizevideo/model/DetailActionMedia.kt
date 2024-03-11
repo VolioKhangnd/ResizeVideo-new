@@ -27,7 +27,7 @@ fun Context.getListDetailsActionMedia(): List<DetailActionMedia> {
         ),
         DetailActionMedia(
             MediaAction.JoinVideo,
-            "Join VIdeo",
+            "Join Video",
             getDrawable(R.drawable.ic_join_video)!!,
             getColor(R.color.bg_join_video),
             getColor(R.color.bg_ic_join_video)

@@ -15,6 +15,7 @@ import com.jaygoo.widget.RangeSeekBar
 import com.tearas.resizevideo.core.BaseAdapter
 import com.tearas.resizevideo.R
 import com.tearas.resizevideo.databinding.ItemRsBinding
+import com.tearas.resizevideo.ffmpeg.MediaAction
 import com.tearas.resizevideo.model.MediaInfo
 import com.tearas.resizevideo.ui.video.ShowVideoActivity
 import com.tearas.resizevideo.utils.Utils.loadImage
@@ -42,9 +43,12 @@ class ResultAdapter(
         this.binding = binding
         val mediaBefore = item.first
         val mediaAfter = item.second
+        Log.d("sjahdjksak", mediaBefore.toString())
         if (mediaAfter.isVideo) binding.resolutionAfter.text = mediaAfter.resolution.toString()
         if (mediaBefore.isVideo) binding.resolutionBefore.text = mediaBefore.resolution.toString()
         val sizeBefore = if (this.sizeBefore != 0L) this.sizeBefore else mediaBefore.size
+
+        hideReplace()
 
         displayMediaThumbnail(mediaBefore, mediaAfter)
         setSeekBarAndSize(
@@ -64,6 +68,11 @@ class ResultAdapter(
         moreClickHandler(binding)
 
         setOptionClickListeners(item)
+    }
+
+    private fun hideReplace() {
+        binding.option.replace.visibility =
+            if (sizeBefore == 0L) View.VISIBLE else View.GONE
     }
 
     private fun displayMediaThumbnail(mediaBefore: MediaInfo, mediaAfter: MediaInfo) {
@@ -90,7 +99,8 @@ class ResultAdapter(
         binding.more.setOnClickListener {
             getVisibilityOption(binding).let {
                 if (!it) return@let
-                val animUtils = AnimationUtils.loadAnimation(context, R.anim.anim_open_option_video_compressed)
+                val animUtils =
+                    AnimationUtils.loadAnimation(context, R.anim.anim_open_option_video_compressed)
                 this.binding.option.root.startAnimation(animUtils)
             }
         }

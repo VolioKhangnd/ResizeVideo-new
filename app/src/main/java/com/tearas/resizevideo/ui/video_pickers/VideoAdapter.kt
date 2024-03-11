@@ -42,7 +42,7 @@ class VideoAdapter(
             time.text = item.time
 
             Glide.with(context)
-                .load("file:///${item.path}")
+                .load("${item.path}")
                 .error(ContextCompat.getDrawable(context, R.drawable.img))
                 .into(thumbnail)
 

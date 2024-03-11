@@ -42,7 +42,7 @@ class ExtractAudioActivity : BaseActivity<ActivityExtractAudioBinding>(), IProce
         val videoCommandProcessor = VideoCommandProcessor(
             this@ExtractAudioActivity,
             handle.getPathVideoCacheFolder(),
-            handle.getPathVideoCacheFolder()
+            handle.getPathAudioCacheFolder()
         )
 
         val videoProcess = VideoProcess.Builder(this@ExtractAudioActivity, media)

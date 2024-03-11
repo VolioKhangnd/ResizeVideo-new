@@ -2,9 +2,9 @@
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/BackgroundFastOptions"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/maintream"
     android:orientation="vertical"
     tools:context=".ui.fast_forward.FastForwardOptionsActivity">
 
@@ -13,8 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/maintream"
-        app:title="Fast Forward Options" app:titleTextColor="@color/black"
-  />
+        app:title="Fast Forward Options"
+        app:titleTextColor="@color/black" />
 
     <androidx.cardview.widget.CardView
         style="@style/CustomBgVAudioOptions"
@@ -27,21 +27,22 @@
         app:cardElevation="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+
+            android:layout_height="wrap_content"
+            android:background="@color/maintream">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView2"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:cardCornerRadius="10dp"
+                app:cardCornerRadius="25dp"
                 app:cardElevation="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintDimensionRatio="6:4"
+                app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_percent="0.4">
+                app:layout_constraintWidth_percent="0.3">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/thumbnail"
@@ -68,7 +69,8 @@
                     android:ellipsize="middle"
                     android:lines="1"
                     android:text="nguyen duy khang"
-                    android:textSize="17sp" />
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -114,19 +116,19 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        style="@style/CustomBgVAudioOptions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        app:cardCornerRadius="5dp"
+        app:cardCornerRadius="15dp"
         app:cardElevation="0dp">
 
         <LinearLayout
             android:id="@+id/linearLayout3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/bg_unclick"
             android:orientation="vertical"
             android:padding="10sp"
             app:layout_constraintTop_toBottomOf="@+id/include"
@@ -136,7 +138,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/select_compression"
-                android:textColor="@color/maintream"
+                android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -153,7 +155,7 @@
                     android:checked="true"
                     android:text="@string/without_compression"
                     android:textStyle="bold"
-                    app:buttonTint="@color/maintream" />
+                    app:buttonTint="@color/buttonTintCb" />
 
                 <RadioButton
                     android:id="@+id/rdi2"
@@ -161,7 +163,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/smail_size"
                     android:textStyle="bold"
-                    app:buttonTint="@color/maintream" />
+                    app:buttonTint="@color/buttonTintCb" />
 
                 <RadioButton
                     android:id="@+id/rdi3"
@@ -171,7 +173,7 @@
                     android:text="@string/medium_size"
 
                     android:textStyle="bold"
-                    app:buttonTint="@color/maintream" />
+                    app:buttonTint="@color/buttonTintCb" />
 
                 <RadioButton
                     android:id="@+id/rdi4"
@@ -179,7 +181,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/large_size"
                     android:textStyle="bold"
-                    app:buttonTint="@color/maintream" />
+                    app:buttonTint="@color/buttonTintCb" />
 
             </RadioGroup>
         </LinearLayout>
@@ -192,14 +194,17 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        app:cardCornerRadius="5dp"
+        app:cardCornerRadius="15dp"
         app:cardElevation="0dp">
 
         <LinearLayout
             android:id="@+id/linearLayout4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/bg_unclick"
             android:orientation="vertical"
+
+
             android:padding="10sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -209,7 +214,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/select_compression"
-                android:textColor="@color/maintream"
+                android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -218,22 +223,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="@string/with_audio" />
+                android:text="@string/with_audio"
+                app:buttonTint="@color/buttonTintCb" />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/continues"
+        style="@style/TextAppearance.Material3.TitleLarge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:padding="15dp"
-
+        android:backgroundTint="@color/orangerYellow"
         android:text="@string/continues"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />

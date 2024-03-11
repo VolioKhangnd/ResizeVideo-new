@@ -50,6 +50,7 @@ interface IVideo {
     fun getPathExternalFolderAudio(): String
     fun createFolder(nameFolder: String, isVideo: Boolean): String
     fun replaceFiles(pathInput: String, pathOutput: String): File?
+    fun getPathAudioCacheFolder(): String
 }
 
 class HandleMediaVideo(private val context: Context) : IVideo {
@@ -109,6 +110,12 @@ class HandleMediaVideo(private val context: Context) : IVideo {
 
     override fun getPathVideoCacheFolder(): String {
         val file = File(context.cacheDir.path, "Videos")
+        if (file.exists() || file.mkdirs()) return file.path
+        return ""
+    }
+
+    override fun getPathAudioCacheFolder(): String {
+        val file = File(context.cacheDir.path, "Audio")
         if (file.exists() || file.mkdirs()) return file.path
         return ""
     }
@@ -201,7 +208,7 @@ class HandleMediaVideo(private val context: Context) : IVideo {
                         formatTime,
                         getString(getColumnIndex(Media.MIME_TYPE)).split("/")[1],
                         getLong(getColumnIndex(Media.BITRATE)),
-                        false
+                        true
                     )
                     if (formatTime != "00:00:00") {
                         videos.add(mediaInfo)

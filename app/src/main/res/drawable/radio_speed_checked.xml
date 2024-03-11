@@ -4,9 +4,9 @@
     <size
         android:width="50dp"
         android:height="50dp" />
-    <solid android:color="@color/bg_btn_speed" />
+    <solid android:color="@color/maintream" />
     <corners android:radius="50dp" />
     <stroke
         android:width="2dp"
-        android:color="@color/maintream" />
+        android:color="@color/buttonTintCb" />
 </shape>

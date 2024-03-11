@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.BaseAdapter
 import android.widget.Spinner
@@ -14,6 +15,7 @@ import com.tearas.resizevideo.core.BaseBottomSheetFragment
 import com.tearas.resizevideo.databinding.FragmentOptionSettingsJoinBottomSheetBinding
 import com.tearas.resizevideo.model.Resolution
 import com.tearas.resizevideo.utils.Utils
+import java.util.Locale
 
 class OptionSettingsJoinBottomSheetFragment :
     BaseBottomSheetFragment<FragmentOptionSettingsJoinBottomSheetBinding>(R.layout.fragment_option_settings_join_bottom_sheet) {
@@ -33,26 +35,50 @@ class OptionSettingsJoinBottomSheetFragment :
         }
     }
 
+    private var formatBefore = "RECOMMENDED"
+
     override fun initView() {
         binding.resolution.text = resolution.toString()
         binding.totalTime.text = Utils.formatTime(totalTime!!)
-        binding.apply {
-            spnFormat.setAdapterSpinner(false)
-            spnCodec.setAdapterSpinner(true, "mp4")
-            spnCodec.setSelection(0)
-            spnFormat.setSelection(0)
+        try {
+            binding.apply {
+                spnFormat.setAdapterSpinner(false)
+                spnCodec.setAdapterSpinner(true, "mp4")
+                spnCodec.setSelection(0)
+                spnFormat.setSelection(0)
+
+                spnFormat.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>,
+                        view: View,
+                        position: Int,
+                        id: Long
+                    ) {
+                        if (formatBefore != spnFormat.selectedItem && formatBefore != "RECOMMENDED") spnCodec.setAdapterSpinner(
+                            true,
+                            spnFormat.selectedItem as String
+                        )
+                        formatBefore = spnFormat.selectedItem as String
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>) {
+
+                    }
+                }
 
 
-            done.setOnClickListener {
-                if (title.text.isNotBlank()) {
-                    dismiss()
-                    (requireActivity() as JoinVideoActivity).onDone(
-                        title.text.toString(),
-                        spnFormat.selectedItem.toString(),
-                        spnCodec.selectedItem.toString()
-                    )
+                done.setOnClickListener {
+                    if (title.text.isNotBlank() && isAdded) {
+                        dismiss()
+                        (requireActivity() as JoinVideoActivity).onDone(
+                            title.text.toString(),
+                            spnFormat.selectedItem.toString(),
+                            if (spnCodec.selectedItemPosition == 0) null else spnCodec.selectedItem.toString()
+                        )
+                    }
                 }
             }
+        } catch (e: Exception) {
         }
     }
 
@@ -69,13 +95,14 @@ class OptionSettingsJoinBottomSheetFragment :
     private fun Spinner.setAdapterSpinner(isCodec: Boolean, format: String = "mp3") {
         var list = if (!isCodec) Utils.formatVideos.map { it.key }
             .toList() else Utils.formatVideos[format]!!.toList()
-        list = ArrayList(list).apply { add(0, "RECOMMENDED") }
+        list = ArrayList(list).apply { if (isCodec) add(0, "RECOMMENDED") }
         val adapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item,
             list
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
         this.adapter = adapter
     }
 }

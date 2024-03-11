@@ -32,6 +32,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:progressColor="#fbba67"
             app:progressColorDefault="#ccc2b3"
+            app:strokeWidth="30dp"
+            app:strokeWidthDefault="30dp"
             app:textSizeProgress="25dp"
             app:textStyleProgress="bold"
             app:toProgress="25" />
@@ -49,12 +51,12 @@
             android:id="@+id/viewPager"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:listitem="@layout/item_video_compressing"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/position" />
+            app:layout_constraintTop_toBottomOf="@+id/position"
+            tools:listitem="@layout/item_video_compressing" />
 
 
         <FrameLayout

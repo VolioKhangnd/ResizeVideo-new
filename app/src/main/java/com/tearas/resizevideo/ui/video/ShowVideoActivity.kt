@@ -1,14 +1,10 @@
 package com.tearas.resizevideo.ui.video
 
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
-import android.widget.MediaController
 import com.tearas.resizevideo.R
 import com.tearas.resizevideo.core.BaseActivity
 import com.tearas.resizevideo.databinding.ActivityShowVideoBinding
+import com.tearas.resizevideo.ui.VideoController
 
 class ShowVideoActivity : BaseActivity<ActivityShowVideoBinding>() {
     override fun getViewBinding(): ActivityShowVideoBinding {
@@ -22,9 +18,14 @@ class ShowVideoActivity : BaseActivity<ActivityShowVideoBinding>() {
                 getString(R.string.player),
                 getDrawable(R.drawable.baseline_arrow_back_24)!!
             )
-            val path = intent.getStringExtra("path")!!
-            video.setPathVideo(path)
+            showVideo()
         }
+    }
+
+    private fun showVideo() {
+        val path = intent.getStringExtra("path")!!
+        val videoController = VideoController(binding.video)
+        videoController.setUpVideoController(path)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

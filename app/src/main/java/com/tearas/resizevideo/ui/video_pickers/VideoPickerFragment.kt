@@ -87,7 +87,6 @@ class VideoPickerFragment :
     }
 
     private fun submitData(orderBy: String) {
-        Log.d("óakdokosad",orderBy)
         adapter.submitData = handlerVideo.getAllVideo(orderBy)
         size = adapter.submitData.size
     }

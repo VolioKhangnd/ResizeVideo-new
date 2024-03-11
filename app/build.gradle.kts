@@ -77,7 +77,9 @@ android {
 
 
 dependencies {
-
+    implementation("androidx.media3:media3-exoplayer:1.3.0")
+    implementation("androidx.media3:media3-exoplayer-dash:1.3.0")
+    implementation("androidx.media3:media3-ui:1.3.0")
     implementation(files("libs/adshelper.aar"))
     implementation("androidx.multidex:multidex:2.0.1")
     implementation("com.google.android.gms:play-services-ads-identifier:18.0.1")

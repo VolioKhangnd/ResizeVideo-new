@@ -104,7 +104,7 @@ class MoreBottomSheetFragment(private val mediaInfo: MediaInfo, private val onDe
                     .into(binding.thumbnail);
             } else {
                 Glide.with(this@MoreBottomSheetFragment)
-                    .load("file:///" + mediaInfo.path)
+                    .load( mediaInfo.path)
                     .error(requireContext().getDrawable(R.drawable.img))
                     .into(binding.thumbnail);
             }

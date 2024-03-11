@@ -9,12 +9,14 @@ import com.tearas.resizevideo.core.BaseActivity
 import com.tearas.resizevideo.core.DialogClickListener
 import com.tearas.resizevideo.databinding.ActivityProcessBinding
 import com.tearas.resizevideo.ffmpeg.IProcessFFmpeg
+import com.tearas.resizevideo.ffmpeg.MediaAction
 import com.tearas.resizevideo.ffmpeg.VideoCommandProcessor
 import com.tearas.resizevideo.ffmpeg.VideoProcess
 import com.tearas.resizevideo.model.MediaInfo
 import com.tearas.resizevideo.model.OptionCompressType
 import com.tearas.resizevideo.model.OptionMedia
 import com.tearas.resizevideo.model.StateCompression
+import com.tearas.resizevideo.ui.main.MainActivity
 import com.tearas.resizevideo.ui.result.ResultActivity
 import com.tearas.resizevideo.utils.DialogUtils
 import com.tearas.resizevideo.utils.HandleMediaVideo
@@ -64,19 +66,25 @@ class ProcessActivity : BaseActivity<ActivityProcessBinding>(), IProcessFFmpeg {
     private fun setupViewPager() {
         processAdapter.submitData = optionMedia.dataOriginal
         binding.viewPager.adapter = processAdapter
+        if (intent.getActionMedia() == MediaAction.JoinVideo) {
+            processAdapter.submitData.forEach { it.stateCompression = StateCompression.Processing }
+            processAdapter.notifyDataSetChanged()
+        }
         compressVideo()
     }
 
     private fun compressVideo() {
+        binding.progressBar.totalProgress = 100f
+        binding.progressBar.format("%.0f%%")
+
         val handle = HandleMediaVideo(this)
         val videoCommandProcessor = VideoCommandProcessor(
             this,
             handle.getPathVideoCacheFolder(),
-            handle.getPathVideoCacheFolder()
+            handle.getPathAudioCacheFolder()
         )
         listInput = videoCommandProcessor.createCommandList(optionMedia)
-        binding.progressBar.totalProgress = 100f
-        binding.progressBar.format("%.0f%%")
+
         if (optionMedia.optionCompressType is OptionCompressType.CustomFileSize) {
             VideoProcess.Builder(this, optionMedia)
                 .twoCompressAsync(listInput, this)
@@ -109,26 +117,28 @@ class ProcessActivity : BaseActivity<ActivityProcessBinding>(), IProcessFFmpeg {
 
     override fun onCurrentElement(position: Int) {
         runOnUiThread {
-            processAdapter.submitData[position].stateCompression = StateCompression.Processing
+            processAdapter.submitData[0].stateCompression = StateCompression.Processing
             processAdapter.notifyItemChanged(position)
         }
     }
 
     override fun onSuccess(currentIndex: Int, mediaInfo: MediaInfo) {
         runOnUiThread {
+            val lastItemIndex = processAdapter.itemCount - 1
             processAdapter.submitData[currentIndex].stateCompression = StateCompression.Success
             mediaInfoResults.add(mediaInfo)
-            processAdapter.notifyItemMoved(currentIndex, processAdapter.itemCount - 1)
-            Collections.swap(
-                processAdapter.submitData,
-                currentIndex,
-                processAdapter.itemCount - 1
-            )
+            processAdapter.notifyItemMoved(0, lastItemIndex)
+            Collections.swap(processAdapter.submitData, 0, lastItemIndex)
         }
     }
 
     private val mediaInfoResults: ArrayList<MediaInfo> = ArrayList()
     override fun onFinish() {
+        if (mediaInfoResults.isEmpty()) {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+        }
         val intent = Intent(this, ResultActivity::class.java)
         intent.passMediaOutput(mediaInfoResults)
         intent.passMediaInput(this.intent.getOptionMedia()!!.dataOriginal)
@@ -139,12 +149,16 @@ class ProcessActivity : BaseActivity<ActivityProcessBinding>(), IProcessFFmpeg {
 
     override fun onFailure(position: Int, error: String) {
         runOnUiThread {
+            if (intent.getActionMedia() == MediaAction.JoinVideo) {
+                processAdapter.submitData.forEach { it.stateCompression = StateCompression.Failure }
+                processAdapter.notifyDataSetChanged()
+                onFinish()
+            }
+            val lastItemIndex = processAdapter.itemCount - 1
             processAdapter.submitData[position].stateCompression = StateCompression.Failure
             processAdapter.notifyItemChanged(position)
-            if (position + 1 < processAdapter.itemCount) {
-                Collections.swap(processAdapter.submitData, position, processAdapter.itemCount - 1)
-                processAdapter.notifyItemMoved(position, processAdapter.itemCount - 1)
-            }
+            Collections.swap(processAdapter.submitData, position, lastItemIndex)
+            processAdapter.notifyItemMoved(position, lastItemIndex)
         }
     }
 }

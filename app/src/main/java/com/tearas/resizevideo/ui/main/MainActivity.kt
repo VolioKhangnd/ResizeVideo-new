@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -27,12 +28,14 @@ import com.tearas.resizevideo.ui.compressed.CompressedActivity
 import com.tearas.resizevideo.ui.extract_audio.ShowAudioActivity
 import com.tearas.resizevideo.ui.setting.SettingActivity
 import com.tearas.resizevideo.ui.video_pickers.MainPickerActivity
+import com.tearas.resizevideo.utils.HandleMediaVideo
 import com.tearas.resizevideo.utils.IntentUtils.passActionMedia
 import com.tearas.resizevideo.utils.READ_EXTERNAL_STORAGE
 import com.tearas.resizevideo.utils.READ_MEDIA_VIDEO
 import com.tearas.resizevideo.utils.RequestPermission
 import com.tearas.resizevideo.utils.WRITE_EXTERNAL_STORAGE
 import com.tearas.resizevideo.utils.checkPermission
+import java.io.File
 
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
@@ -58,6 +61,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             })
             mTab.attach(viewPager, "Home", "Files")
             mTab.setTabSelected(0)
+            val handle = HandleMediaVideo(this@MainActivity)
+
+            val file = File(handle.getPathVideoCacheFolder())
+            file.listFiles().forEach {
+                Log.d("dfkjsdlkfjsdlkfjl", it.name)
+            }
+
         }
     }
 

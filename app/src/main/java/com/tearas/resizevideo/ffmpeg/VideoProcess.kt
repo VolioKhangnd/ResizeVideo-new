@@ -33,6 +33,8 @@ class VideoProcess {
         private var pass1: String = ""
         private var pass2: String = ""
         private var isTwoCompress: Boolean = false
+        private val countCompress
+            get() = durations.size
 
         init {
             FFmpegKitConfig.enableStatisticsCallback { newStatistics ->
@@ -156,7 +158,7 @@ class VideoProcess {
                     pathOutputs.add(command.substring(command.lastIndexOf(" ") + 1))
                     this.commands.addAll(listOf(pass1, pass2))
                 } else {
-                    iProcess.onFailure(currentIndex,"Invalid double compression command syntax")
+                    iProcess.onFailure(currentIndex, "Invalid double compression command syntax")
                     return
                 }
             }
@@ -192,20 +194,18 @@ class VideoProcess {
                             mediaInfo.mediaInformation,
                             session.sessionId,
                             pathOutput
-                            )
+                        )
                     )
                     countSuccess += 1
                     iProcess.processElement(currentIndex, 100)
-                    iProcess.onSuccess(currentIndex,mediaInfoOutput[currentIndex])
+                    iProcess.onSuccess(currentIndex, mediaInfoOutput[currentIndex])
                 }
-
                 processFileSet(commands, currentIndex + 1)
-
                 count += 1
             } else {
-                iProcess.onFailure(currentIndex, "Something went wrong. Please try again.")
                 cleanupAndFail("Something went wrong. Please try again.")
                 countFailed += 1
+                if (currentIndex == countCompress) iProcess.onFinish()
             }
         }
 
@@ -216,7 +216,7 @@ class VideoProcess {
 
 
         private fun resetToZero() {
-            iProcess.onFinish( )
+            iProcess.onFinish()
             countSuccess = 0
             countFailed = 0
             duration = 0
@@ -224,7 +224,5 @@ class VideoProcess {
             commands.clear()
             mediaInfoOutput.clear()
         }
-
-
     }
 }

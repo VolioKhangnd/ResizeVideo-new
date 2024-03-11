@@ -19,6 +19,7 @@ import com.tearas.resizevideo.ffmpeg.MediaAction
 import com.tearas.resizevideo.model.MediaInfo
 import com.tearas.resizevideo.ui.compare.CompareActivity
 import com.tearas.resizevideo.ui.select_compress.ItemSpacingDecoration
+import com.tearas.resizevideo.ui.sup_vip.SubVipActivity
 import com.tearas.resizevideo.utils.DialogUtils
 import com.tearas.resizevideo.utils.HandleMediaVideo
 import com.tearas.resizevideo.utils.HandleSaveResult
@@ -32,7 +33,7 @@ import java.io.File
 import java.io.FileInputStream
 
 
-class ResultActivity : BaseActivity<ActivityResultBinding>() {
+class ResultActivity : BaseActivity<ActivityResultBinding>(), OnItemMenuMoreSelectedListen {
     override fun getViewBinding(): ActivityResultBinding {
         return ActivityResultBinding.inflate(layoutInflater)
     }
@@ -56,21 +57,6 @@ class ResultActivity : BaseActivity<ActivityResultBinding>() {
         binding.apply {
             setUpAdapterRs()
             showNativeAds(binding.container) {}
-
-            bottomnavigation.setOnNavigationItemSelectedListener {
-                handleNavigationItemSelected(it)
-                true
-            }
-        }
-    }
-
-    private fun handleNavigationItemSelected(it: MenuItem) {
-        when (it.itemId) {
-            R.id.share -> share()
-
-            R.id.replace -> showDialogReplace()
-
-            R.id.save -> handleSaveMedia()
         }
     }
 
@@ -128,7 +114,7 @@ class ResultActivity : BaseActivity<ActivityResultBinding>() {
                 mediaInfo.name
             )
             file?.let { savedFile ->
-                handleSaveResult.getPathInput(mediaInfo.path)?.let { inputPath ->
+                handleSaveResult.getPathInput(mediaInfo.path).let { inputPath ->
                     handleSaveResult.save(inputPath, savedFile.path)
                     File(mediaInfo.path).delete()
                 }
@@ -149,20 +135,8 @@ class ResultActivity : BaseActivity<ActivityResultBinding>() {
         adapter = ResultAdapter(
             this,
             if (intent.getActionMedia()!! != MediaAction.JoinVideo) 0L else mediaInput.sumOf { it.size },
-            object : OnItemMenuMoreSelectedListen {
-                override fun onRename(item: Pair<MediaInfo, MediaInfo>) {
-                    showDialogRename(item)
-                }
-
-                override fun onCompare(item: Pair<MediaInfo, MediaInfo>) {
-                    startCompareActivity(item)
-                }
-
-                override fun onReplace(item: Pair<MediaInfo, MediaInfo>) {
-                    this@ResultActivity.item = item
-                    showDialogReplace()
-                }
-            })
+            this
+        )
 
         adapter.submitData = ArrayList(mediaOutput.mapIndexed { index, mediaInfo ->
             Pair(mediaInput[index], mediaInfo)
@@ -175,9 +149,8 @@ class ResultActivity : BaseActivity<ActivityResultBinding>() {
                     pair.second.path,
                 )
             }
-        } else {
-            binding.bottomnavigation.menu.findItem(R.id.replace).isVisible = false
         }
+
         val itemSpacingDecoration = ItemSpacingDecoration(30)
         binding.rcyRs.addItemDecoration(itemSpacingDecoration)
         binding.rcyRs.adapter = adapter
@@ -205,11 +178,44 @@ class ResultActivity : BaseActivity<ActivityResultBinding>() {
         finish()
     }
 
+    override fun getMenu(): Int {
+        return R.menu.menu_bottom_rs
+    }
+
+    override fun onRename(item: Pair<MediaInfo, MediaInfo>) {
+        showDialogRename(item)
+    }
+
+    override fun onCompare(item: Pair<MediaInfo, MediaInfo>) {
+        startCompareActivity(item)
+    }
+
+    override fun onReplace(item: Pair<MediaInfo, MediaInfo>) {
+        if (proApplication.isSubVip) {
+            this@ResultActivity.item = item
+            showDialogReplace()
+        } else {
+            startActivity(Intent(this, SubVipActivity::class.java))
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-            return true
+        when (item.itemId) {
+            android.R.id.home -> {
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+                return true
+            }
+
+            R.id.share -> {
+                share()
+                return true
+            }
+
+            R.id.save -> {
+                handleSaveMedia()
+                return true
+            }
         }
 
         return super.onOptionsItemSelected(item)

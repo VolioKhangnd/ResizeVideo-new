@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.text.format.Formatter
 import android.util.Log
+import android.view.MenuItem
 import androidx.lifecycle.ViewModelProvider
 import com.tearas.resizevideo.core.BaseActivity
 import com.tearas.resizevideo.databinding.ActivitySelectCompressBinding
@@ -136,6 +137,7 @@ class SelectCompressActivity : BaseActivity<ActivitySelectCompressBinding>() {
                     mediaOption.optionCompressType = optionCompressType
                     mediaOption.bitrate = bitRate
                     mediaOption.frameRate = frameRate
+                    deselectAndSelectNew()
                 }
             }).show(supportFragmentManager, AdvanceCompressionBottomSheetFragment::class.simpleName)
     }
@@ -148,8 +150,11 @@ class SelectCompressActivity : BaseActivity<ActivitySelectCompressBinding>() {
 
     private fun createOptionMedia() = mediaOption.copy(
         optionCompressType = optionSelected.type,
-        mimetype = "mp4",
         newResolution = if (optionSelected.type == OptionCompressType.Custom) newResolution else Resolution(),
         fileSize = fileSize!!
     )
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) finish()
+        return super.onOptionsItemSelected(item)
+    }
 }

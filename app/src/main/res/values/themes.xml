@@ -25,10 +25,7 @@
 
     </style>
 
-    <style name="StyleSpeed">
-        <item name="android:background">@drawable/radio_speed_unchecked</item>
-        <item name="android:textColor">@color/gray</item>
-    </style>
+
 
     <style name="CustomTintIcon">
         <item name="android:tint">@color/black</item>

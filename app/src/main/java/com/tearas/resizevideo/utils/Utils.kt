@@ -33,10 +33,10 @@ object Utils {
             "mpeg2video",
             "mpeg1video",
             "libkvazaar",
-            "h265"
+            
         ),
         "gp3" to listOf("h264baseline", "h264high", "h264main", "mpeg4"),
-        "asf" to listOf("h264baseline", "h264high", "h264main", "mpeg4", "h265"),
+        "asf" to listOf("h264baseline", "h264high", "h264main", "mpeg4", ),
         "avi" to listOf(
             "h264baseline",
             "h264high",
@@ -47,7 +47,7 @@ object Utils {
             "vp9",
             "vp8",
             "libxvid",
-            "h265"
+            
         ),
         "f4v" to listOf("h264baseline", "h264high", "h264main"),
         "m4v" to listOf("flv1", "h264baseline", "h264high", "h264main"),
@@ -60,7 +60,7 @@ object Utils {
             "mpeg1video",
             "vp9",
             "vp8",
-            "h265"
+            
         ),
         "mov" to listOf(
             "h264baseline",
@@ -70,11 +70,11 @@ object Utils {
             "mpeg2video",
             "mpeg1video",
             "flv1",
-            "h265"
+            
         ),
-        "mpeg" to listOf("mpeg2video", "mpeg1video", "h265"),
-        "mpg" to listOf("mpeg2video", "mpeg1video", "h265"),
-        "m2ts" to listOf("h264baseline", "h264high", "h264main", "wmv2", "h265"),
+        "mpeg" to listOf("mpeg2video", "mpeg1video", ),
+        "mpg" to listOf("mpeg2video", "mpeg1video", ),
+        "m2ts" to listOf("h264baseline", "h264high", "h264main", "wmv2", ),
         "mts" to listOf(
             "h264baseline",
             "h264high",
@@ -82,7 +82,7 @@ object Utils {
             "mpeg4",
             "mpeg2video",
             "mpeg1video",
-            "h265"
+            
         ),
         "ts" to listOf(
             "h264baseline",
@@ -91,9 +91,9 @@ object Utils {
             "mpeg4",
             "mpeg2video",
             "mpeg1video",
-            "h265"
+            
         ),
-        "vob" to listOf("mpeg2video", "mpeg1video", "h265"),
+        "vob" to listOf("mpeg2video", "mpeg1video", ),
         "ogv" to listOf("libtheora"),
         "webm" to listOf("vp9", "vp8"),
         "wmv" to listOf("wmv2", "wmv1", "h264baseline", "h264high", "h264main")

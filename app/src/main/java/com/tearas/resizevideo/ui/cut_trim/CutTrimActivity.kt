@@ -3,17 +3,14 @@ package com.tearas.resizevideo.ui.cut_trim
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Looper
 import android.view.MenuItem
 import android.view.View
-import android.view.animation.AnimationUtils
+import androidx.media3.common.Player
+import androidx.media3.common.Player.Listener
+import androidx.media3.exoplayer.ExoPlayer
 import com.arthenica.ffmpegkit.FFprobeKit
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
-import com.google.android.material.tabs.TabLayoutMediator
 import com.jaygoo.widget.OnRangeChangedListener
 import com.jaygoo.widget.RangeSeekBar
 import com.tearas.resizevideo.ui.main.MainActivity
@@ -22,7 +19,7 @@ import com.tearas.resizevideo.R
 import com.tearas.resizevideo.databinding.ActivityCutTrimBinding
 import com.tearas.resizevideo.ffmpeg.MediaAction
 import com.tearas.resizevideo.model.OptionMedia
-import com.tearas.resizevideo.ui.OnControllerVideo
+import com.tearas.resizevideo.ui.VideoController
 import com.tearas.resizevideo.ui.select_compress.SelectCompressActivity
 import com.tearas.resizevideo.utils.IntentUtils.getActionMedia
 import com.tearas.resizevideo.utils.IntentUtils.getOptionMedia
@@ -44,10 +41,15 @@ class CutTrimActivity : BaseActivity<ActivityCutTrimBinding>() {
     private lateinit var optionMedia: OptionMedia
     private lateinit var runnable: Runnable
     private var idClick = R.id.cutVideo
+    private lateinit var exoPlayer: ExoPlayer
+
     override fun initData() {
         optionMedia = intent.getOptionMedia()!!
         val media = optionMedia.dataOriginal[0]
         path = media.path
+        val videoController = VideoController(binding.video)
+        videoController.setUpVideoController(path, false)
+        exoPlayer = videoController.exoPlayer
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -62,23 +64,21 @@ class CutTrimActivity : BaseActivity<ActivityCutTrimBinding>() {
 
             setUpDefaultRangeSeekBar(path)
             setAdapterFrameVideo()
-            video.setPathVideo(path)
-            video.setOnVideoListener(object : OnControllerVideo{
-                override fun onPause() {
-                    handler.removeCallbacksAndMessages(null)
+            exoPlayer.addListener(object : Listener {
+                override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
+                    if (playWhenReady) {
+                        handler.removeCallbacksAndMessages(null)
+                        handler.post(runnable)
+                    } else {
+                        handler.removeCallbacksAndMessages(null)
+                    }
                 }
-
-                override fun onStart() {
-                    handler.removeCallbacksAndMessages(null)
-                    handler.post(runnable)
-                }
-
             })
+
             setColorIndicator(idClick)
             setUpUICutVideo()
             setColorIndicator(idClick)
             handler.removeCallbacksAndMessages(null)
-            handler.post(runnable)
             cutVideo.setOnClickListener {
                 idClick = it.id
                 setUpUICutVideo()
@@ -153,7 +153,7 @@ class CutTrimActivity : BaseActivity<ActivityCutTrimBinding>() {
         }
         runnable = Runnable {
             if (idClick == R.id.trimVideo) {
-                binding.video.setCurrentProgress(left.toInt())
+                exoPlayer.seekTo(left.toLong())
                 handler.postDelayed(runnable1, (right - left).toLong())
             } else {
                 val duration =
@@ -175,10 +175,10 @@ class CutTrimActivity : BaseActivity<ActivityCutTrimBinding>() {
                     secondPartStartTime = duration
                     secondPartEndTime = duration
                 }
+                exoPlayer.seekTo(firstPartStartTime)
 
-                binding.video.setCurrentProgress(firstPartStartTime.toInt())
                 handler.postDelayed({
-                    binding.video.setCurrentProgress(secondPartStartTime.toInt())
+                    exoPlayer.seekTo(secondPartStartTime)
                 }, firstPartEndTime)
 
                 handler.postDelayed({

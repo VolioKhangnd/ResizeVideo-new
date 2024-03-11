@@ -13,7 +13,7 @@ import com.tearas.resizevideo.utils.Utils.isDarkMode
 @BindingAdapter("imageUrl")
 fun ImageView.loadImage(path: String) {
     Glide.with(this)
-        .load("file:///$path")
+        .load("$path")
         .into(this)
 }
 

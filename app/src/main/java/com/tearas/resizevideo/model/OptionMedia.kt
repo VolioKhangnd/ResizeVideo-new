@@ -8,7 +8,7 @@ data class OptionMedia(
     var optionCompressType: OptionCompressType? = null,
     var bitrate: Long = 0,
     var frameRate: Int = 0,
-    val codec: String = "",
+    val codec: String? = null,
     val fileSize: Long = 0,
     val mimetype: String? = null,
     val mediaAction: MediaAction,
