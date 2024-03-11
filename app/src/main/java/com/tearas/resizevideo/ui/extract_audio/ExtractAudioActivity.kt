@@ -14,7 +14,6 @@ import com.tearas.resizevideo.model.MediaInfo
 import com.tearas.resizevideo.model.OptionMedia
 import com.tearas.resizevideo.ui.DialogLoading
 import com.tearas.resizevideo.utils.HandleMediaVideo
-import com.tearas.resizevideo.utils.IntentUtils.getActionMedia
 import com.tearas.resizevideo.utils.IntentUtils.getOptionMedia
 import com.tearas.resizevideo.utils.Utils.startActivityResult
 
@@ -57,7 +56,7 @@ class ExtractAudioActivity : BaseActivity<ActivityExtractAudioBinding>(), IProce
                 )
             )
             videoProcess.compressAsync(
-                 listInput,
+                listInput,
                 this@ExtractAudioActivity
             )
         }
@@ -85,16 +84,19 @@ class ExtractAudioActivity : BaseActivity<ActivityExtractAudioBinding>(), IProce
     }
 
 
-    override fun onFailure(error: String) {
+    override fun onFailure(currentIndex: Int, error: String) {
         dialogLoading.dismiss()
         showMessage(error)
     }
 
-    override fun onSuccess() {
+    override fun onSuccess(currentIndex: Int, mediaInfo: MediaInfo) {
+        mediaInfoOutput.add(mediaInfo)
         dialogLoading.dismiss()
     }
 
-    override fun onFinish(mediaInfoOutput: List<MediaInfo>) {
+    private val mediaInfoOutput: ArrayList<MediaInfo> = arrayListOf()
+
+    override fun onFinish() {
         startActivityResult(media.dataOriginal, mediaInfoOutput)
     }
 

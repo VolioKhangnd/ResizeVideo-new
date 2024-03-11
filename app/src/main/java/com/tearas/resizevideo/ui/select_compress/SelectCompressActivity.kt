@@ -3,6 +3,7 @@ package com.tearas.resizevideo.ui.select_compress
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.text.format.Formatter
+import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import com.tearas.resizevideo.core.BaseActivity
 import com.tearas.resizevideo.databinding.ActivitySelectCompressBinding

@@ -2,11 +2,17 @@ package com.tearas.resizevideo.utils;
 
 import android.content.Intent;
 import android.os.Build;
+import android.util.JsonReader
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder
+import com.google.gson.TypeAdapter
+import com.google.gson.stream.JsonWriter
 import com.tearas.resizevideo.ffmpeg.MediaAction;
 import com.tearas.resizevideo.model.MediaInfo
 import com.tearas.resizevideo.model.MediaInfos
 import com.tearas.resizevideo.model.OptionMedia;
+import com.tearas.resizevideo.model.StateCompression
+import java.io.Serializable
 
 object IntentUtils {
 
@@ -22,11 +28,10 @@ object IntentUtils {
         getSerializableExtra(ACTION) as MediaAction
     }
 
-    fun Intent.getMediaOutput() =
-        Gson().fromJson(getStringExtra(MEDIA_OUTPUT), MediaInfos::class.java)!!
+    fun Intent.getMediaOutput() = getSerializableExtra(MEDIA_OUTPUT)!! as List<MediaInfo>
 
-    fun Intent.getMediaInput() =
-        Gson().fromJson(getStringExtra(MEDIA_INPUT), MediaInfos::class.java)!!
+    fun Intent.getMediaInput() = getSerializableExtra(MEDIA_INPUT)!! as List<MediaInfo>
+
 
     fun Intent.getOptionMedia() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         getSerializableExtra(OPTION, OptionMedia::class.java)
@@ -37,10 +42,11 @@ object IntentUtils {
     fun Intent.passActionMedia(action: MediaAction) = putExtra(ACTION, action)
 
     fun Intent.passMediaOutput(mediaOutput: List<MediaInfo>) =
-        putExtra(MEDIA_OUTPUT, Gson().toJson(mediaOutput))
+        putExtra(MEDIA_OUTPUT, mediaOutput as Serializable)
+
 
     fun Intent.passMediaInput(mediaInput: List<MediaInfo>) =
-        putExtra(MEDIA_INPUT, Gson().toJson(mediaInput))
+        putExtra(MEDIA_INPUT, mediaInput as Serializable)
 
     fun Intent.passOptionMedia(
         optionMedia: OptionMedia

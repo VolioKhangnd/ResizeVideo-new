@@ -1,7 +1,6 @@
 package com.tearas.resizevideo.ffmpeg
 
 import android.content.Context
-import android.util.Log
 import com.arthenica.ffmpegkit.FFmpegKit
 import com.arthenica.ffmpegkit.FFmpegKitConfig
 import com.arthenica.ffmpegkit.FFprobeKit
@@ -9,7 +8,6 @@ import com.arthenica.ffmpegkit.MediaInformation
 import com.arthenica.ffmpegkit.ReturnCode
 import com.arthenica.ffmpegkit.Session
 import com.tearas.resizevideo.model.MediaInfo
-import com.tearas.resizevideo.model.MediaInfos
 import com.tearas.resizevideo.model.OptionMedia
 import com.tearas.resizevideo.model.Resolution
 import com.tearas.resizevideo.utils.Utils
@@ -158,7 +156,7 @@ class VideoProcess {
                     pathOutputs.add(command.substring(command.lastIndexOf(" ") + 1))
                     this.commands.addAll(listOf(pass1, pass2))
                 } else {
-                    iProcess.onFailure("Invalid double compression command syntax")
+                    iProcess.onFailure(currentIndex,"Invalid double compression command syntax")
                     return
                 }
             }
@@ -172,6 +170,7 @@ class VideoProcess {
                 resetToZero()
                 return
             }
+            iProcess.onCurrentElement(currentIndex)
             FFmpegKit.executeAsync(commands[currentIndex]) { session ->
                 handleExecutionResult(session)
             }
@@ -185,26 +184,26 @@ class VideoProcess {
                     var currentIndex = 0
                     if (count % 2 == 0) currentIndex = (count / 2) - 1
                     if (!isTwoCompress) currentIndex = this.currentIndex
+
                     val pathOutput = pathOutputs[currentIndex]
                     val mediaInfo = FFprobeKit.getMediaInformation(pathOutput)
                     mediaInfoOutput.add(
                         createMediaInfo(
                             mediaInfo.mediaInformation,
                             session.sessionId,
-                            pathOutput,
-
+                            pathOutput
                             )
                     )
                     countSuccess += 1
                     iProcess.processElement(currentIndex, 100)
-                    iProcess.onSuccess()
+                    iProcess.onSuccess(currentIndex,mediaInfoOutput[currentIndex])
                 }
 
                 processFileSet(commands, currentIndex + 1)
 
                 count += 1
             } else {
-                iProcess.onFailure("Something went wrong. Please try again.")
+                iProcess.onFailure(currentIndex, "Something went wrong. Please try again.")
                 cleanupAndFail("Something went wrong. Please try again.")
                 countFailed += 1
             }
@@ -212,12 +211,12 @@ class VideoProcess {
 
         private fun cleanupAndFail(errorMessage: String) {
             File(pathOutputs[currentIndex]).delete()
-            iProcess.onFailure(errorMessage)
+            iProcess.onFailure(currentIndex, errorMessage)
         }
 
 
         private fun resetToZero() {
-            iProcess.onFinish(mediaInfoOutput)
+            iProcess.onFinish( )
             countSuccess = 0
             countFailed = 0
             duration = 0

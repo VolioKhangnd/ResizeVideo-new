@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ProgressCircle">
+        <attr name="textSizeProgress" format="reference|dimension" />
+        <attr name="textStyleProgress">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+        <attr name="textColorProgress" format="color" />
+        <attr name="progress" format="float" />
+        <attr name="toProgress" format="float" />
+        <attr name="strokeWidth" format="dimension|reference" />
+        <attr name="strokeWidthDefault" format="dimension|reference" />
+        <attr name="progressColorDefault" format="color" />
+        <attr name="progressColor" format="color" />
+        <attr name="radius" format="dimension|reference" />
+    </declare-styleable>
+</resources>

@@ -8,10 +8,7 @@ data class Resolution(var width: Int = 0, var height: Int = 0) : Serializable {
         return if (height == 0) "$width" else "$width x $height"
     }
 
-
     fun getRatio() = width * 1.0f / height
-
-
 }
 
 data class MediaInfo(
@@ -24,9 +21,17 @@ data class MediaInfo(
     var mime: String,
     var bitrate: Long,
     var isVideo: Boolean = true,
-    var isSelected: Boolean = false
+    var isSelected: Boolean = false,
+    var stateCompression: StateCompression = StateCompression.Waiting
 ) : Serializable {
 
+}
+
+sealed class StateCompression : Serializable {
+    data object Success : StateCompression()
+    data object Failure : StateCompression()
+    data object Waiting : StateCompression()
+    data object Processing : StateCompression()
 }
 
 class MediaInfos : ArrayList<MediaInfo>() {}

@@ -146,7 +146,6 @@ class ResultActivity : BaseActivity<ActivityResultBinding>() {
     private fun setUpAdapterRs() {
         val mediaOutput = intent.getMediaOutput()
         val mediaInput = intent.getMediaInput()
-
         adapter = ResultAdapter(
             this,
             if (intent.getActionMedia()!! != MediaAction.JoinVideo) 0L else mediaInput.sumOf { it.size },
@@ -171,7 +170,7 @@ class ResultActivity : BaseActivity<ActivityResultBinding>() {
 
         if (intent.getActionMedia()!! != MediaAction.JoinVideo) {
             adapter.submitData.forEachIndexed { index, pair ->
-                 handleSaveResult.save(
+                handleSaveResult.save(
                     pair.first.path,
                     pair.second.path,
                 )

@@ -14,7 +14,7 @@ import com.tearas.resizevideo.ffmpeg.VideoProcess
 import com.tearas.resizevideo.model.MediaInfo
 import com.tearas.resizevideo.model.OptionCompressType
 import com.tearas.resizevideo.model.OptionMedia
-import com.tearas.resizevideo.ui.error.ShowErrorActivity
+import com.tearas.resizevideo.model.StateCompression
 import com.tearas.resizevideo.ui.result.ResultActivity
 import com.tearas.resizevideo.utils.DialogUtils
 import com.tearas.resizevideo.utils.HandleMediaVideo
@@ -24,6 +24,7 @@ import com.tearas.resizevideo.utils.IntentUtils.passActionMedia
 import com.tearas.resizevideo.utils.IntentUtils.passMediaInput
 import com.tearas.resizevideo.utils.IntentUtils.passMediaOutput
 import com.tearas.resizevideo.utils.Utils.startToMainActivity
+import java.util.Collections
 
 class ProcessActivity : BaseActivity<ActivityProcessBinding>(), IProcessFFmpeg {
 
@@ -50,6 +51,23 @@ class ProcessActivity : BaseActivity<ActivityProcessBinding>(), IProcessFFmpeg {
     private lateinit var listInput: List<String>
     override fun initData() {
         optionMedia = intent.getOptionMedia()!!
+    }
+
+    override fun initView() {
+        binding.apply {
+            showNativeAds(nativeAds) {}
+            setupViewPager()
+        }
+    }
+
+    private var processAdapter: ProcessAdapter = ProcessAdapter(this)
+    private fun setupViewPager() {
+        processAdapter.submitData = optionMedia.dataOriginal
+        binding.viewPager.adapter = processAdapter
+        compressVideo()
+    }
+
+    private fun compressVideo() {
         val handle = HandleMediaVideo(this)
         val videoCommandProcessor = VideoCommandProcessor(
             this,
@@ -57,7 +75,8 @@ class ProcessActivity : BaseActivity<ActivityProcessBinding>(), IProcessFFmpeg {
             handle.getPathVideoCacheFolder()
         )
         listInput = videoCommandProcessor.createCommandList(optionMedia)
-
+        binding.progressBar.totalProgress = 100f
+        binding.progressBar.format("%.0f%%")
         if (optionMedia.optionCompressType is OptionCompressType.CustomFileSize) {
             VideoProcess.Builder(this, optionMedia)
                 .twoCompressAsync(listInput, this)
@@ -66,25 +85,6 @@ class ProcessActivity : BaseActivity<ActivityProcessBinding>(), IProcessFFmpeg {
                 .compressAsync(listInput, this)
         }
     }
-
-    override fun initView() {
-        binding.apply {
-            showNativeAds(nativeAds) {}
-            setupViewPager()
-
-            binding.cancel.setOnClickListener {
-                showBackDialog()
-            }
-        }
-    }
-
-    private fun setupViewPager() {
-        val processAdapter = ProcessAdapter(this)
-        processAdapter.submitData = optionMedia.dataOriginal
-        binding.viewPager.adapter = processAdapter
-        binding.circleIndicator.setViewPager(binding.viewPager)
-    }
-
 
     override fun getViewBinding(): ActivityProcessBinding {
         return ActivityProcessBinding.inflate(layoutInflater)
@@ -95,8 +95,7 @@ class ProcessActivity : BaseActivity<ActivityProcessBinding>(), IProcessFFmpeg {
         runOnUiThread {
             binding.apply {
                 position.text = "${currentElement + 1}/${listInput.size}"
-                percent.text = "$percentage%"
-                progressBar.setProgress(percentage, true)
+                progressBar.currentProgress = percentage.toFloat()
             }
         }
     }
@@ -109,10 +108,27 @@ class ProcessActivity : BaseActivity<ActivityProcessBinding>(), IProcessFFmpeg {
     }
 
     override fun onCurrentElement(position: Int) {
-        binding.viewPager.setCurrentItem(position, true)
+        runOnUiThread {
+            processAdapter.submitData[position].stateCompression = StateCompression.Processing
+            processAdapter.notifyItemChanged(position)
+        }
     }
 
-    override fun onFinish(mediaInfoResults: List<MediaInfo>) {
+    override fun onSuccess(currentIndex: Int, mediaInfo: MediaInfo) {
+        runOnUiThread {
+            processAdapter.submitData[currentIndex].stateCompression = StateCompression.Success
+            mediaInfoResults.add(mediaInfo)
+            processAdapter.notifyItemMoved(currentIndex, processAdapter.itemCount - 1)
+            Collections.swap(
+                processAdapter.submitData,
+                currentIndex,
+                processAdapter.itemCount - 1
+            )
+        }
+    }
+
+    private val mediaInfoResults: ArrayList<MediaInfo> = ArrayList()
+    override fun onFinish() {
         val intent = Intent(this, ResultActivity::class.java)
         intent.passMediaOutput(mediaInfoResults)
         intent.passMediaInput(this.intent.getOptionMedia()!!.dataOriginal)
@@ -121,8 +137,14 @@ class ProcessActivity : BaseActivity<ActivityProcessBinding>(), IProcessFFmpeg {
         finish()
     }
 
-    override fun onFailure(error: String) {
-        startActivity(Intent(this, ShowErrorActivity::class.java))
-        finish()
+    override fun onFailure(position: Int, error: String) {
+        runOnUiThread {
+            processAdapter.submitData[position].stateCompression = StateCompression.Failure
+            processAdapter.notifyItemChanged(position)
+            if (position + 1 < processAdapter.itemCount) {
+                Collections.swap(processAdapter.submitData, position, processAdapter.itemCount - 1)
+                processAdapter.notifyItemMoved(position, processAdapter.itemCount - 1)
+            }
+        }
     }
 }
