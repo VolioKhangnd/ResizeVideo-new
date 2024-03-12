@@ -21,6 +21,7 @@ import com.tearas.resizevideo.ui.extract_audio.ExtractAudioActivity
 import com.tearas.resizevideo.ui.fast_forward.FastForwardActivity
 import com.tearas.resizevideo.ui.join_video.JoinVideoActivity
 import com.tearas.resizevideo.ui.process.ProcessActivity
+import com.tearas.resizevideo.ui.reverse.ReversesActivity
 import com.tearas.resizevideo.ui.select_compress.SelectCompressActivity
 import com.tearas.resizevideo.utils.IntentUtils.getActionMedia
 import com.tearas.resizevideo.utils.IntentUtils.passActionMedia
@@ -63,8 +64,9 @@ class MainPickerActivity : BaseActivity<ActivityMainPickerBinding>() {
                         is MediaAction.CompressVideo -> SelectCompressActivity::class.java
                         is MediaAction.CutOrTrim -> CutTrimActivity::class.java
                         is MediaAction.ExtractAudio -> ExtractAudioActivity::class.java
-                        is MediaAction.FastForward -> FastForwardActivity::class.java
+                        is MediaAction.FastForward, MediaAction.SlowVideo -> FastForwardActivity::class.java
                         is MediaAction.JoinVideo -> JoinVideoActivity::class.java
+                        is MediaAction.ReveresVideo -> ReversesActivity::class.java
                         else -> ProcessActivity::class.java
                     }
                     val intent = Intent(this@MainPickerActivity, destination)

@@ -74,8 +74,7 @@ class JoinVideoActivity : BaseActivity<ActivityJoinVideoBinding>() {
             }
             videoJoinAdapter.submitData = listInfo
             listInfo = videoJoinAdapter.submitData
-            val dragDropCallback =
-                DragDropCallback(videoJoinAdapter, object : ItemTouchListenner {
+            val dragDropCallback = DragDropCallback(videoJoinAdapter, object : ItemTouchListenner {
                     override fun onMove(oldPosition: Int, newPosition: Int) {
                         Collections.swap(listInfo, oldPosition, newPosition)
                     }
@@ -104,6 +103,7 @@ class JoinVideoActivity : BaseActivity<ActivityJoinVideoBinding>() {
     }
 
     private fun createOptionMedia(title: String, format: String, codec: String?): OptionMedia {
+        Log.d("Nguyễn duy khang",videoJoinAdapter.submitData.toString())
         return OptionMedia(
             dataOriginal = MediaInfos().apply { addAll(videoJoinAdapter.submitData) },
             mediaAction = MediaAction.JoinVideo,

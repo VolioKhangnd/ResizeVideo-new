@@ -11,7 +11,6 @@ import com.tearas.resizevideo.utils.ResolutionUtils.calculateResolution
 import com.tearas.resizevideo.utils.ResolutionUtils.calculateResolutionByRadio
 import com.tearas.resizevideo.utils.Utils
 import com.tearas.resizevideo.utils.Utils.getResolutionMax
-import java.io.File
 
 class VideoCommandProcessor(
     private val context: Context,
@@ -166,7 +165,7 @@ class VideoCommandProcessor(
         commandProcessor
             .appendCommand("-i $inputPath")
             .appendCommand("-s ${resolution.width}x${resolution.height}")
-            .appendCommand("-c:v libx264")
+            .appendCommand("-c:v copy")
             .appendCommand("-preset medium")
             .appendCommand("-filter_complex")
         if (withAudio) {
@@ -203,29 +202,38 @@ class VideoCommandProcessor(
             "${resolutionMax!!.resolution!!.width}:${resolutionMax.resolution!!.height}"
 
         mediaOption.dataOriginal.forEachIndexed { index, _ ->
-            commandProcessor.appendCommandNotSpace("[$index:v]scale=$resolution:force_original_aspect_ratio=decrease,pad=$resolution:(ow-iw)/2:(oh-ih)/2,setsar=1[v$index];")
+            commandProcessor.appendCommandNotSpace("[$index:v]setpts=PTS-STARTPTS,scale=$resolution:force_original_aspect_ratio=decrease,fps=60,pad=$resolution:(ow-iw)/2:(oh-ih)/2,setsar=1[v$index];")
             videoStream += "[v$index][$index:a:0]"
         }
         commandProcessor.appendCommand("${videoStream}concat=n=${mediaOption.dataOriginal.size}:v=1:a=1[v][a]\"")
         commandProcessor.appendCommand("-map \"[v]\" -map \"[a]\"")
         commandProcessor.appendCommand("-b:v ${resolutionMax.bitrate}")
-        commandProcessor.appendCommand("-vsync vfr")
-
-        commandProcessor.appendCommand("$pathOutputFolderVideo/${mediaOption.nameOutput}.${mediaOption.mimetype}")
+        commandProcessor.appendCommand("-vsync 1")
+        commandProcessor.appendCommand("$pathOutputFolderVideo/${mediaOption.nameOutput + "_" + System.currentTimeMillis()}.${mediaOption.mimetype}")
         return commandProcessor.getCommand()
     }
 
 
-    private fun reverseVideo(pathVideo: String, mime: String): String {
-        return "-i $pathVideo -vf reverse -af areverse ${getPathOutPut(mime)}"
+    private fun reverseVideo(
+        pathVideo: String,
+        mime: String,
+        reverseAudio: Boolean,
+        preset: String
+    ): String {
+        return "-i $pathVideo -vf reverse ${if (reverseAudio) "-af areverse" else ""} -preset $preset ${getPathOutPut(mime)}"
     }
 
     fun createCommandList(optionMedia: OptionMedia): List<String> {
         var resolution: Resolution
 
         if (optionMedia.mediaAction is MediaAction.JoinVideo) {
-
+            Log.d(
+                "skajfljklafjalsf", joinVideo(
+                    optionMedia
+                )
+            )
             return listOf(
+
                 joinVideo(
                     optionMedia
                 )
@@ -280,7 +288,9 @@ class VideoCommandProcessor(
 
                 is MediaAction.ReveresVideo -> reverseVideo(
                     optionMedia.dataOriginal[0].path,
-                    mediaItem.mime
+                    mediaItem.mime,
+                    optionMedia.reverseAudio,
+                    optionMedia.preset
                 )
 
                 else -> {

@@ -25,7 +25,7 @@ import java.util.TimeZone
 
 object Utils {
     val formatVideos = hashMapOf(
-        "mp4" to listOf(
+        "MP4" to listOf(
             "h264baseline",
             "h264high",
             "h264main",
@@ -33,11 +33,11 @@ object Utils {
             "mpeg2video",
             "mpeg1video",
             "libkvazaar",
-            
-        ),
-        "gp3" to listOf("h264baseline", "h264high", "h264main", "mpeg4"),
-        "asf" to listOf("h264baseline", "h264high", "h264main", "mpeg4", ),
-        "avi" to listOf(
+
+            ),
+        "GP3" to listOf("h264baseline", "h264high", "h264main", "mpeg4"),
+        "ASF" to listOf("h264baseline", "h264high", "h264main", "mpeg4"),
+        "AVI" to listOf(
             "h264baseline",
             "h264high",
             "h264main",
@@ -47,11 +47,11 @@ object Utils {
             "vp9",
             "vp8",
             "libxvid",
-            
-        ),
-        "f4v" to listOf("h264baseline", "h264high", "h264main"),
-        "m4v" to listOf("flv1", "h264baseline", "h264high", "h264main"),
-        "mkv" to listOf(
+
+            ),
+        "F4V" to listOf("h264baseline", "h264high", "h264main"),
+        "M4V" to listOf("flv1", "h264baseline", "h264high", "h264main"),
+        "MKV" to listOf(
             "h264baseline",
             "h264high",
             "h264main",
@@ -60,9 +60,9 @@ object Utils {
             "mpeg1video",
             "vp9",
             "vp8",
-            
-        ),
-        "mov" to listOf(
+
+            ),
+        "MOV" to listOf(
             "h264baseline",
             "h264high",
             "h264main",
@@ -70,33 +70,33 @@ object Utils {
             "mpeg2video",
             "mpeg1video",
             "flv1",
-            
-        ),
-        "mpeg" to listOf("mpeg2video", "mpeg1video", ),
-        "mpg" to listOf("mpeg2video", "mpeg1video", ),
-        "m2ts" to listOf("h264baseline", "h264high", "h264main", "wmv2", ),
-        "mts" to listOf(
+
+            ),
+        "MPEG" to listOf("mpeg2video", "mpeg1video"),
+        "MPG" to listOf("mpeg2video", "mpeg1video"),
+        "M2TS" to listOf("h264baseline", "h264high", "h264main", "wmv2"),
+        "MTS" to listOf(
             "h264baseline",
             "h264high",
             "h264main",
             "mpeg4",
             "mpeg2video",
             "mpeg1video",
-            
-        ),
-        "ts" to listOf(
+
+            ),
+        "TS" to listOf(
             "h264baseline",
             "h264high",
             "h264main",
             "mpeg4",
             "mpeg2video",
             "mpeg1video",
-            
-        ),
-        "vob" to listOf("mpeg2video", "mpeg1video", ),
-        "ogv" to listOf("libtheora"),
-        "webm" to listOf("vp9", "vp8"),
-        "wmv" to listOf("wmv2", "wmv1", "h264baseline", "h264high", "h264main")
+
+            ),
+        "VOB" to listOf("mpeg2video", "mpeg1video"),
+        "OGV" to listOf("libtheora"),
+        "WEBM" to listOf("vp9", "vp8"),
+        "WMV" to listOf("wmv2", "wmv1", "h264baseline", "h264high", "h264main")
     )
 
     fun convertKBtoBit(kb: Long) = kb * 8 * 1024
@@ -120,13 +120,15 @@ object Utils {
     @SuppressLint("SimpleDateFormat")
     private val simpleDateFormat = SimpleDateFormat("HH:mm:ss")
         .apply { timeZone = TimeZone.getTimeZone("GMT") }
-
+    private val simpleDateFormat2 = SimpleDateFormat("dd:MM:YYYY")
+        .apply { timeZone = TimeZone.getTimeZone("GMT") }
     private val decimalFormat = DecimalFormat("#").apply {
         roundingMode = RoundingMode.CEILING
     }
 
     fun Float.formatToInt(): Int = decimalFormat.format(this).toInt()
     fun formatTime(time: Long): String = simpleDateFormat.format(time)
+    fun formatDate(miliS: Long): String = simpleDateFormat2.format(miliS)
     fun convertTimeToMiliSeconds(timeString: String): Long {
         val date = simpleDateFormat.parse(timeString) ?: return 0
         return date.time

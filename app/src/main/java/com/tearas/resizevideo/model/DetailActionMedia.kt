@@ -47,7 +47,7 @@ fun Context.getListDetailsActionMedia(): List<DetailActionMedia> {
             getColor(R.color.bg_ic_reveres_video)
         ),
         DetailActionMedia(
-            MediaAction.FastForward,
+            MediaAction.SlowVideo,
             "Slow Video",
             getDrawable(R.drawable.ic_slow_vd)!!,
             getColor(R.color.bg_slow_video),

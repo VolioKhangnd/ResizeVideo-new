@@ -17,6 +17,8 @@ data class OptionMedia(
     var startTime: Long = 0,
     var endTime: Long = 0,
     var speed: Float = 1.0f,
+    var preset: String = "medium",
+    var reverseAudio: Boolean = false,
     var withAudio: Boolean = true,
     var isFastVideo: Boolean = true,
     val isPickMultiple: Boolean = dataOriginal.size > 0,

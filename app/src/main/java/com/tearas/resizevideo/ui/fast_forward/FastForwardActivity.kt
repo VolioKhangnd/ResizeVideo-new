@@ -16,8 +16,10 @@ import com.google.android.exoplayer2.ui.StyledPlayerControlView
 import com.tearas.resizevideo.R
 import com.tearas.resizevideo.core.BaseActivity
 import com.tearas.resizevideo.databinding.ActivityFastForwardBinding
+import com.tearas.resizevideo.ffmpeg.MediaAction
 import com.tearas.resizevideo.model.OptionMedia
 import com.tearas.resizevideo.ui.VideoController
+import com.tearas.resizevideo.utils.IntentUtils.getActionMedia
 import com.tearas.resizevideo.utils.IntentUtils.getOptionMedia
 import com.tearas.resizevideo.utils.IntentUtils.passOptionMedia
 
@@ -53,9 +55,10 @@ class FastForwardActivity : BaseActivity<ActivityFastForwardBinding>() {
         )
         setBackground(binding.txt1x.id)
         binding.apply {
+            val actionMedia = intent.getActionMedia()!!
             setToolbar(
                 binding.toolbar,
-                "Fast Forward",
+                if (actionMedia is MediaAction.FastForward) "Fast Forward" else "Slow Video",
                 getDrawable(R.drawable.baseline_arrow_back_24)!!
             )
             setUpVideo()
@@ -138,7 +141,7 @@ class FastForwardActivity : BaseActivity<ActivityFastForwardBinding>() {
     private fun createOptionMedia(): OptionMedia {
         return intent.getOptionMedia()!!.copy(
             speed = exoPlayer.playbackParameters.speed,
-            isFastVideo = true
+            isFastVideo = intent.getActionMedia() is MediaAction.FastForward
         )
     }
 }

@@ -77,10 +77,10 @@ abstract class BaseActivity<VB : ViewBinding> : BaseActivity() {
     }
 
     open fun showBannerAds(viewContainer: ViewGroup) {
-        if (!proApplication.isSubVip) {
+//        if (!proApplication.isSubVip) {
             val banner = AdsBannerView.getView(windowManager, this, viewContainer)
             AdsBannerView.loadAds(AdsBannerView.BANNER_BOTTOM, banner)
-        }
+//        }
     }
 
     open fun showInterstitial(now: Boolean, call: (Boolean) -> Unit) {

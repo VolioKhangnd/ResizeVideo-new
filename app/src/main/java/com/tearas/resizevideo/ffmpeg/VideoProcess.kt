@@ -4,6 +4,7 @@ import android.content.Context
 import com.arthenica.ffmpegkit.FFmpegKit
 import com.arthenica.ffmpegkit.FFmpegKitConfig
 import com.arthenica.ffmpegkit.FFprobeKit
+import com.arthenica.ffmpegkit.Log
 import com.arthenica.ffmpegkit.MediaInformation
 import com.arthenica.ffmpegkit.ReturnCode
 import com.arthenica.ffmpegkit.Session
@@ -77,7 +78,8 @@ class VideoProcess {
                 durationFormatted,
                 extension,
                 bitrate,
-                optionMedia.mediaAction != MediaAction.JoinVideo,
+                Utils.formatDate(System.currentTimeMillis()),
+                isVideo = optionMedia.mediaAction != MediaAction.ExtractAudio,
                 false
             )
         }
@@ -188,6 +190,7 @@ class VideoProcess {
                     if (!isTwoCompress) currentIndex = this.currentIndex
 
                     val pathOutput = pathOutputs[currentIndex]
+                    android.util.Log.d("sầklfaksfjakslfla", pathOutput)
                     val mediaInfo = FFprobeKit.getMediaInformation(pathOutput)
                     mediaInfoOutput.add(
                         createMediaInfo(

@@ -19,7 +19,7 @@ class ShowAudioCompressedAdapter(private val context: Context ) :
 
     override fun onBind(binding: ItemAudioBinding, item: MediaInfo) {
         binding.apply {
-            size.text = Formatter.formatFileSize(context, item.size)
+            date.text = item.date
             time.text = item.time
             name.text = item.name
         }

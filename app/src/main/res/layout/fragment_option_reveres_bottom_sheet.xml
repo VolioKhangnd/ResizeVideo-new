@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/corner_bottom_sheet"
+    android:backgroundTint="@color/maintream"
+    android:orientation="vertical"
+    android:padding="15dp"
+    tools:context=".ui.join_video.OptionSettingsJoinBottomSheetFragment">
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_close_24"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            style="@style/TextAppearance.Material3.TitleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_toEndOf="@+id/close"
+            android:text="Option Settings"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/close" />
+
+        <TextView
+            android:id="@+id/done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bg_btn_action"
+            android:backgroundTint="@color/buttonTintCb"
+            android:gravity="center"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="5sp"
+            android:text="Done"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/cbReverseAudio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reverse Audio"
+        app:buttonTint="@color/buttonTintCb" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray" />
+
+    <TextView
+        style="@style/TextAppearance.Material3.TitleMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="15dp"
+        android:text="Select Mode"
+        android:textStyle="bold" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/mOptionFast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/cbFast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:enabled="false"
+                app:buttonTint="@color/buttonTintCb" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/TextAppearance.Material3.TitleMedium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="Fast (Recommend)" />
+
+                <TextView
+                    style="@style/TextAppearance.Material3.LabelMedium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+
+                    android:text="Faster converting speed. Video lenght may not be accoure." />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mOptionStronger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/cbStronger"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                app:buttonTint="@color/buttonTintCb" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/TextAppearance.Material3.TitleMedium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="Stable" />
+
+                <TextView
+                    style="@style/TextAppearance.Material3.LabelMedium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Stronger video compatibility. Slower converting speed." />
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <FrameLayout
+        android:id="@+id/bannerAds"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</androidx.appcompat.widget.LinearLayoutCompat>

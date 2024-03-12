@@ -12,7 +12,7 @@ import com.tearas.resizevideo.utils.DialogUtils
 class MyApplication : ProApplication() {
     override fun onCreate() {
         super.onCreate()
-        val testDeviceIds: List<String> = mutableListOf("0A616E7B2A72EB996BF974ACBF5855FC")
+        val testDeviceIds: List<String> = mutableListOf("0A616E7B2A72EB996BF974ACBF5855FC","DEEC3DF04481FB7EA3741E6984AD9958")
         val configuration = RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build()
         MobileAds.setRequestConfiguration(configuration)
         DialogUtils.init(this)

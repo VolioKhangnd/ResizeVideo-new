@@ -23,229 +23,215 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <FrameLayout
-        android:id="@+id/frameLayout"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:paddingStart="25sp"
-        android:paddingEnd="25sp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayoutCompat5"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
         <androidx.media3.ui.PlayerView
             android:id="@+id/videoController"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.8"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayoutCompat5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/play"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:src="@drawable/icon_play"
-            android:visibility="gone"
-            app:tint="@color/black" />
-
-    </FrameLayout>
-
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="891dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintGuide_percent="0.5"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
-
-
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/linearLayoutCompat5"
-        android:layout_width="match_parent"
-        android:paddingVertical="15dp"
-        android:layout_height="wrap_content"
-        android:background="@color/bg_unclick"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/bannerAds">
-
-        <RadioGroup
-            android:id="@+id/radioGroup2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-             android:layout_marginBottom="10dp"
-            android:gravity="center"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/linearLayoutCompat5"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/bg_unclick"
             android:orientation="vertical"
-            android:textStyle="bold">
+            android:paddingVertical="15dp"
+            app:layout_constraintHeight_percent="0.2"
+            app:layout_constraintBottom_toTopOf="@+id/bannerAds"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
             <RadioGroup
-                android:id="@+id/radioGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toTopOf="@+id/radioGroup2"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <RadioGroup
-                android:id="@+id/radioGroup3"
+                android:id="@+id/radioGroup2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/cardView5"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                android:orientation="vertical"
+                android:textStyle="bold">
 
-                <androidx.cardview.widget.CardView
+                <RadioGroup
+                    android:id="@+id/radioGroup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    app:cardCornerRadius="25dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toTopOf="@+id/radioGroup2"
+                    app:layout_constraintStart_toStartOf="parent" />
 
-                    app:cardElevation="0dp">
-
-                    <TextView
-                        android:id="@+id/txt1x"
-                        style="@style/StyleSpeed"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:foreground="?attr/selectableItemBackground"
-                        android:gravity="center"
-                        android:text="1x"
-                        android:textStyle="bold" />
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
+                <RadioGroup
+                    android:id="@+id/radioGroup3"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    app:cardCornerRadius="25dp"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/cardView5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
 
-                    app:cardElevation="0dp">
-
-                    <TextView
-                        android:id="@+id/txt1_25x"
-                        style="@style/StyleSpeed"
+                    <androidx.cardview.widget.CardView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        app:cardCornerRadius="25dp"
 
-                        android:foreground="?attr/selectableItemBackground"
-                        android:gravity="center"
-                        android:text="1.25x"
-                        android:textStyle="bold" />
-                </androidx.cardview.widget.CardView>
+                        app:cardElevation="0dp">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    app:cardCornerRadius="25dp"
+                        <TextView
+                            android:id="@+id/txt1x"
+                            style="@style/StyleSpeed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:gravity="center"
+                            android:text="1x"
+                            android:textStyle="bold" />
+                    </androidx.cardview.widget.CardView>
 
-                    app:cardElevation="0dp">
-
-                    <TextView
-                        android:id="@+id/txt1_5x"
-                        style="@style/StyleSpeed"
+                    <androidx.cardview.widget.CardView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        app:cardCornerRadius="25dp"
 
-                        android:foreground="?attr/selectableItemBackground"
-                        android:gravity="center"
-                        android:text="1.5x"
-                        android:textStyle="bold" />
-                </androidx.cardview.widget.CardView>
+                        app:cardElevation="0dp">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    app:cardCornerRadius="25dp"
+                        <TextView
+                            android:id="@+id/txt1_25x"
+                            style="@style/StyleSpeed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
 
-                    app:cardElevation="0dp">
+                            android:foreground="?attr/selectableItemBackground"
+                            android:gravity="center"
+                            android:text="1.25x"
+                            android:textStyle="bold" />
+                    </androidx.cardview.widget.CardView>
 
-                    <TextView
-                        android:id="@+id/txt2x"
-                        style="@style/StyleSpeed"
+                    <androidx.cardview.widget.CardView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        app:cardCornerRadius="25dp"
 
-                        android:foreground="?attr/selectableItemBackground"
-                        android:gravity="center"
-                        android:text="2x"
-                        android:textStyle="bold" />
-                </androidx.cardview.widget.CardView>
+                        app:cardElevation="0dp">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    app:cardCornerRadius="25dp"
-                    app:cardElevation="0dp">
+                        <TextView
+                            android:id="@+id/txt1_5x"
+                            style="@style/StyleSpeed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
 
-                    <TextView
-                        android:id="@+id/txt2_5x"
-                        style="@style/StyleSpeed"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:gravity="center"
+                            android:text="1.5x"
+                            android:textStyle="bold" />
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        app:cardCornerRadius="25dp"
 
-                        android:foreground="?attr/selectableItemBackground"
-                        android:gravity="center"
-                        android:text="2.5x"
-                        android:textStyle="bold" />
-                </androidx.cardview.widget.CardView>
+                        app:cardElevation="0dp">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    app:cardCornerRadius="25dp"
-                    app:cardElevation="0dp">
+                        <TextView
+                            android:id="@+id/txt2x"
+                            style="@style/StyleSpeed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
 
-                    <TextView
-                        android:id="@+id/txt3x"
-                        style="@style/StyleSpeed"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:gravity="center"
+                            android:text="2x"
+                            android:textStyle="bold" />
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        app:cardCornerRadius="25dp"
+                        app:cardElevation="0dp">
 
-                        android:foreground="?attr/selectableItemBackground"
-                        android:gravity="center"
-                        android:text="3x"
-                        android:textStyle="bold" />
-                </androidx.cardview.widget.CardView>
+                        <TextView
+                            android:id="@+id/txt2_5x"
+                            style="@style/StyleSpeed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                            android:foreground="?attr/selectableItemBackground"
+                            android:gravity="center"
+                            android:text="2.5x"
+                            android:textStyle="bold" />
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        app:cardCornerRadius="25dp"
+                        app:cardElevation="0dp">
+
+                        <TextView
+                            android:id="@+id/txt3x"
+                            style="@style/StyleSpeed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                            android:foreground="?attr/selectableItemBackground"
+                            android:gravity="center"
+                            android:text="3x"
+                            android:textStyle="bold" />
+                    </androidx.cardview.widget.CardView>
+                </RadioGroup>
+
+
             </RadioGroup>
 
-
-        </RadioGroup>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            app:cardCornerRadius="25dp"
-            app:cardElevation="0dp">
-
-            <TextView
-                android:id="@+id/customSpeed"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:button="@drawable/status_radio_speed"
-                android:foreground="?attr/selectableItemBackground"
-                android:gravity="center"
-                android:text="●●●"
-                android:textColor="@color/buttonTintCb"
-                android:textStyle="bold" />
-        </androidx.cardview.widget.CardView>
-    </androidx.appcompat.widget.LinearLayoutCompat>
+                android:layout_gravity="center_horizontal"
+                app:cardCornerRadius="25dp"
+                app:cardElevation="0dp">
 
-    <FrameLayout
-        android:id="@+id/bannerAds"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent" />
+                <TextView
+                    android:id="@+id/customSpeed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/status_radio_speed"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="●●●"
+                    android:textColor="@color/buttonTintCb"
+                    android:textStyle="bold" />
+            </androidx.cardview.widget.CardView>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <FrameLayout
+            android:id="@+id/bannerAds"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

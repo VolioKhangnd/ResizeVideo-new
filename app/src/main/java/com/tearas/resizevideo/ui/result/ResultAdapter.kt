@@ -9,16 +9,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
+import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import com.jaygoo.widget.RangeSeekBar
-import com.tearas.resizevideo.core.BaseAdapter
 import com.tearas.resizevideo.R
+import com.tearas.resizevideo.core.BaseAdapter
 import com.tearas.resizevideo.databinding.ItemRsBinding
-import com.tearas.resizevideo.ffmpeg.MediaAction
 import com.tearas.resizevideo.model.MediaInfo
 import com.tearas.resizevideo.ui.video.ShowVideoActivity
 import com.tearas.resizevideo.utils.Utils.loadImage
+import java.io.File
+
 
 interface OnItemMenuMoreSelectedListen {
     fun onRename(item: Pair<MediaInfo, MediaInfo>)
@@ -43,7 +46,7 @@ class ResultAdapter(
         this.binding = binding
         val mediaBefore = item.first
         val mediaAfter = item.second
-        Log.d("sjahdjksak", mediaBefore.toString())
+        Log.d("sjahdjksak", mediaAfter.toString())
         if (mediaAfter.isVideo) binding.resolutionAfter.text = mediaAfter.resolution.toString()
         if (mediaBefore.isVideo) binding.resolutionBefore.text = mediaBefore.resolution.toString()
         val sizeBefore = if (this.sizeBefore != 0L) this.sizeBefore else mediaBefore.size
@@ -73,12 +76,14 @@ class ResultAdapter(
     private fun hideReplace() {
         binding.option.replace.visibility =
             if (sizeBefore == 0L) View.VISIBLE else View.GONE
+        binding.option.compare.visibility =
+            if (sizeBefore == 0L) View.VISIBLE else View.GONE
     }
 
     private fun displayMediaThumbnail(mediaBefore: MediaInfo, mediaAfter: MediaInfo) {
         if (mediaAfter.isVideo) {
             context.loadImage(
-                "file:///" + mediaBefore.path,
+                mediaBefore.path,
                 binding.thumbnail
             )
         } else {
@@ -89,6 +94,19 @@ class ResultAdapter(
 
     private fun thumbnailClickHandler(mediaAfter: MediaInfo) {
         binding.thumbnail.setOnClickListener {
+            if (sizeBefore != 0L) {
+                val videoFile = File(mediaAfter.path)
+                val fileUri = FileProvider.getUriForFile(
+                    context,
+                    "com.tearas.resizevideo.ui",
+                    videoFile
+                )
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.setDataAndType(fileUri, "video/*")
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) //DO NOT FORGET THIS EVER
+                context.startActivity(intent)
+                return@setOnClickListener
+            }
             val intent = Intent(context, ShowVideoActivity::class.java)
             intent.putExtra("path", mediaAfter.path)
             context.startActivity(intent)

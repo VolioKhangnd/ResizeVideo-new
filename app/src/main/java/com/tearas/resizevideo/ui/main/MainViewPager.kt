@@ -11,7 +11,7 @@ class MainViewPager(private val activity: FragmentActivity) : FragmentStateAdapt
     override fun getItemCount() = 2
 
     override fun createFragment(position: Int): Fragment {
-        if (position==0) return HomeFragment()
-        return HomeFragment()
+        if (position == 0) return HomeFragment()
+        return VideoSaveFragment()
     }
 }

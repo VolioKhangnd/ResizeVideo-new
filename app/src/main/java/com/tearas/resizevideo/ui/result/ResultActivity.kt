@@ -150,7 +150,6 @@ class ResultActivity : BaseActivity<ActivityResultBinding>(), OnItemMenuMoreSele
                 )
             }
         }
-
         val itemSpacingDecoration = ItemSpacingDecoration(30)
         binding.rcyRs.addItemDecoration(itemSpacingDecoration)
         binding.rcyRs.adapter = adapter

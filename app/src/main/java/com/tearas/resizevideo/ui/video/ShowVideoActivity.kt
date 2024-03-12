@@ -1,5 +1,6 @@
 package com.tearas.resizevideo.ui.video
 
+import android.util.Log
 import android.view.MenuItem
 import com.tearas.resizevideo.R
 import com.tearas.resizevideo.core.BaseActivity
@@ -24,6 +25,7 @@ class ShowVideoActivity : BaseActivity<ActivityShowVideoBinding>() {
 
     private fun showVideo() {
         val path = intent.getStringExtra("path")!!
+        Log.d("Âffsdfdffs", path)
         val videoController = VideoController(binding.video)
         videoController.setUpVideoController(path)
     }

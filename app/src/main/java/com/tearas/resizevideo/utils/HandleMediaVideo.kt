@@ -1,22 +1,23 @@
 package com.tearas.resizevideo.utils
 
 import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.content.Context
+import android.media.MediaScannerConnection
 import android.os.Build
 import android.os.Environment
 import android.os.storage.StorageManager
 import android.provider.MediaStore.Video.Media
+import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.arthenica.ffmpegkit.FFprobeKit
-import com.arthenica.ffmpegkit.Log
 import com.arthenica.ffmpegkit.MediaInformation
 import com.tearas.resizevideo.model.FolderInfo
-import com.tearas.resizevideo.model.Resolution
 import com.tearas.resizevideo.model.MediaInfo
+import com.tearas.resizevideo.model.Resolution
 import java.io.File
 import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.InputStream
 
 interface IVideo {
 
@@ -73,6 +74,19 @@ class HandleMediaVideo(private val context: Context) : IVideo {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.FROYO)
+    private fun exportMp4ToGallery(context: Context, filePath: String) {
+        val file = File(filePath)
+        val values = ContentValues(2)
+        values.put(Media.MIME_TYPE, "video/*")
+        values.put(Media.DATA, filePath)
+        context.contentResolver.insert(Media.EXTERNAL_CONTENT_URI, values)
+        MediaScannerConnection.scanFile(
+            context, arrayOf(file.toString()),
+            null, null
+        )
+    }
+
     fun saveFileToExternalStorage(
         context: Context, isVideo: Boolean, inputStream: FileInputStream, fileName: String
     ): File? {
@@ -80,8 +94,9 @@ class HandleMediaVideo(private val context: Context) : IVideo {
             if (isVideo) getPathExternalFolderVideo()
             else getPathExternalFolderAudio()
         )
+        val fileSave = File(folder, fileName)
+
         return try {
-            val fileSave = File(folder, fileName)
             if (fileSave.exists()) {
                 Toast.makeText(context, "File exists", Toast.LENGTH_SHORT).show()
                 return fileSave
@@ -102,6 +117,10 @@ class HandleMediaVideo(private val context: Context) : IVideo {
             return fileSave
         } catch (e: Exception) {
             Toast.makeText(context, "Error when save", Toast.LENGTH_SHORT).show()
+            try {
+                exportMp4ToGallery(context, fileSave.path)
+            } catch (e: Exception) {
+            }
             return null
         }
 
@@ -147,6 +166,7 @@ class HandleMediaVideo(private val context: Context) : IVideo {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.GINGERBREAD)
     override fun getPathStorageExternal(): String {
         val storeMediaMng = context.getSystemService(Context.STORAGE_SERVICE) as StorageManager
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -183,7 +203,8 @@ class HandleMediaVideo(private val context: Context) : IVideo {
             Media.HEIGHT,
             Media.DURATION,
             Media.MIME_TYPE,
-            Media.BITRATE
+            Media.BITRATE,
+            Media.DATE_ADDED
         )
 
         val cursor = contentResolver.query(
@@ -208,7 +229,8 @@ class HandleMediaVideo(private val context: Context) : IVideo {
                         formatTime,
                         getString(getColumnIndex(Media.MIME_TYPE)).split("/")[1],
                         getLong(getColumnIndex(Media.BITRATE)),
-                        true
+                        date = Utils.formatDate(getLong(getColumnIndex(Media.DATE_ADDED))),
+                        true,
                     )
                     if (formatTime != "00:00:00") {
                         videos.add(mediaInfo)
@@ -229,19 +251,10 @@ class HandleMediaVideo(private val context: Context) : IVideo {
     }
 
     override fun getVideoSave(): ArrayList<MediaInfo> {
-        val cacheDir = File(getPathExternalFolderVideo())
-        val videos = ArrayList<MediaInfo>()
-        cacheDir.listFiles()?.forEachIndexed { index, file ->
-            if (file.isFile && file.name.endsWith(".mp4")) {
-                val formatTime = Utils.formatTime(file.length())
-                val fFmpegKit = FFprobeKit.getMediaInformation(file.path).mediaInformation
-                val mediaInfo = createMediaInfo(fFmpegKit, index.toLong())
-                if (formatTime != "00:00:00") {
-                    videos.add(mediaInfo)
-                }
-            }
-        }
-        return videos
+        val path = File(getPathExternalFolderVideo())
+        val selection = "${Media.DATA} like ?"
+        val selectionArg = arrayOf("$path%")
+        return getVideo(selection, selectionArg)
     }
 
     override fun getAudioSave(): ArrayList<MediaInfo> {
@@ -264,12 +277,12 @@ class HandleMediaVideo(private val context: Context) : IVideo {
     ): MediaInfo {
         val filename = mediaInfo.filename.substringAfterLast("/")
         val size = mediaInfo.size.toLong()
-        val resolution = if (mediaInfo.filename.endsWith("mp4")) {
+        val bitrate = mediaInfo.bitrate.toFloat().toLong()
+
+        val resolution =
             Resolution(mediaInfo.streams[0].width.toInt(), mediaInfo.streams[0].height.toInt())
-        } else null
         val durationFormatted = Utils.formatTime(mediaInfo.duration.toFloat().toLong() * 1000)
         val extension = mediaInfo.filename.substringAfterLast(".")
-        val bitrate = mediaInfo.bitrate.toFloat().toLong()
 
         return MediaInfo(
             executionId,
@@ -279,7 +292,8 @@ class HandleMediaVideo(private val context: Context) : IVideo {
             resolution,
             durationFormatted,
             extension,
-            bitrate
+            bitrate,
+            Utils.formatDate(System.currentTimeMillis()),
         )
     }
 
@@ -297,7 +311,6 @@ class HandleMediaVideo(private val context: Context) : IVideo {
             } catch (e: Exception) {
 
             }
-
         }
         return videos
     }

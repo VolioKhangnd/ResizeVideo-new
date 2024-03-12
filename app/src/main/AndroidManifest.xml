@@ -26,12 +26,11 @@
         android:theme="@style/Theme.ResizeVideo"
         tools:targetApi="31">
         <activity
-            android:name=".ui.join_video.JoinVideoActivity"
+            android:name=".ui.reverse.ReversesActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.join_video.JoinActivity"
-            android:exported="false"
-            android:theme="@style/Theme.ResizeVideo" />
+            android:name=".ui.join_video.JoinVideoActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.sup_vip.SubVipActivity"
             android:exported="false" />
@@ -95,7 +94,7 @@
             android:exported="false" />
         <activity
             android:name=".ui.result.ResultActivity"
-            android:exported="false" />
+            android:exported="false"></activity>
         <activity
             android:name=".ui.select_compress.SelectCompressActivity"
             android:exported="false" />

@@ -1,5 +1,6 @@
 package com.tearas.resizevideo.model
 
+import com.tearas.resizevideo.utils.Utils
 import java.io.Serializable
 import java.text.SimpleDateFormat
 
@@ -20,6 +21,7 @@ data class MediaInfo(
     var time: String,
     var mime: String,
     var bitrate: Long,
+    val date: String  ,
     var isVideo: Boolean = true,
     var isSelected: Boolean = false,
     var stateCompression: StateCompression = StateCompression.Waiting

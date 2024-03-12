@@ -52,7 +52,7 @@
                 android:ellipsize="middle"
                 android:lines="1"
                 android:text="nguyen duy khang"
-                 android:textSize="17sp" />
+                android:textSize="17sp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -99,19 +99,21 @@
                 android:background="@android:color/transparent"
                 android:text="@string/play"
                 app:icon="@drawable/icon_play"
-                app:iconGravity="start" />
+                app:iconGravity="start"
+                app:iconSize="24dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/result"
                 style="@style/BTNMore"
-
                 android:layout_width="match_parent"
+
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:text="@string/result"
-
                 app:icon="@drawable/baseline_arrow_forward_24"
-                app:iconGravity="start" />
+
+                app:iconGravity="start"
+                app:iconSize="24dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/compare"
@@ -119,9 +121,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
+
                 android:text="@string/compare_with_original"
                 app:icon="@drawable/compress"
-                app:iconGravity="start" />
+                app:iconGravity="start"
+                app:iconSize="24dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/share"
@@ -129,18 +133,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
+
                 android:text="@string/share_title"
                 app:icon="@drawable/share"
-                app:iconGravity="start" />
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/save"
-                style="@style/BTNMore"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:text="Save"
+                app:iconGravity="start"
+                app:iconSize="24dp" />
 
-                app:iconGravity="start" />
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/delete"
                 style="@style/BTNMore"
@@ -149,7 +147,9 @@
                 android:background="@android:color/transparent"
                 android:text="@string/delete"
                 app:icon="@drawable/baseline_delete_24"
-                app:iconGravity="start" />
+
+                app:iconGravity="start"
+                app:iconSize="24dp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
