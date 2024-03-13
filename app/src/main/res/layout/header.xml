@@ -2,23 +2,24 @@
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    android:background="@color/maintream"
+    android:background="@color/buttonTintCb"
     android:gravity="bottom"
     android:orientation="vertical"
     android:padding="15dp">
 
     <TextView
-        style="@style/textMain"
+        style="@style/TextAppearance.Material3.TitleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/header_title"
         android:textColor="@color/black"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:text="By Teras Apps"
+        android:text="By Teras Apps\nVersion 1.0"
         android:textColor="@color/black" />
 </androidx.appcompat.widget.LinearLayoutCompat>

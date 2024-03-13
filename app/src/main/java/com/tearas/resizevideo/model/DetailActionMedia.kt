@@ -10,10 +10,11 @@ data class DetailActionMedia(
     val media: MediaAction,
     val title: String,
     val icon: Drawable,
-
     val backGroundAction: Int,
-    val backGroundIcon: Int
+    val backGroundIcon: Int,
+    val isSubVip: Boolean = false
 )
+
 
 @SuppressLint("UseCompatLoadingForDrawables")
 fun Context.getListDetailsActionMedia(): List<DetailActionMedia> {
@@ -51,14 +52,14 @@ fun Context.getListDetailsActionMedia(): List<DetailActionMedia> {
             "Slow Video",
             getDrawable(R.drawable.ic_slow_vd)!!,
             getColor(R.color.bg_slow_video),
-            getColor(R.color.bg_ic_slow_video)
+            getColor(R.color.bg_ic_slow_video),
         ),
         DetailActionMedia(
             MediaAction.ExtractAudio,
             "Extract Audio",
             getDrawable(R.drawable.ic_extract_adi)!!,
             getColor(R.color.bg_extract_audio),
-            getColor(R.color.bg_ic_extract_audio)
+            getColor(R.color.bg_ic_extract_audio),
         ),
     )
 }

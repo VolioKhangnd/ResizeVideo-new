@@ -11,10 +11,10 @@ import com.tearas.resizevideo.utils.HandleMediaVideo
 
 class FolderPickerFragment :
     BaseFragment<FragmentFolderPickerBinding>(R.layout.fragment_folder_picker) {
+
     override fun getViewBinding(view: View): FragmentFolderPickerBinding {
         return FragmentFolderPickerBinding.bind(view)
     }
-
 
     private var orderBy = MediaStore.Video.Media.DATE_ADDED + " DESC"
     private lateinit var folderAdapter: FolderAdapter
@@ -38,8 +38,7 @@ class FolderPickerFragment :
         binding.apply {
             rcyFolder.adapter = folderAdapter
             folderAdapter.setOnClickListener { folderInfo, position ->
-                val videoFolder =
-                    MainPickerFragmentDirections.actionMainPickerFragmentToPickerFragment(folderInfo)
+                val videoFolder = MainPickerFragmentDirections.actionMainPickerFragmentToPickerFragment(folderInfo)
                 findNavController().navigate(videoFolder)
             }
         }

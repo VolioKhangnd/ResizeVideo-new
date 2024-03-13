@@ -16,10 +16,6 @@ class SubVipActivity : BaseActivity<ActivitySubVipBinding>() {
                 finish()
             }
 
-            close.setOnClickListener {
-                startActivity(Intent(this@SubVipActivity, MainActivity::class.java))
-                finish()
-            }
         }
     }
 }

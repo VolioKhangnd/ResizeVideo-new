@@ -2,6 +2,7 @@ package com.tearas.resizevideo.ui.main
 
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import com.tearas.resizevideo.core.BaseAdapter
 import com.tearas.resizevideo.databinding.ItemActionBinding
@@ -17,7 +18,8 @@ class ActionVideoAdapter : BaseAdapter<ItemActionBinding, DetailActionMedia>() {
             mCConstraint.backgroundTintList = ColorStateList.valueOf(item.backGroundAction)
             imageIcon.backgroundTintList = ColorStateList.valueOf(item.backGroundIcon)
             imageIcon.setImageDrawable(item.icon)
-            title.text=item.title
+            title.text = item.title
+            imgIsSubVip.visibility = if (!item.isSubVip) View.GONE else View.VISIBLE
         }
     }
 }

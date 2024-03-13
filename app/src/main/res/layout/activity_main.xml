@@ -111,6 +111,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        android:background="@color/maintream"
         app:headerLayout="@layout/header"
         app:menu="@menu/menu_draw" />
 

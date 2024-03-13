@@ -6,12 +6,12 @@
     <group android:checkableBehavior="single" >
         <item
             android:id="@+id/home"
-            android:icon="@drawable/home"
+            android:icon="@drawable/baseline_home_24"
             android:title="@string/home_title"
             app:showAsAction="always" />
         <item
             android:id="@+id/compressVideos"
-            android:icon="@drawable/compress"
+            android:icon="@drawable/ic_folder"
             android:title="@string/compressed_videos_title"
             app:showAsAction="always" />
         <item
@@ -26,7 +26,7 @@
             app:showAsAction="always" />
         <item
             android:id="@+id/settings"
-            android:icon="@drawable/settings"
+            android:icon="@drawable/ic_setting"
             android:title="@string/settings_title"
             app:showAsAction="always" />
 
@@ -37,17 +37,17 @@
         <menu>
             <item
                 android:id="@+id/star"
-                android:icon="@drawable/star"
+                android:icon="@drawable/ic_star"
                 android:title="@string/rate_app_title"
                 app:showAsAction="always" />
             <item
                 android:id="@+id/share"
-                android:icon="@drawable/send"
+                android:icon="@drawable/ic_share"
                 android:title="@string/share_title"
                 app:showAsAction="always" />
             <item
                 android:id="@+id/info"
-                android:icon="@drawable/info"
+                android:icon="@drawable/ic_contact"
                 android:title="@string/contact_us_title"
                 app:showAsAction="always" />
         </menu>

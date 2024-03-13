@@ -77,38 +77,68 @@ android {
 
 
 dependencies {
-     implementation("androidx.media3:media3-exoplayer:1.3.0")
+    // Dependencies for media playback
+    implementation("androidx.media3:media3-exoplayer:1.3.0")
     implementation("androidx.media3:media3-exoplayer-dash:1.3.0")
     implementation("androidx.media3:media3-ui:1.3.0")
+
+// Custom library
     implementation(files("libs/adshelper.aar"))
+
+// Multidex support
     implementation("androidx.multidex:multidex:2.0.1")
+
+// Google Play Services dependencies
     implementation("com.google.android.gms:play-services-ads-identifier:18.0.1")
-    implementation("com.google.android.gms:play-services-ads:22.6.0")
+    implementation("com.google.android.gms:play-services-ads:23.0.0")
+
+// ExoPlayer for media playback
     implementation("com.google.android.exoplayer:exoplayer:2.19.1")
-    implementation("com.android.billingclient:billing-ktx:6.1.0")
+
+// Billing client
+    implementation("com.android.billingclient:billing-ktx:6.2.0")
+
+// UI components
     implementation("com.facebook.shimmer:shimmer:0.5.0")
     implementation("com.airbnb.android:lottie:6.0.0")
     implementation("com.makeramen:roundedimageview:2.3.0")
-//    implementation("com.google.gms:google-services:4.4.0")
     implementation("com.github.Jay-Goo:RangeSeekBar:v3.0.0")
+
+// JSON parsing
     implementation("com.google.code.gson:gson:2.10.1")
+
+// Image loading and caching
     implementation("com.github.bumptech.glide:glide:4.16.0")
 
+// Multimedia processing with FFmpeg
     implementation("com.arthenica:ffmpeg-kit-full-gpl:6.0-2")
+
+// UI components
     implementation("me.relex:circleindicator:2.1.6")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.6")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.6")
-    implementation("com.google.firebase:firebase-config-ktx:21.6.0")
-    implementation("com.google.android.gms:play-services-measurement-api:21.5.0")
-    implementation("androidx.activity:activity:1.8.0")
+
+// Navigation components
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+
+// Firebase dependencies
+    implementation("com.google.firebase:firebase-config-ktx:21.6.3")
+    implementation("com.google.android.gms:play-services-measurement-api:21.5.1")
+
+// Lifecycle components
+    val lifecycle_version = "2.7.0"
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version")
+    annotationProcessor("androidx.lifecycle:lifecycle-compiler:$lifecycle_version")
+
+// Testing dependencies
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    val lifecycle_version = "2.3.1"
-     implementation ("androidx.lifecycle:lifecycle-runtime:$lifecycle_version")
-    annotationProcessor ("androidx.lifecycle:lifecycle-compiler:$lifecycle_version")
+
+// Activity component
+    implementation("androidx.activity:activity-ktx:1.8.2")
+
 }

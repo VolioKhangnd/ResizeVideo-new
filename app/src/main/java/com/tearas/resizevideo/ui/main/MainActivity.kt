@@ -54,13 +54,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             })
             mTab.attach(viewPager, "Home", "Files")
             mTab.setTabSelected(0)
-            val handle = HandleMediaVideo(this@MainActivity)
-
-            val file = File(handle.getPathVideoCacheFolder())
-            file.listFiles().forEach {
-                Log.d("dfkjsdlkfjsdlkfjl", it.name)
-            }
-
         }
     }
 

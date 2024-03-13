@@ -10,7 +10,10 @@ import com.tearas.resizevideo.R
 import com.tearas.resizevideo.databinding.ItemVideoCompressedBinding
 import com.tearas.resizevideo.model.MediaInfo
 
-class VideoCompressedAdapter(private val context: FragmentActivity,private val onMore:(MediaInfo)->Unit) :
+class VideoCompressedAdapter(
+    private val context: FragmentActivity,
+    private val onMore: (MediaInfo) -> Unit
+) :
     BaseAdapter<ItemVideoCompressedBinding, MediaInfo>() {
     override fun getViewBinding(
         inflater: LayoutInflater,
@@ -23,7 +26,7 @@ class VideoCompressedAdapter(private val context: FragmentActivity,private val o
         binding.apply {
             size.text = Formatter.formatFileSize(context, item.size)
             time.text = item.time
-
+            name.text = item.name
             more.setOnClickListener {
                 onMore(item)
             }
