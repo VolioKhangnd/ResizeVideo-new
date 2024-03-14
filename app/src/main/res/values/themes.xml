@@ -77,4 +77,11 @@
     <style name="Edt_Dialog">
         <item name="android:background">@color/edt</item>
     </style>
+    <style name="bg_default">
+        <item name="android:background">@color/maintream</item>
+    </style>
+
+    <style name="popupMenuStyle" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@android:color/white</item>
+    </style>
 </resources>

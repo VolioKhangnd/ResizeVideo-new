@@ -8,18 +8,18 @@ plugins {
     id("org.jetbrains.kotlin.android")
 //     id("androidx.navigation.safeargs")
     id("androidx.navigation.safeargs.kotlin")
-//    id ("com.google.gms.google-services")
-
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 val apikeyPropertiesFile = rootProject.file("apikey.properties")
 val apikeyProperties = Properties()
 apikeyProperties.load(FileInputStream(apikeyPropertiesFile))
 android {
-    namespace = "com.tearas.resizevideo"
+    namespace = "com.video.mini.tools.zip.compress.convert.simple.tiny"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.tearas.resizevideo"
+        applicationId = "com.video.mini.tools.zip.compress.convert.simple.tiny"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -31,10 +31,10 @@ android {
         buildConfigField("String", "GG_NATIVE", apikeyProperties["GG_NATIVE"] as String)
         buildConfigField("String", "GG_FULL", apikeyProperties["GG_FULL"] as String)
         buildConfigField("String", "GG_REWARDED", apikeyProperties["GG_REWARDED"] as String)
-//
-//        ndk {
-//            abiFilters.add("arm64-v8a")
-//        }
+
+        ndk {
+            abiFilters.add("arm64-v8a")
+        }
     }
 
 
@@ -123,10 +123,8 @@ dependencies {
 // Navigation components
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
-
-// Firebase dependencies
     implementation("com.google.firebase:firebase-config-ktx:21.6.3")
-    implementation("com.google.android.gms:play-services-measurement-api:21.5.1")
+
 
 // Lifecycle components
     val lifecycle_version = "2.7.0"
@@ -140,5 +138,12 @@ dependencies {
 
 // Activity component
     implementation("androidx.activity:activity-ktx:1.8.2")
+
+    // Firebase
+    implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
+    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-crashlytics")
+    implementation("com.google.firebase:firebase-analytics")
+
 
 }

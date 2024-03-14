@@ -2,10 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/BackgroundScreen"
+    style="@style/bg_default"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fast_forward.FastForwardActivity">
+    tools:context="com.video.mini.tools.zip.compress.convert.simple.tiny.ui.fast_forward.FastForwardActivity">
 
 
     <androidx.appcompat.widget.Toolbar
@@ -36,9 +36,9 @@
             android:id="@+id/videoController"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.8"
             app:layout_constraintBottom_toTopOf="@+id/linearLayoutCompat5"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.8"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,9 +49,9 @@
             android:background="@color/bg_unclick"
             android:orientation="vertical"
             android:paddingVertical="15dp"
-            app:layout_constraintHeight_percent="0.2"
             app:layout_constraintBottom_toTopOf="@+id/bannerAds"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.2"
             app:layout_constraintStart_toStartOf="parent">
 
             <RadioGroup
@@ -93,8 +93,7 @@
 
                         <TextView
                             android:id="@+id/txt1x"
-                            style="@style/StyleSpeed"
-                            android:layout_width="wrap_content"
+                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:foreground="?attr/selectableItemBackground"
                             android:gravity="center"
@@ -112,8 +111,7 @@
 
                         <TextView
                             android:id="@+id/txt1_25x"
-                            style="@style/StyleSpeed"
-                            android:layout_width="wrap_content"
+                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
 
                             android:foreground="?attr/selectableItemBackground"
@@ -132,8 +130,7 @@
 
                         <TextView
                             android:id="@+id/txt1_5x"
-                            style="@style/StyleSpeed"
-                            android:layout_width="wrap_content"
+                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
 
                             android:foreground="?attr/selectableItemBackground"
@@ -152,8 +149,7 @@
 
                         <TextView
                             android:id="@+id/txt2x"
-                            style="@style/StyleSpeed"
-                            android:layout_width="wrap_content"
+                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
 
                             android:foreground="?attr/selectableItemBackground"
@@ -171,8 +167,7 @@
 
                         <TextView
                             android:id="@+id/txt2_5x"
-                            style="@style/StyleSpeed"
-                            android:layout_width="wrap_content"
+                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
 
                             android:foreground="?attr/selectableItemBackground"
@@ -186,19 +181,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         app:cardCornerRadius="25dp"
-                        app:cardElevation="0dp">
-
-                        <TextView
-                            android:id="@+id/txt3x"
-                            style="@style/StyleSpeed"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-
-                            android:foreground="?attr/selectableItemBackground"
-                            android:gravity="center"
-                            android:text="3x"
-                            android:textStyle="bold" />
-                    </androidx.cardview.widget.CardView>
+                        app:cardElevation="0dp" />
                 </RadioGroup>
 
 

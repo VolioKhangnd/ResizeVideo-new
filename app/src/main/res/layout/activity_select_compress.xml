@@ -2,11 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/BackgroundScreen"
+    style="@style/bg_default"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.select_compress.SelectCompressActivity">
+    tools:context="com.video.mini.tools.zip.compress.convert.simple.tiny.ui.select_compress.SelectCompressActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar2"
@@ -60,7 +60,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcyOption"
-                style="@style/BackgroundScreen"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -86,11 +86,11 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/compress"
+                style="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/orangerYellow"
                 android:text="@string/compress"
-                style="@style/TextAppearance.AppCompat.Title"
                 android:textAllCaps="false"
                 android:textStyle="bold" />
         </androidx.cardview.widget.CardView>

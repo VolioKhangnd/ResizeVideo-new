@@ -2,12 +2,12 @@
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/BackgroundScreen"
+    style="@style/bg_default"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_view_fast_options"
     android:orientation="vertical"
-    tools:context=".ui.video.ShowVideoActivity">
+    tools:context="com.video.mini.tools.zip.compress.convert.simple.tiny.ui.video.ShowVideoActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"

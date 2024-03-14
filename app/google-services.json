@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "572616564674",
+    "project_id": "appteras",
+    "storage_bucket": "appteras.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:572616564674:android:6a9e4857b987c9dab6005b",
+        "android_client_info": {
+          "package_name": "com.video.mini.tools.zip.compress.convert.simple.tiny"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3d0DbTtlcaP_g4X_6Hbc3VTvBWuz9vLY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:572616564674:android:6292c2c737b56d1cb6005b",
+        "android_client_info": {
+          "package_name": "com.video.mini.tools.zip.compress.convert.simple.tiny.core"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3d0DbTtlcaP_g4X_6Hbc3VTvBWuz9vLY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

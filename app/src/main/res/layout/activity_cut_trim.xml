@@ -2,13 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/BackgroundScreen"
+    style="@style/bg_default"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="match_parent"
+         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/maintream"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,9 +21,9 @@
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
+
         android:layout_height="0dp"
         android:layout_marginBottom="15sp"
-        android:background="#fffaf3"
         android:paddingStart="25sp"
         android:paddingEnd="25sp"
         app:layout_constraintBottom_toTopOf="@+id/tab"
@@ -56,7 +56,6 @@
         android:id="@+id/tab"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/maintream"
         android:orientation="horizontal"
         android:weightSum="10"
         app:layout_constraintBottom_toTopOf="@+id/includeCutTrim"
@@ -74,6 +73,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:gravity="center"
+
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -88,6 +88,7 @@
                     android:id="@+id/textView15"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
                     android:gravity="center"
                     android:text="Cut video"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -125,12 +126,15 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/cut" />
+                    android:tint="@color/black"
+                    android:src="@drawable/ic_trim" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
                     android:gravity="center"
+
                     android:text="Trim video"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -163,6 +167,7 @@
         android:id="@+id/includeCutTrim"
         layout="@layout/include_cut_trim"
         android:layout_width="match_parent"
+
         android:layout_height="wrap_content"
         android:layout_marginStart="50sp"
         android:layout_marginEnd="50sp"

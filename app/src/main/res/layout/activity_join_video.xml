@@ -3,17 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    style="@style/bg_default"
     android:layout_width="match_parent"
-    android:background="@color/maintream"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.join_video.JoinVideoActivity">
+    tools:context="com.video.mini.tools.zip.compress.convert.simple.tiny.ui.join_video.JoinVideoActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:layout_width="match_parent"
-        app:title="Join Video"
         android:id="@+id/toolbar"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/maintream"
+        app:titleTextColor="@color/black"
+        app:title="Join Video"
+        >
 
         <TextView
             android:id="@+id/next"
@@ -23,6 +26,7 @@
             android:layout_gravity="end"
             android:layout_marginEnd="15dp"
             android:text="Next"
+            android:textColor="@color/black"
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
 
@@ -45,8 +49,8 @@ Drag&amp;Drop them to the timeline orderly "
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcy"
         android:layout_width="match_parent"
-        android:paddingHorizontal="15dp"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:paddingHorizontal="15dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 </androidx.appcompat.widget.LinearLayoutCompat>

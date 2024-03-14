@@ -64,6 +64,7 @@
             android:id="@+id/name"
             style="@style/TextAppearance.Material3.TitleMedium"
             android:layout_width="0dp"
+            android:textColor="@color/black"
             android:layout_height="wrap_content"
             android:ellipsize="middle"
             android:lines="1"
@@ -90,6 +91,7 @@
                 android:layout_marginTop="5dp"
                 android:ellipsize="middle"
                 android:lines="1"
+                android:textColor="@color/black"
                 android:text="@string/compressed"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

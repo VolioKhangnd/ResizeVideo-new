@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    style="@style/BackgroundScreen"
+    style="@style/bg_default"
     android:layout_height="match_parent"
-    tools:context=".ui.error.ShowErrorActivity">
+    tools:context="com.video.mini.tools.zip.compress.convert.simple.tiny.ui.error.ShowErrorActivity">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
@@ -24,7 +24,7 @@
         android:textStyle="bold"
         android:textSize="25sp"
         android:text="@string/something_went_wrong_please_try_again"
-        android:textColor="@color/maintream"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

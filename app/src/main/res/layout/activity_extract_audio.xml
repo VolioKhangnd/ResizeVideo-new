@@ -5,28 +5,28 @@
 
         <variable
             name="MediaInfo"
-            type="com.tearas.resizevideo.model.MediaInfo" />
+            type="com.video.mini.tools.zip.compress.convert.simple.tiny.model.MediaInfo" />
 
         <variable
             name="ExtractViewModel"
-            type="com.tearas.resizevideo.ui.extract_audio.ExtractViewModel" />
+            type="com.video.mini.tools.zip.compress.convert.simple.tiny.ui.extract_audio.ExtractViewModel" />
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        style="@style/CustomBgAudioOptions"
+        style="@style/bg_default"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/maintream"
 
         android:orientation="vertical"
-        tools:context=".ui.fast_forward.FastForwardOptionsActivity">
+        tools:context="com.video.mini.tools.zip.compress.convert.simple.tiny.ui.fast_forward.FastForwardOptionsActivity">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/maintream"
             app:title="Fast Forward Options"
             app:titleTextColor="@color/black" />
 
@@ -43,7 +43,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/maintream">
+                 android:background="@color/maintream">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardView2"
@@ -143,8 +143,8 @@
                 android:id="@+id/linearLayout3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:background="@color/bg_unclick"
+                android:orientation="vertical"
                 android:padding="10sp"
                 app:layout_constraintTop_toBottomOf="@+id/include"
                 tools:layout_editor_absoluteX="10dp">
@@ -164,6 +164,7 @@
 
                     <RadioButton
                         android:id="@+id/rdi1"
+                        android:textColor="@color/black"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
@@ -174,6 +175,7 @@
 
                     <RadioButton
                         android:id="@+id/rdi2"
+                        android:textColor="@color/black"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
@@ -185,6 +187,7 @@
                     <RadioButton
                         android:id="@+id/rdi3"
                         android:layout_width="wrap_content"
+                        android:textColor="@color/black"
                         android:layout_height="wrap_content"
                         android:checked="@{ExtractViewModel.selectedRadioIndex.intValue()==2}"
                         android:onClick="@{() -> ExtractViewModel.setSelectedRadioIndex(2)}"
@@ -203,6 +206,7 @@
                     <RadioButton
                         android:id="@+id/rdi4"
                         android:layout_width="wrap_content"
+                        android:textColor="@color/black"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         android:checked="@{ExtractViewModel.selectedRadioIndex.intValue()==3}"
@@ -215,6 +219,7 @@
                         android:id="@+id/rdi5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/black"
                         android:layout_marginEnd="10dp"
                         android:checked="@{ExtractViewModel.selectedRadioIndex.intValue()==4}"
                         android:onClick="@{() -> ExtractViewModel.setSelectedRadioIndex(4)}"
@@ -229,6 +234,7 @@
                         android:checked="@{ExtractViewModel.selectedRadioIndex.intValue()==5}"
                         android:onClick="@{() -> ExtractViewModel.setSelectedRadioIndex(5)}"
                         android:text="OGG"
+                        android:textColor="@color/black"
 
                         app:buttonTint="@color/buttonTintCb" />
 
@@ -255,7 +261,7 @@
             android:layout_marginTop="10dp"
             android:backgroundTint="@color/orangerYellow"
             android:onClick="@{() ->ExtractViewModel.setOnClickContinues()}"
-             android:text="@string/continues"
+            android:text="@string/continues"
             android:textColor="@color/black"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"

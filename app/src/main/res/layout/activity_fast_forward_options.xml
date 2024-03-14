@@ -2,11 +2,11 @@
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/bg_default"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/maintream"
     android:orientation="vertical"
-    tools:context=".ui.fast_forward.FastForwardOptionsActivity">
+    tools:context="com.video.mini.tools.zip.compress.convert.simple.tiny.ui.fast_forward.FastForwardOptionsActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -28,7 +28,6 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-
             android:layout_height="wrap_content"
             android:background="@color/maintream">
 
@@ -154,6 +153,7 @@
                     android:layout_height="wrap_content"
                     android:checked="true"
                     android:text="@string/without_compression"
+                    android:textColor="@color/black"
                     android:textStyle="bold"
                     app:buttonTint="@color/buttonTintCb" />
 
@@ -162,6 +162,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/smail_size"
+                    android:textColor="@color/black"
                     android:textStyle="bold"
                     app:buttonTint="@color/buttonTintCb" />
 
@@ -171,6 +172,7 @@
                     android:layout_height="wrap_content"
                     android:checked="true"
                     android:text="@string/medium_size"
+                    android:textColor="@color/black"
 
                     android:textStyle="bold"
                     app:buttonTint="@color/buttonTintCb" />
@@ -180,6 +182,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/large_size"
+                    android:textColor="@color/black"
                     android:textStyle="bold"
                     app:buttonTint="@color/buttonTintCb" />
 
@@ -224,6 +227,7 @@
                 android:layout_height="wrap_content"
                 android:checked="true"
                 android:text="@string/with_audio"
+                android:textColor="@color/black"
                 app:buttonTint="@color/buttonTintCb" />
         </LinearLayout>
 

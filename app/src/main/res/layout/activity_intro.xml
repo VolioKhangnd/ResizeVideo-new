@@ -4,41 +4,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_sub_vip"
-    tools:context=".ui.intro.IntroActivity">
+    android:background="@drawable/bg_intro"
+    tools:context="com.video.mini.tools.zip.compress.convert.simple.tiny.ui.intro.IntroActivity">
+
+    <TextView
+        android:id="@+id/textView22"
+        style="@style/TextAppearance.Material3.TitleLarge"
+        android:layout_width="0dp"
+        android:gravity="center"
+
+        android:textSize="35dp"
+        android:lines="1"
+        android:autoSizeTextType="uniform"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:text="Powerful Compression App"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager2"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginBottom="15dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/btnNext"
+        app:layout_constraintBottom_toTopOf="@+id/circleIndicator3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView22" />
 
     <me.relex.circleindicator.CircleIndicator3
         android:id="@+id/circleIndicator3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/bannerAds"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/btnNext" />
+        app:layout_constraintBottom_toTopOf="@+id/btnGetStarted"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnNext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:src="@drawable/ic_arrow_24"
-        app:layout_constraintBottom_toTopOf="@+id/bannerAds"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <FrameLayout
-        android:id="@+id/bannerAds"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnGetStarted"
+        style="@style/TextAppearance.Material3.TitleLarge"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:maxHeight="100dp"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginBottom="15dp"
+        android:backgroundTint="#97FF5722"
+        android:text="Get started"
+        android:textColor="@color/maintream"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

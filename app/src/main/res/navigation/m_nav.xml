@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/pickerFragment"
-        android:name="com.tearas.resizevideo.ui.video_pickers.VideoFolderFragment"
+        android:name="com.video.mini.tools.zip.compress.convert.simple.tiny.ui.video_pickers.VideoFolderFragment"
         android:label="PickerFragment"
         tools:layout="@layout/fragment_video_folder">
 
         <argument
             android:name="FolderInfo"
-            app:argType="com.tearas.resizevideo.model.FolderInfo" />
+            app:argType="com.video.mini.tools.zip.compress.convert.simple.tiny.model.FolderInfo" />
 
     </fragment>
 
     <fragment
         android:id="@+id/mainPickerFragment"
-        android:name="com.tearas.resizevideo.ui.video_pickers.MainPickerFragment"
+        android:name="com.video.mini.tools.zip.compress.convert.simple.tiny.ui.video_pickers.MainPickerFragment"
         android:label="MainPickerFragment"
         tools:layout="@layout/fragment_main_picker">
 

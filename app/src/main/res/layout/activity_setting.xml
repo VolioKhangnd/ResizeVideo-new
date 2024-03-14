@@ -2,11 +2,11 @@
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/BackgroundScreen"
+    style="@style/bg_default"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.setting.SettingActivity">
+    tools:context="com.video.mini.tools.zip.compress.convert.simple.tiny.ui.setting.SettingActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:background="@color/maintream"
         app:title="Settings"
+        app:popupTheme="@style/popupMenuStyle"
         app:titleTextColor="@color/black"  />
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -2,8 +2,8 @@
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/BackgroundScreen"
     android:layout_width="match_parent"
+    style="@style/bg_default"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
@@ -11,6 +11,7 @@
         android:id="@+id/mToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         android:background="@color/maintream"
         app:titleTextColor="@color/black" />
 
