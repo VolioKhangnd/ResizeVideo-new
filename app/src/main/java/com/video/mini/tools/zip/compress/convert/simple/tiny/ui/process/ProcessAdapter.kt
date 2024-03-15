@@ -22,10 +22,10 @@ class ProcessAdapter(val context: Context) : BaseAdapter<ItemVideoCompressingBin
 
     override fun onBind(binding: ItemVideoCompressingBinding, item: MediaInfo) {
         binding.apply {
-            name.text=item.name
+            name.text = item.name
             size.text = Formatter.formatFileSize(context, item.size)
             Glide.with(context)
-                .load("file:///" + item.path)
+                .load(item.path)
                 .error(context.getDrawable(R.drawable.logo)!!.setTint(Color.GRAY))
                 .into(binding.thumbnail);
             val drawState = when (item.stateCompression) {
@@ -34,7 +34,7 @@ class ProcessAdapter(val context: Context) : BaseAdapter<ItemVideoCompressingBin
                 StateCompression.Failure -> R.drawable.ic_close_24
                 StateCompression.Success -> R.drawable.baseline_done_24
             }
-            state.setImageDrawable(context.getDrawable(drawState)!!)
+            state.setImageResource(drawState)
         }
     }
 }

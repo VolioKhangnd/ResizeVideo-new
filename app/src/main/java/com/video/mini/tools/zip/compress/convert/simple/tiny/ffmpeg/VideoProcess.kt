@@ -1,6 +1,7 @@
 package com.video.mini.tools.zip.compress.convert.simple.tiny.ffmpeg
 
 import android.content.Context
+import android.util.Log
 import com.arthenica.ffmpegkit.FFmpegKit
 import com.arthenica.ffmpegkit.FFmpegKitConfig
 import com.arthenica.ffmpegkit.FFprobeKit
@@ -116,11 +117,11 @@ class VideoProcess {
                             }
 
                             is MediaAction.FastForward -> {
-                                timeVideo * (1.0 + (1 - optionMedia.speed))
+                                timeVideo / (optionMedia.speed)
                             }
 
                             is MediaAction.SlowVideo -> {
-                                timeVideo * (1 / optionMedia.speed)
+                                timeVideo * (1 + (1 - optionMedia.speed))
                             }
 
                             is MediaAction.JoinVideo -> {
@@ -130,6 +131,7 @@ class VideoProcess {
                             else -> timeVideo
                         }
                         ).toFloat()
+                Log.d("sadkafjlafsjf", Utils.formatTime(duration.toLong()))
                 durations.add(duration)
                 if (optionMedia.mediaAction is MediaAction.CutOrTrim.CutVideo ||
                     optionMedia.mediaAction is MediaAction.CutOrTrim.TrimVideo ||

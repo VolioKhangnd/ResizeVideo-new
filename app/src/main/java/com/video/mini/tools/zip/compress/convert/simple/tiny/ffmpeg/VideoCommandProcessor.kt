@@ -158,7 +158,7 @@ class VideoCommandProcessor(
     ): String {
         val commandProcessor = CommandConfiguration.getInstance()
         val speedVideo = if (!isFastVideo) 1.0 + (1 - speed) else 1 / speed
-        val speedAudio = if (isFastVideo) speed else 1.0 / (speed + 1)
+        val speedAudio = if (isFastVideo) speed else 1.0 / (1.0 + (1 - speed))
 
         if (resolution.height % 2 != 0) resolution.height += 1
         commandProcessor

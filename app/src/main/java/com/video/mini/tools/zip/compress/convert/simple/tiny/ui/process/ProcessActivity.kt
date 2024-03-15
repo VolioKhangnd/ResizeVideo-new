@@ -2,6 +2,7 @@ package com.video.mini.tools.zip.compress.convert.simple.tiny.ui.process
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Looper
 import android.util.Log
 import android.view.MenuItem
 import com.arthenica.ffmpegkit.FFmpegKit
@@ -28,6 +29,7 @@ import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.IntentUtils.p
 import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.IntentUtils.passMediaOutput
 import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.Utils.startToMainActivity
 import java.util.Collections
+import java.util.logging.Handler
 
 class ProcessActivity : BaseActivity<ActivityProcessBinding>(), IProcessFFmpeg {
 
@@ -122,22 +124,19 @@ class ProcessActivity : BaseActivity<ActivityProcessBinding>(), IProcessFFmpeg {
         }
     }
 
-    override fun onSuccess(currentIndex: Int, mediaInfo: MediaInfo) {
-        Log.d("sdfaklfjaklsjfkonSuccess", mediaInfoResults.toString())
+    override fun onSuccess(position: Int, mediaInfo: MediaInfo) {
         mediaInfoResults.add(mediaInfo)
-
+        val lastItemIndex = processAdapter.itemCount - 1
+        processAdapter.submitData[0].stateCompression = StateCompression.Success
         runOnUiThread {
-            val lastItemIndex = processAdapter.itemCount - 1
-            processAdapter.submitData[currentIndex].stateCompression = StateCompression.Success
-
-            processAdapter.notifyItemMoved(0, lastItemIndex)
+        //    processAdapter.notifyItemChanged(0)
             Collections.swap(processAdapter.submitData, 0, lastItemIndex)
+            processAdapter.notifyDataSetChanged()
         }
     }
 
     private val mediaInfoResults: ArrayList<MediaInfo> = ArrayList()
     override fun onFinish() {
-        Log.d("sdfaklfjaklsjfkonFinish", mediaInfoResults.toString())
         if (mediaInfoResults.isEmpty()) {
             val intent = Intent(this, ShowErrorActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -153,18 +152,15 @@ class ProcessActivity : BaseActivity<ActivityProcessBinding>(), IProcessFFmpeg {
     }
 
     override fun onFailure(position: Int, error: String) {
-        Log.d("sdfaklfjaklsjfkononFailure", mediaInfoResults.toString())
-
+        if (intent.getActionMedia() == MediaAction.JoinVideo) {
+            processAdapter.submitData.forEach { it.stateCompression = StateCompression.Failure }
+        }
+        val lastItemIndex = processAdapter.itemCount - 1
+        processAdapter.submitData[0].stateCompression = StateCompression.Failure
         runOnUiThread {
-            if (intent.getActionMedia() == MediaAction.JoinVideo) {
-                processAdapter.submitData.forEach { it.stateCompression = StateCompression.Failure }
-                processAdapter.notifyDataSetChanged()
-            }
-            val lastItemIndex = processAdapter.itemCount - 1
-            processAdapter.submitData[position].stateCompression = StateCompression.Failure
-            processAdapter.notifyItemChanged(position)
-            Collections.swap(processAdapter.submitData, position, lastItemIndex)
-            processAdapter.notifyItemMoved(position, lastItemIndex)
+         //   processAdapter.notifyItemChanged(0)
+            Collections.swap(processAdapter.submitData, 0, lastItemIndex)
+            processAdapter.notifyDataSetChanged()
         }
     }
 }
