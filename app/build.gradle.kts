@@ -22,8 +22,8 @@ android {
         applicationId = "com.video.mini.tools.zip.compress.convert.simple.tiny"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0.1"
+        versionCode = 102
+        versionName = "1.0.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "GG_APP_OPEN", apikeyProperties["GG_APP_OPEN"] as String)
@@ -32,9 +32,9 @@ android {
         buildConfigField("String", "GG_FULL", apikeyProperties["GG_FULL"] as String)
         buildConfigField("String", "GG_REWARDED", apikeyProperties["GG_REWARDED"] as String)
 
-        ndk {
-            abiFilters.add("arm64-v8a")
-        }
+//        ndk {
+//            abiFilters.add("arm64-v8a")
+//        }
     }
 
 
@@ -66,17 +66,14 @@ android {
         dataBinding = true
     }
 
-//    packagingOptions {
-//        exclude("lib/x86_64/*")
-//        exclude("lib/x86/*")
-//        exclude("lib/armeabi-v7a/*")
-//    }
+
 }
 
 
 
 
 dependencies {
+    implementation ("com.github.akshaaatt:Google-IAP:1.6.0")
     // Dependencies for media playback
     implementation("androidx.media3:media3-exoplayer:1.3.0")
     implementation("androidx.media3:media3-exoplayer-dash:1.3.0")

@@ -10,12 +10,12 @@
               <deviceKey>
                 <Key>
                   <type value="SERIAL_NUMBER" />
-                  <value value="7f13dbd8" />
+                  <value value="192.168.56.101:5555" />
                 </Key>
               </deviceKey>
             </Target>
           </runningDeviceTargetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-03-14T09:36:26.985330900Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-03-18T08:20:33.795989400Z" />
         </State>
       </entry>
     </value>

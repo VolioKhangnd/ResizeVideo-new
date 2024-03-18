@@ -2,6 +2,7 @@ package com.video.mini.tools.zip.compress.convert.simple.tiny.ffmpeg
 
 import android.content.Context
 import com.arthenica.ffmpegkit.FFprobeKit
+import com.arthenica.ffmpegkit.Log
 import com.video.mini.tools.zip.compress.convert.simple.tiny.model.MediaInfo
 import com.video.mini.tools.zip.compress.convert.simple.tiny.model.OptionCompressType
 import com.video.mini.tools.zip.compress.convert.simple.tiny.model.OptionMedia
@@ -21,7 +22,7 @@ class VideoCommandProcessor(
         return CommandConfiguration.getInstance()
             .appendCommand("-y")
             .appendCommand("-i")
-            .appendCommand(inputPath)
+            .appendCommand("\"$inputPath\"")
             .appendCommand("-c:v libx264")
             .appendCommand("-r 60")
             .appendCommand("-passlogfile")
@@ -35,7 +36,7 @@ class VideoCommandProcessor(
             .appendCommand("-f mp4")
             .appendCommand("/dev/null")
             .appendCommand("-y -i")
-            .appendCommand(inputPath)
+            .appendCommand("\"$inputPath\"")
             .appendCommand("-c:v libx264")
             .appendCommand("-r 60")
             .appendCommand("-passlogfile")
@@ -61,16 +62,16 @@ class VideoCommandProcessor(
         return when (option) {
             is OptionCompressType.CustomFileSize -> {
                 val originalDuration =
-                    FFprobeKit.getMediaInformation(inputPath).mediaInformation.duration.toFloat()
+                    FFprobeKit.getMediaInformation("\"$inputPath\"").mediaInformation.duration.toFloat()
                         .toLong()
                 val targetBitrate = (fileSizeCompress!! / originalDuration) - 127000
-                val x = compressByFileSize(inputPath, targetBitrate)
+                val x = compressByFileSize("\"$inputPath\"", targetBitrate)
                 x
             }
 
             is OptionCompressType.Origin -> {
                 CommandConfiguration.getInstance()
-                    .appendCommand("-i $inputPath")
+                    .appendCommand("-i \"$inputPath\" -c:v libx264")
                     .appendCommand("-preset medium")
                     .appendCommand(getPathOutPut(mime))
                     .getCommand()
@@ -78,8 +79,8 @@ class VideoCommandProcessor(
 
             is OptionCompressType.AdvanceTypeOption -> {
                 CommandConfiguration.getInstance()
-                    .appendCommand("-i $inputPath")
-                    .appendCommand("-s ${resolution.width}x${resolution.height}")
+                    .appendCommand("-i \"$inputPath\"")
+                    .appendCommand("-s ${resolution.width}x${resolution.height} -c:v libx264")
                     .appendCommand("-r $frameRate")
                     .appendCommand("-b:v ${bitrate}k")
                     .appendCommand("-preset medium")
@@ -89,8 +90,8 @@ class VideoCommandProcessor(
 
             else -> {
                 CommandConfiguration.getInstance()
-                    .appendCommand("-i $inputPath")
-                    .appendCommand("-s ${resolution.width}x${resolution.height}")
+                    .appendCommand("-i \"$inputPath\" ")
+                    .appendCommand("-s ${resolution.width}x${resolution.height} -c:v libx264")
                     .appendCommand(getPathOutPut(mime))
                     .getCommand()
             }
@@ -113,7 +114,7 @@ class VideoCommandProcessor(
         mime: String
     ): String {
         return CommandConfiguration.getInstance()
-            .appendCommand("-i $inputPath")
+            .appendCommand("-i \"$inputPath\"")
             .appendCommand("-s ${resolution.width}x${resolution.height}")
             .appendCommand("-ss ${Utils.formatTime(startTime * 1000)}")
             .appendCommand("-t ${Utils.formatTime((endTime - startTime) * 1000)}")
@@ -131,17 +132,18 @@ class VideoCommandProcessor(
         mime: String
     ): String {
         return CommandConfiguration.getInstance()
-            .appendCommand("-i $inputPath")
+            .appendCommand("-i \"$inputPath\"")
             .appendCommand("-s ${resolution.width}x${resolution.height}")
             .appendCommand("-vf  \"select='not(between(t,$startTime,$endTime))',  setpts=N/FRAME_RATE/TB\"")
             .appendCommand(" -af \"aselect='not(between(t,$startTime,$endTime))', asetpts=N/SR/TB\"")
+            .appendCommand("-c:v copy")
             .appendCommand(getPathOutPut(mime))
             .getCommand();
     }
 
     private fun extractAudioCommand(mime: String, inputPath: String): String {
         return CommandConfiguration.getInstance()
-            .appendCommand("-i $inputPath")
+            .appendCommand("-i \"$inputPath\"")
             .appendCommand("-vn")
             .appendCommand(getPathOutPut(mime, false))
             .getCommand()
@@ -162,8 +164,9 @@ class VideoCommandProcessor(
 
         if (resolution.height % 2 != 0) resolution.height += 1
         commandProcessor
-            .appendCommand("-i $inputPath")
+            .appendCommand("-i \"$inputPath\"")
             .appendCommand("-s ${resolution.width}x${resolution.height}")
+            .appendCommand("-c:v libx264")
             .appendCommand("-preset medium")
             .appendCommand("-filter_complex")
         if (withAudio) {
@@ -183,14 +186,15 @@ class VideoCommandProcessor(
         val commandProcessor = CommandConfiguration.getInstance()
         mediaOption.dataOriginal.forEach {
             commandProcessor.appendCommand("-i")
-            commandProcessor.appendCommand(it.path)
+            commandProcessor.appendCommand("\"${it.path}\"")
         }
+        android.util.Log.d("sdfafsaff",mediaOption.codec.toString()+mediaOption.mimetype)
         if (mediaOption.codec != null) commandProcessor.appendCommand(
-            "-vcodec  ${
+            "-c:v  ${
                 if (mediaOption.codec.startsWith(
                         "h264"
                     )
-                ) "h264" else mediaOption.codec
+                ) "libx264" else mediaOption.codec
             }"
         )
         var videoStream = ""
@@ -218,7 +222,7 @@ class VideoCommandProcessor(
         reverseAudio: Boolean,
         preset: String
     ): String {
-        return "-i $pathVideo -vf reverse ${if (reverseAudio) "-af areverse" else ""} -preset $preset ${
+        return "-i $pathVideo -c:v libx264 -vf reverse ${if (reverseAudio) "-af areverse" else ""} -preset $preset ${
             getPathOutPut(
                 mime
             )

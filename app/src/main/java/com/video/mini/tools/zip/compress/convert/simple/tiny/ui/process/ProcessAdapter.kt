@@ -11,6 +11,7 @@ import com.video.mini.tools.zip.compress.convert.simple.tiny.core.BaseAdapter
 import com.video.mini.tools.zip.compress.convert.simple.tiny.databinding.ItemVideoCompressingBinding
 import com.video.mini.tools.zip.compress.convert.simple.tiny.model.MediaInfo
 import com.video.mini.tools.zip.compress.convert.simple.tiny.model.StateCompression
+import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.AnimUtils
 
 class ProcessAdapter(val context: Context) : BaseAdapter<ItemVideoCompressingBinding, MediaInfo>() {
     override fun getViewBinding(
@@ -35,6 +36,11 @@ class ProcessAdapter(val context: Context) : BaseAdapter<ItemVideoCompressingBin
                 StateCompression.Success -> R.drawable.baseline_done_24
             }
             state.setImageResource(drawState)
+            val animUtils = android.view.animation.AnimationUtils.loadAnimation(
+                context,
+                R.anim.anim_zoom_in_out
+            )
+            state.startAnimation(animUtils)
         }
     }
 }

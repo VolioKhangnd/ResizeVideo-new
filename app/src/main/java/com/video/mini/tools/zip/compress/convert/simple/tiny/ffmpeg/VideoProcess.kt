@@ -131,8 +131,7 @@ class VideoProcess {
                             else -> timeVideo
                         }
                         ).toFloat()
-                Log.d("sadkafjlafsjf", Utils.formatTime(duration.toLong()))
-                durations.add(duration)
+                 durations.add(duration)
                 if (optionMedia.mediaAction is MediaAction.CutOrTrim.CutVideo ||
                     optionMedia.mediaAction is MediaAction.CutOrTrim.TrimVideo ||
                     optionMedia.mediaAction is MediaAction.FastForward ||
@@ -159,8 +158,8 @@ class VideoProcess {
             commands.forEach { command ->
                 val positionPass2 = command.split("-y -i")
                 if (positionPass2.size >= 2) {
-                    pass1 = "-y -i " + positionPass2[1].trim()
-                    pass2 = "-y -i " + positionPass2[2].trim()
+                    pass1 = "-y -i \"${positionPass2[1].trim()}\""
+                    pass2 = "-y -i \"${positionPass2[2].trim()}\""
                     pathOutputs.add(command.substring(command.lastIndexOf(" ") + 1))
                     this.commands.addAll(listOf(pass1, pass2))
                 } else {

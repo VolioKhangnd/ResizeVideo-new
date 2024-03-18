@@ -11,7 +11,7 @@ data class OptionCompression(
     var detail: String = "",
     val type: OptionCompressType,
     var isSelected: Boolean = false,
-    val isSubVip: Boolean = false
+    val isSubVip: Boolean = false,
 ) {
     companion object {
         fun getOptionsCompression(
@@ -37,7 +37,8 @@ data class OptionCompression(
                 val description = listDescription[index]
                 val compressType = listCompressType[index]
                 val isSelected = index == 0
-                val detail = if (resolutionOrigin != null && index < 4) resolution.toString() else ""
+                val detail =
+                    if (resolutionOrigin != null && index < 4) resolution.toString() else ""
                 val option = OptionCompression(
                     title,
                     description,

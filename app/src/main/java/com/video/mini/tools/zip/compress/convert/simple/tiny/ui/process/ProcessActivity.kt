@@ -129,7 +129,7 @@ class ProcessActivity : BaseActivity<ActivityProcessBinding>(), IProcessFFmpeg {
         val lastItemIndex = processAdapter.itemCount - 1
         processAdapter.submitData[0].stateCompression = StateCompression.Success
         runOnUiThread {
-        //    processAdapter.notifyItemChanged(0)
+            //    processAdapter.notifyItemChanged(0)
             Collections.swap(processAdapter.submitData, 0, lastItemIndex)
             processAdapter.notifyDataSetChanged()
         }
@@ -142,6 +142,14 @@ class ProcessActivity : BaseActivity<ActivityProcessBinding>(), IProcessFFmpeg {
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
             return
+        }else{
+            runOnUiThread {
+                if (intent.getActionMedia() == MediaAction.JoinVideo) {
+                    processAdapter.submitData.forEach { it.stateCompression = StateCompression.Success }
+                    processAdapter.notifyDataSetChanged()
+                    return@runOnUiThread
+                }
+            }
         }
         val intent = Intent(this, ResultActivity::class.java)
         intent.passMediaOutput(mediaInfoResults)
@@ -152,13 +160,16 @@ class ProcessActivity : BaseActivity<ActivityProcessBinding>(), IProcessFFmpeg {
     }
 
     override fun onFailure(position: Int, error: String) {
-        if (intent.getActionMedia() == MediaAction.JoinVideo) {
-            processAdapter.submitData.forEach { it.stateCompression = StateCompression.Failure }
-        }
-        val lastItemIndex = processAdapter.itemCount - 1
-        processAdapter.submitData[0].stateCompression = StateCompression.Failure
+
         runOnUiThread {
-         //   processAdapter.notifyItemChanged(0)
+            if (intent.getActionMedia() == MediaAction.JoinVideo) {
+                processAdapter.submitData.forEach { it.stateCompression = StateCompression.Failure }
+                processAdapter.notifyDataSetChanged()
+                return@runOnUiThread
+            }
+            val lastItemIndex = processAdapter.itemCount - 1
+            processAdapter.submitData[0].stateCompression = StateCompression.Failure
+            //   processAdapter.notifyItemChanged(0)
             Collections.swap(processAdapter.submitData, 0, lastItemIndex)
             processAdapter.notifyDataSetChanged()
         }

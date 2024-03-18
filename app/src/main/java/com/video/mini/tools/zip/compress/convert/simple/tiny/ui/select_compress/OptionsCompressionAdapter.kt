@@ -1,10 +1,12 @@
 package com.video.mini.tools.zip.compress.convert.simple.tiny.ui.select_compress
 
+import android.text.format.Formatter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.video.mini.tools.zip.compress.convert.simple.tiny.core.BaseAdapter
 import com.video.mini.tools.zip.compress.convert.simple.tiny.databinding.ItemOptionCompressionBinding
 import com.video.mini.tools.zip.compress.convert.simple.tiny.model.OptionCompression
+import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.VideoUtils
 
 
 class OptionsCompressionAdapter() :
@@ -24,5 +26,4 @@ class OptionsCompressionAdapter() :
             isSelected = item.isSelected
         }
     }
-
 }

@@ -42,14 +42,13 @@ class JoinVideoActivity : BaseActivity<ActivityJoinVideoBinding>() {
 
             val mediaInfos = intent.getOptionMedia()!!.dataOriginal
             val maxResolution = mediaInfos.getResolutionMax()!!.resolution!!
-            val optionSettingsJoinBottomSheetFragment =
-                OptionSettingsJoinBottomSheetFragment.getInstance(
-                    maxResolution,
-                    mediaInfos.sumOf { Utils.convertTimeToMiliSeconds(it.time) })
+
 
             next.setOnClickListener {
                 if (videoJoinAdapter.itemCount > 0) {
-                    optionSettingsJoinBottomSheetFragment.show(
+                    OptionSettingsJoinBottomSheetFragment.getInstance(
+                        maxResolution,
+                        mediaInfos.sumOf { Utils.convertTimeToMiliSeconds(it.time) }).show(
                         supportFragmentManager,
                         OptionSettingsJoinBottomSheetFragment::class.simpleName
                     )
@@ -68,14 +67,14 @@ class JoinVideoActivity : BaseActivity<ActivityJoinVideoBinding>() {
             videoJoinAdapter.submitData = listInfo
             listInfo = videoJoinAdapter.submitData
             val dragDropCallback = DragDropCallback(videoJoinAdapter, object : ItemTouchListenner {
-                    override fun onMove(oldPosition: Int, newPosition: Int) {
-                        Collections.swap(listInfo, oldPosition, newPosition)
-                    }
+                override fun onMove(oldPosition: Int, newPosition: Int) {
+                    Collections.swap(listInfo, oldPosition, newPosition)
+                }
 
-                    override fun swipe(position: Int, direction: Int) {
+                override fun swipe(position: Int, direction: Int) {
 
-                    }
-                })
+                }
+            })
             val itemTouchHelper = ItemTouchHelper(dragDropCallback)
             itemTouchHelper.attachToRecyclerView(rcy)
             rcy.addItemDecoration(ItemSpacingDecoration(30))
@@ -96,7 +95,7 @@ class JoinVideoActivity : BaseActivity<ActivityJoinVideoBinding>() {
     }
 
     private fun createOptionMedia(title: String, format: String, codec: String?): OptionMedia {
-        Log.d("Nguyễn duy khang",videoJoinAdapter.submitData.toString())
+        Log.d("Nguyễn duy khang", videoJoinAdapter.submitData.toString())
         return OptionMedia(
             dataOriginal = MediaInfos().apply { addAll(videoJoinAdapter.submitData) },
             mediaAction = MediaAction.JoinVideo,

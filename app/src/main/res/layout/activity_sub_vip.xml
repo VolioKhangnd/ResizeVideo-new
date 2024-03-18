@@ -56,7 +56,6 @@
                 style="@style/TextAppearance.Material3.TitleMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_marginTop="@dimen/fab_margin"
                 android:gravity="center"
                 android:text="@string/custom_file_size"
@@ -67,7 +66,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/fab_margin"
-
                 android:gravity="center"
                 android:text="@string/completely_ad_free"
                 android:textColor="@color/black" />
@@ -76,7 +74,6 @@
                 style="@style/TextAppearance.Material3.TitleMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_marginTop="@dimen/fab_margin"
                 android:gravity="center"
                 android:text="@string/multiple_compress_at_once"
@@ -88,7 +85,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/fab_margin"
-
                 android:gravity="center"
                 android:text="@string/vip_premium_features"
                 android:textColor="@color/black" />
@@ -97,7 +93,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
             app:layout_constraintBottom_toTopOf="@+id/btnUseFree"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -124,7 +119,7 @@
                     android:paddingVertical="10dp">
 
                     <TextView
-                        android:id="@+id/textView12"
+                        android:id="@+id/txtMonth"
                         style="@style/TextAppearance.Material3.TitleLarge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -135,7 +130,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/priceByMonth"
+                        android:id="@+id/txtPriceMonth"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="234.000 đ"
@@ -176,19 +171,19 @@
                 app:layout_constraintWidth_percent="0.3">
 
                 <TextView
-                    android:id="@+id/textView11"
+                    android:id="@+id/txtWeek"
                     style="@style/TextAppearance.Material3.TitleLarge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:autoSizeTextType="uniform"
                     android:lines="1"
-                    android:text="1 Year"
+                    android:text="1 Week"
 
                     android:textColor="@color/black"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/priceByYear"
+                    android:id="@+id/txtPriceWeek"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="234.000 đ"
@@ -216,6 +211,7 @@
                 android:layout_height="0dp"
                 android:layout_margin="5sp"
                 app:cardCornerRadius="25sp"
+                app:cardBackgroundColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -242,7 +238,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/priceLifeTime"
+                        android:id="@+id/txtPriceLifeTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="234.000 đ"
@@ -257,7 +253,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="15dp"
             android:backgroundTint="#97FF5722"
             android:text="Upgrade"
             android:textColor="@color/maintream"

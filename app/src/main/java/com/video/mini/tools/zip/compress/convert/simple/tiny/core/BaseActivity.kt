@@ -21,8 +21,10 @@ import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
-import com.android.billingclient.api.queryProductDetails
-import com.google.android.gms.ads.nativead.NativeAd
+ import com.android.billingclient.api.QueryPurchasesParams
+ import com.android.billingclient.api.queryProductDetails
+ import com.android.billingclient.api.queryPurchasesAsync
+ import com.google.android.gms.ads.nativead.NativeAd
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.ktx.Firebase
  import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -41,187 +43,43 @@ abstract class BaseActivity<VB : ViewBinding> : BaseActivity() {
     val binding get() = _binding!!
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     var billingClient: BillingClient? = null
-    private var subWeekProduct: ProductDetails? = null
-    private var subMonthProduct: ProductDetails? = null
-    private var lifeTimeProduct: ProductDetails? = null
-    private var currentProduct: ProductDetails? = null
-    private var restore = false
 
-    private val purchasesUpdatedListener =
-        PurchasesUpdatedListener { billingResult, purchases ->
-            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
-                for (purchase in purchases) {
-                    if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
-                        proApplication.isSubVip = true
-                        //update UI hiển thị đã mua
-                        if (!purchase.isAcknowledged) {
-                            val acknowledgePurchaseParams =
-                                AcknowledgePurchaseParams.newBuilder()
-                                    .setPurchaseToken(purchase.purchaseToken).build()
 
-                            billingClient?.acknowledgePurchase(acknowledgePurchaseParams) { billingResult ->
-                            }
-                        }
-                    }
-                }
-            } else if (billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
-            } else {
-            }
-        }
-
-    private fun initBillingClient() {
+    fun setupBilling(purchasesUpdatedListener: PurchasesUpdatedListener) {
         billingClient = BillingClient.newBuilder(this)
             .setListener(purchasesUpdatedListener)
             .enablePendingPurchases()
             .build()
-    }
-
-    private suspend fun getPurchasesProductDetail(
-        packId: String,
-        productType: String
-    ): ProductDetails? {
-        val productList = mutableListOf<QueryProductDetailsParams.Product>()
-        productList.add(
-            QueryProductDetailsParams.Product.newBuilder().setProductId(packId)
-                .setProductType(productType).build()
-        )
-        val paramsSub = QueryProductDetailsParams.newBuilder()
-        paramsSub.setProductList(productList)
-        val productDetailsResult = withContext(Dispatchers.IO) {
-            billingClient!!.queryProductDetails(paramsSub.build())
-        }
-        if (!productDetailsResult.productDetailsList.isNullOrEmpty()) {
-            return productDetailsResult.productDetailsList!!.first()
-        } else {
-            return null
-        }
-    }
-
-    private fun showPurchaseDialog() {
-        if (currentProduct != null) {
-            val productDetailsParamsList: List<BillingFlowParams.ProductDetailsParams>
-            if (currentProduct!!.productType == BillingClient.ProductType.SUBS) {
-                productDetailsParamsList = listOf(
-                    BillingFlowParams.ProductDetailsParams.newBuilder()
-                        .setProductDetails(currentProduct!!)
-                        .setOfferToken(currentProduct!!.subscriptionOfferDetails!!.first().offerToken)
-                        .build()
-                )
-            } else {
-                productDetailsParamsList = listOf(
-                    BillingFlowParams.ProductDetailsParams.newBuilder()
-                        .setProductDetails(currentProduct!!)
-                        .build()
-                )
-            }
-            val billingFlowParams = BillingFlowParams.newBuilder()
-                .setProductDetailsParamsList(productDetailsParamsList)
-                .build()
-            billingClient!!.launchBillingFlow(this@BaseActivity, billingFlowParams)
-        } else {
-            restore = false
-            startConnection()
-        }
-    }
-
-    private fun startConnection() {
         billingClient?.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     lifecycleScope.launch {
-                        processPurchases()
-                     //   getActivePurchase()
-                        runOnUiThread {
-                            if (proApplication.isSubVip) {
-                                //update UI hien thi da mua vip
-                            } else {
-                                //update UI hien thi chua mua
-                            }
-
-                            if (restore) {
-                                Toast.makeText(
-                                    this@BaseActivity,
-                                    "Restore Success",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
+                        getActivePurchase()
                     }
-                } else {
-                    Toast.makeText(
-                        this@BaseActivity,
-                        billingResult.debugMessage,
-                        Toast.LENGTH_SHORT
-                    ).show()
-
                 }
             }
 
             override fun onBillingServiceDisconnected() {
-                Toast.makeText(
-                    this@BaseActivity,
-                    "Connect billing service failed! Check Your network connection.",
-                    Toast.LENGTH_SHORT
-                ).show()
+                // Try to restart the connection on the next request to
+                // Google Play by calling the startConnection() method.
             }
         })
     }
 
-    suspend fun processPurchases() {
-        subMonthProduct =
-            getPurchasesProductDetail("pack_sub_month", BillingClient.ProductType.SUBS)
-        subWeekProduct = getPurchasesProductDetail("pack_sub_week", BillingClient.ProductType.SUBS)
-        lifeTimeProduct =
-            getPurchasesProductDetail("pack_life_time", BillingClient.ProductType.INAPP)
-         //  runOnUiThread {
-        fillDataToUI()
-        // }
-    }
 
-    private fun fillDataToUI() {
-//        if (subMonthProduct != null && !subMonthProduct!!.subscriptionOfferDetails.isNullOrEmpty()) {
-//            val product = subMonthProduct!!.subscriptionOfferDetails!!.first()
-//            val pricingPhase = product.pricingPhases.pricingPhaseList
-//            if (pricingPhase.size > 1) {
-//                binding.txtPriceMonth.text =
-//                    "Then\n".plus(product.pricingPhases.pricingPhaseList[1].formattedPrice)
-//                        .plus("/month")
-//                binding.txtMonth.text =
-//                    product.pricingPhases.pricingPhaseList[0].formattedPrice.plus("\nFor 3 Day")
-//            } else if (pricingPhase.isNotEmpty()) {
-//                binding.txtPriceMonth.text =
-//                    "Then\n".plus(
-//                        product.pricingPhases.pricingPhaseList[0].formattedPrice
-//                    ).plus("/month")
-//                binding.txtMonth.text =
-//                    product.pricingPhases.pricingPhaseList[0].formattedPrice
-//            }
-//        }
-//        if (subWeekProduct != null && !subWeekProduct!!.subscriptionOfferDetails.isNullOrEmpty()) {
-//            var product = subWeekProduct!!.subscriptionOfferDetails!!.first()
-//            var pricingPhase = product.pricingPhases.pricingPhaseList
-//            if (pricingPhase.size > 1) {
-//                binding.txtPriceWeek.text = "Then\n".plus(
-//                    product.pricingPhases.pricingPhaseList[1].formattedPrice
-//                ).plus("/week")
-//                binding.txtWeek.text =
-//                    product.pricingPhases.pricingPhaseList[0].formattedPrice.plus("\nFor 3 Day")
-//            } else if (pricingPhase.isNotEmpty()) {
-//                binding.txtPriceWeek.text = "Then\n".plus(
-//                    product.pricingPhases.pricingPhaseList[0].formattedPrice
-//                ).plus("/week")
-//                binding.txtWeek.text =
-//                    product.pricingPhases.pricingPhaseList[0].formattedPrice
-//            }
-//        }
-//        if (lifeTimeProduct != null) {
-//            val product = lifeTimeProduct!!.oneTimePurchaseOfferDetails
-//            if (product != null) {
-//                binding.txtPriceLifeTime.text = product.formattedPrice
-//            }
-//        }
-//
-//        Log.d("ádasdsdd", subMonthProduct.toString() + "" + subWeekProduct + lifeTimeProduct)
+    suspend fun getActivePurchase(): Boolean {
+        val subResult = billingClient?.queryPurchasesAsync(
+            QueryPurchasesParams.newBuilder()
+                .setProductType(BillingClient.ProductType.SUBS).build()
+        )
+        val inappResult = billingClient?.queryPurchasesAsync(
+            QueryPurchasesParams.newBuilder()
+                .setProductType(BillingClient.ProductType.INAPP).build()
+        )
+        proApplication.isSubVip =
+            (subResult != null && subResult.purchasesList.isNotEmpty())
+                    || (inappResult != null && inappResult.purchasesList.isNotEmpty())
+        return proApplication.isSubVip
     }
 
 
@@ -233,30 +91,30 @@ abstract class BaseActivity<VB : ViewBinding> : BaseActivity() {
     }
 
     open fun showInterstitial(now: Boolean, call: (Boolean) -> Unit) {
-        if (!proApplication.isSubVip) {
-            showAds(now, object : OnShowInterstitialListener {
-                override fun onCloseAds(hasAds: Boolean) {
-                    call(hasAds)
-                }
-            })
-        } else {
-            call(true)
-        }
+//        if (!proApplication.isSubVip) {
+//            showAds(now, object : OnShowInterstitialListener {
+//                override fun onCloseAds(hasAds: Boolean) {
+//                    call(hasAds)
+//                }
+//            })
+//        } else {
+//            call(true)
+//        }
     }
 
     open fun showNativeAds(viewContainer: ViewGroup, call: (() -> Unit)? = null) {
-        if (!proApplication.isSubVip) {
-            nativeRender.prepareNative()
-            nativeRender.loadNativeAds(object : OnShowNativeListener {
-                override fun onLoadDone(hasAds: Boolean, currentNativeAd: NativeAd?) {
-                    // load dc native
-                    if (call != null) {
-                        call()
-                    }
-                }
-
-            }, viewContainer)
-        }
+//        if (!proApplication.isSubVip) {
+//            nativeRender.prepareNative()
+//            nativeRender.loadNativeAds(object : OnShowNativeListener {
+//                override fun onLoadDone(hasAds: Boolean, currentNativeAd: NativeAd?) {
+//                    // load dc native
+//                    if (call != null) {
+//                        call()
+//                    }
+//                }
+//
+//            }, viewContainer)
+//        }
     }
 
     fun getConfigData(isSplash: Boolean) {
@@ -307,7 +165,7 @@ abstract class BaseActivity<VB : ViewBinding> : BaseActivity() {
     }
 
     fun showMessage(message: String, isShort: Boolean = true) =
-        Toast.makeText(this, message, if (isShort) Toast.LENGTH_SHORT else Toast.LENGTH_LONG).show()
+       runOnUiThread {  Toast.makeText(this, message, if (isShort) Toast.LENGTH_SHORT else Toast.LENGTH_LONG).show() }
 
     fun setToolbar(
         toolbar: Toolbar,
