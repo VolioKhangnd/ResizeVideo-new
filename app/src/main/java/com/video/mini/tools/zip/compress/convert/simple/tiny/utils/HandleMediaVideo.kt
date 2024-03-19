@@ -16,6 +16,7 @@ import com.video.mini.tools.zip.compress.convert.simple.tiny.model.MediaInfo
 import com.video.mini.tools.zip.compress.convert.simple.tiny.model.Resolution
 import java.io.File
 import java.io.FileInputStream
+import java.util.Locale
 
 interface IVideo {
 
@@ -227,7 +228,7 @@ class HandleMediaVideo(private val context: Context) : IVideo {
                         date = Utils.formatDate(getLong(getColumnIndex(Media.DATE_ADDED)) * 1000),
                         true,
                     )
-                    if (formatTime != "00:00:00") {
+                    if (formatTime != "00:00:00" && mediaInfo.mime.lowercase(Locale.ROOT) == "mp4") {
                         videos.add(mediaInfo)
                     }
                 }
