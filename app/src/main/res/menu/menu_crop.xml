@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/custom"
+        android:iconTintMode="src_over"
+        android:title="Custom" />
+    <item
+        android:id="@+id/square"
+        android:title="Square"
+        />
+    <item
+        android:id="@+id/portrait"
+        
+        android:title="Portrait"
+
+        />
+    <item
+        android:id="@+id/landscape"
+        
+
+        android:title="Landscape" />
+    <item
+        android:id="@+id/c4_3"
+        
+        android:title="4:3"
+
+        />
+
+    <item
+        android:id="@+id/c16_9"
+        
+        android:title="16:9"
+
+        />
+    <item
+        android:id="@+id/cN"
+        
+        android:title="No Crop"
+
+        />
+</menu>

@@ -1,7 +1,6 @@
 package com.video.mini.tools.zip.compress.convert.simple.tiny.ffmpeg
 
 import android.content.Context
-import android.util.Log
 import com.arthenica.ffmpegkit.FFmpegKit
 import com.arthenica.ffmpegkit.FFmpegKitConfig
 import com.arthenica.ffmpegkit.FFprobeKit
@@ -108,11 +107,11 @@ class VideoProcess {
                 val timeVideo = Utils.convertTimeToMiliSeconds(it.time).toFloat()
                 val duration: Float = (
                         when (optionMedia.mediaAction) {
-                            is MediaAction.CutOrTrim.CutVideo -> {
+                            is MediaAction.CutTrimCrop.CutVideo -> {
                                 timeVideo - (optionMedia.endTime - optionMedia.startTime)
                             }
 
-                            is MediaAction.CutOrTrim.TrimVideo -> {
+                            is MediaAction.CutTrimCrop.TrimVideo -> {
                                 optionMedia.endTime - optionMedia.startTime
                             }
 
@@ -132,8 +131,8 @@ class VideoProcess {
                         }
                         ).toFloat()
                  durations.add(duration)
-                if (optionMedia.mediaAction is MediaAction.CutOrTrim.CutVideo ||
-                    optionMedia.mediaAction is MediaAction.CutOrTrim.TrimVideo ||
+                if (optionMedia.mediaAction is MediaAction.CutTrimCrop.CutVideo ||
+                    optionMedia.mediaAction is MediaAction.CutTrimCrop.TrimVideo ||
                     optionMedia.mediaAction is MediaAction.FastForward ||
                     optionMedia.mediaAction is MediaAction.JoinVideo
                 ) {

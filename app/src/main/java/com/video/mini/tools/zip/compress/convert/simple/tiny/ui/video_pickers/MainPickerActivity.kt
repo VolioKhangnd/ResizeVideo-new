@@ -61,7 +61,7 @@ class MainPickerActivity : BaseActivity<ActivityMainPickerBinding>() {
                 if (viewModel.size() > 0) {
                     val destination = when (intent.getActionMedia()!!) {
                         is MediaAction.CompressVideo -> SelectCompressActivity::class.java
-                        is MediaAction.CutOrTrim -> CutTrimActivity::class.java
+                        is MediaAction.CutTrimCrop -> CutTrimActivity::class.java
                         is MediaAction.ExtractAudio -> ExtractAudioActivity::class.java
                         is MediaAction.FastForward, MediaAction.SlowVideo -> FastForwardActivity::class.java
                         is MediaAction.JoinVideo -> JoinVideoActivity::class.java

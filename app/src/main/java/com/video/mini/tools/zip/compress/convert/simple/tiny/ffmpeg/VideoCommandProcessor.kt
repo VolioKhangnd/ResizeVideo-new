@@ -1,8 +1,8 @@
 package com.video.mini.tools.zip.compress.convert.simple.tiny.ffmpeg
 
 import android.content.Context
+import android.util.Log
 import com.arthenica.ffmpegkit.FFprobeKit
-import com.arthenica.ffmpegkit.Log
 import com.video.mini.tools.zip.compress.convert.simple.tiny.model.MediaInfo
 import com.video.mini.tools.zip.compress.convert.simple.tiny.model.OptionCompressType
 import com.video.mini.tools.zip.compress.convert.simple.tiny.model.OptionMedia
@@ -111,14 +111,24 @@ class VideoCommandProcessor(
         inputPath: String,
         startTime: Long,
         endTime: Long,
-        mime: String
+        mime: String,
+        newResolution: Resolution,
+        x: Int,
+        y: Int,
+        isCrop: Boolean
     ): String {
-        return CommandConfiguration.getInstance()
+        val command = CommandConfiguration.getInstance()
             .appendCommand("-i \"$inputPath\"")
-            .appendCommand("-s ${resolution.width}x${resolution.height}")
-            .appendCommand("-ss ${Utils.formatTime(startTime * 1000)}")
+
+        if (isCrop) {
+            command.appendCommand(" -vf \"crop=${newResolution.width}:${newResolution.height}:$x:$y\"")
+        } else {
+            command.appendCommand("-s ${resolution.width}x${resolution.height}")
+        }
+
+        return command.appendCommand("-ss ${Utils.formatTime(startTime * 1000)}")
             .appendCommand("-t ${Utils.formatTime((endTime - startTime) * 1000)}")
-            .appendCommand("-c copy")
+            .appendCommand("-c:v  libx264")
             .appendCommand(getPathOutPut(mime))
             .getCommand()
 
@@ -129,14 +139,22 @@ class VideoCommandProcessor(
         inputPath: String,
         startTime: Long,
         endTime: Long,
-        mime: String
+        mime: String,
+        newResolution: Resolution,
+        x: Int,
+        y: Int,
+        isCrop: Boolean
     ): String {
-        return CommandConfiguration.getInstance()
+        val command = CommandConfiguration.getInstance()
             .appendCommand("-i \"$inputPath\"")
-            .appendCommand("-s ${resolution.width}x${resolution.height}")
-            .appendCommand("-vf  \"select='not(between(t,$startTime,$endTime))',  setpts=N/FRAME_RATE/TB\"")
+        if (isCrop) {
+            command.appendCommand(" -vf \"select='not(between(t,$startTime,$endTime))',  setpts=N/FRAME_RATE/TB, crop=${newResolution.width}:${newResolution.height}:$x:$y \"")
+        } else {
+            command.appendCommand("-s ${resolution.width}x${resolution.height} -vf  \"select='not(between(t,$startTime,$endTime))',  setpts=N/FRAME_RATE/TB\"")
+        }
+        return command
             .appendCommand(" -af \"aselect='not(between(t,$startTime,$endTime))', asetpts=N/SR/TB\"")
-            .appendCommand("-c:v copy")
+            .appendCommand("-c:v libx264")
             .appendCommand(getPathOutPut(mime))
             .getCommand();
     }
@@ -188,7 +206,7 @@ class VideoCommandProcessor(
             commandProcessor.appendCommand("-i")
             commandProcessor.appendCommand("\"${it.path}\"")
         }
-        android.util.Log.d("sdfafsaff",mediaOption.codec.toString()+mediaOption.mimetype)
+        android.util.Log.d("sdfafsaff", mediaOption.codec.toString() + mediaOption.mimetype)
         if (mediaOption.codec != null) commandProcessor.appendCommand(
             "-c:v  ${
                 if (mediaOption.codec.startsWith(
@@ -229,17 +247,15 @@ class VideoCommandProcessor(
         }"
     }
 
+    private fun cropVideo() {
+
+    }
+
     fun createCommandList(optionMedia: OptionMedia): List<String> {
         var resolution: Resolution
 
         if (optionMedia.mediaAction is MediaAction.JoinVideo) {
-
-            return listOf(
-
-                joinVideo(
-                    optionMedia
-                )
-            )
+            return listOf(joinVideo(optionMedia))
         }
         return optionMedia.dataOriginal.map { mediaItem ->
             resolution = calculateResolutionForCompressVideo(mediaItem, optionMedia)
@@ -255,23 +271,39 @@ class VideoCommandProcessor(
                     mediaItem.mime
                 )
 
-                is MediaAction.CutOrTrim.CutVideo -> {
+                is MediaAction.CutTrimCrop.CutVideo -> {
+                    val isCrop = optionMedia.mediaAction.isCrop
+                    Log.d("đasssssssssssssssss", isCrop.toString())
+
                     cutVideoCommand(
                         resolution,
                         mediaItem.path,
                         optionMedia.startTime,
                         optionMedia.endTime,
-                        mediaItem.mime
+                        mediaItem.mime,
+                        optionMedia.newResolution,
+                        optionMedia.x,
+                        optionMedia.y,
+                        isCrop
                     )
                 }
 
-                is MediaAction.CutOrTrim.TrimVideo -> trimVideoCommand(
-                    resolution,
-                    mediaItem.path,
-                    optionMedia.startTime,
-                    optionMedia.endTime,
-                    mediaItem.mime
-                )
+                is MediaAction.CutTrimCrop.TrimVideo -> {
+                    val isCrop = optionMedia.mediaAction.isCrop
+                    Log.d("đasssssssssssssssss", isCrop.toString())
+
+                    trimVideoCommand(
+                        resolution,
+                        mediaItem.path,
+                        optionMedia.startTime,
+                        optionMedia.endTime,
+                        mediaItem.mime,
+                        optionMedia.newResolution,
+                        optionMedia.x,
+                        optionMedia.y,
+                        isCrop
+                    )
+                }
 
                 is MediaAction.ExtractAudio -> extractAudioCommand(
                     optionMedia.mimetype!!,
@@ -286,7 +318,6 @@ class VideoCommandProcessor(
                     mediaItem.path,
                     mediaItem.mime
                 )
-
 
                 is MediaAction.ReveresVideo -> reverseVideo(
                     optionMedia.dataOriginal[0].path,
@@ -309,11 +340,18 @@ class VideoCommandProcessor(
         // Khởi tạo giá trị resolution ban đầu
         var resolution = Resolution()
 
-        // Kiểm tra điều kiện và tính toán resolution mới dựa trên action và option
+        if (optionMedia.mediaAction is MediaAction.CutTrimCrop.CutVideo) {
+            if (optionMedia.mediaAction.isCrop) return resolution
+        }
+
+        if (optionMedia.mediaAction is MediaAction.CutTrimCrop.TrimVideo) {
+            if (optionMedia.mediaAction.isCrop) return resolution
+        }
+
         if ((optionMedia.mediaAction is MediaAction.CompressVideo &&
                     optionMedia.optionCompressType != OptionCompressType.CustomFileSize) ||
-            optionMedia.mediaAction is MediaAction.CutOrTrim.CutVideo ||
-            optionMedia.mediaAction is MediaAction.CutOrTrim.TrimVideo ||
+            optionMedia.mediaAction is MediaAction.CutTrimCrop.CutVideo ||
+            optionMedia.mediaAction is MediaAction.CutTrimCrop.TrimVideo ||
             optionMedia.mediaAction is MediaAction.FastForward ||
             optionMedia.mediaAction is MediaAction.SlowVideo
 

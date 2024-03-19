@@ -22,8 +22,8 @@ data class OptionMedia(
     var withAudio: Boolean = true,
     var isFastVideo: Boolean = true,
     val isPickMultiple: Boolean = dataOriginal.size > 0,
+    val x: Int = 0,
+    val y: Int = 0
 ) : Serializable {
-    override fun toString(): String {
-        return "OptionMedia(dataOriginal=$dataOriginal, optionCompressType=$optionCompressType, bitrate=$bitrate, frameRate=$frameRate, codec=$codec, fileSize=$fileSize, mimetype=$mimetype, mediaAction=$mediaAction, newResolution=$newResolution, nameOutput=$nameOutput, startTime=$startTime, endTime=$endTime, speed=$speed, preset='$preset', reverseAudio=$reverseAudio, withAudio=$withAudio, isFastVideo=$isFastVideo, isPickMultiple=$isPickMultiple)"
-    }
+
 }

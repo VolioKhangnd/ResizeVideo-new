@@ -73,6 +73,8 @@ android {
 
 
 dependencies {
+    implementation ("com.theartofdev.edmodo:android-image-cropper:2.8.0")
+
     implementation ("com.github.akshaaatt:Google-IAP:1.6.0")
     // Dependencies for media playback
     implementation("androidx.media3:media3-exoplayer:1.3.0")

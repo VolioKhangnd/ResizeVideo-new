@@ -41,6 +41,7 @@ object MyMenu {
         sortBy(MyMenu.sortBy + sortOrder)
     }
 
+
     private lateinit var darkModeManager: DarkModeManager
     fun View.showPopupMenuTheme(text: (String) -> Unit) {
         var wrapper: Context =  ContextThemeWrapper(context, R.style.popupMenuStyle)

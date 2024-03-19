@@ -8,7 +8,7 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-         android:layout_width="match_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/maintream"
         app:layout_constraintEnd_toEndOf="parent"
@@ -18,12 +18,13 @@
         app:title="Edit Video"
         app:titleTextColor="@color/black" />
 
+
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
-
         android:layout_height="0dp"
         android:layout_marginBottom="15sp"
+        android:paddingVertical="15dp"
         android:paddingStart="25sp"
         android:paddingEnd="25sp"
         app:layout_constraintBottom_toTopOf="@+id/tab"
@@ -36,20 +37,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:paddingVertical="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-        <ImageView
-            android:id="@+id/play"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:src="@drawable/icon_play"
-            android:visibility="gone"
-            app:tint="@color/black" />
+        <com.theartofdev.edmodo.cropper.CropImageView
+            android:id="@+id/imgCrop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </FrameLayout>
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -126,15 +122,14 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:tint="@color/black"
-                    android:src="@drawable/ic_trim" />
+                    android:src="@drawable/ic_trim"
+                    app:tint="@color/black" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:gravity="center"
-
                     android:text="Trim video"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -167,7 +162,6 @@
         android:id="@+id/includeCutTrim"
         layout="@layout/include_cut_trim"
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content"
         android:layout_marginStart="50sp"
         android:layout_marginEnd="50sp"
