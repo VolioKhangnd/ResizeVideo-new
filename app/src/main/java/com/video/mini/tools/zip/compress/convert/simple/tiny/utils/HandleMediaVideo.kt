@@ -1,14 +1,17 @@
 package com.video.mini.tools.zip.compress.convert.simple.tiny.utils
 
 import android.annotation.SuppressLint
+import android.content.ContentResolver
 import android.content.Context
 import android.media.MediaScannerConnection
 import android.os.Build
 import android.os.Environment
 import android.os.storage.StorageManager
+import android.provider.MediaStore
 import android.provider.MediaStore.Video.Media
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.content.FileProvider
 import com.arthenica.ffmpegkit.FFprobeKit
 import com.arthenica.ffmpegkit.MediaInformation
 import com.video.mini.tools.zip.compress.convert.simple.tiny.model.FolderInfo
@@ -17,6 +20,7 @@ import com.video.mini.tools.zip.compress.convert.simple.tiny.model.Resolution
 import java.io.File
 import java.io.FileInputStream
 import java.util.Locale
+
 
 interface IVideo {
 
@@ -55,16 +59,15 @@ interface IVideo {
 
 class HandleMediaVideo(private val context: Context) : IVideo {
     override fun replaceFiles(pathInput: String, pathOutput: String): File? {
-        val fileOriginal = File(pathInput)
-        val fileReplace = File(pathOutput)
+        val fileOriginal = File(getPathExternalFolderVideo() + "/" + File(pathOutput).name)
+        val fileInputStream = FileInputStream(pathOutput)
         return try {
-            fileReplace.inputStream().use { input ->
+            fileInputStream.use { input ->
                 fileOriginal.outputStream().use { output ->
                     input.copyTo(output)
                 }
             }
-
-            fileReplace.renameTo(fileOriginal)
+            exportMp4ToGallery(context, fileOriginal.path)
             Toast.makeText(context, "Replace success", Toast.LENGTH_SHORT).show()
             fileOriginal
         } catch (e: Exception) {
@@ -76,10 +79,6 @@ class HandleMediaVideo(private val context: Context) : IVideo {
     @RequiresApi(Build.VERSION_CODES.FROYO)
     private fun exportMp4ToGallery(context: Context, filePath: String) {
         val file = File(filePath)
-//        val values = ContentValues(2)
-//        values.put(Media.MIME_TYPE, "video/*")
-//        values.put(Media.DATA, filePath)
-//        context.contentResolver.insert(Media.EXTERNAL_CONTENT_URI, values)
         MediaScannerConnection.scanFile(
             context, arrayOf(file.toString()),
             null, null

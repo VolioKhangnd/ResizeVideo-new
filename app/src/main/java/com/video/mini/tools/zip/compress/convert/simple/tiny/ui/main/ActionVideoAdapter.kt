@@ -7,9 +7,14 @@ import android.view.ViewGroup
 import com.video.mini.tools.zip.compress.convert.simple.tiny.core.BaseAdapter
 import com.video.mini.tools.zip.compress.convert.simple.tiny.databinding.ItemActionBinding
 import com.video.mini.tools.zip.compress.convert.simple.tiny.model.DetailActionMedia
+import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.AnimUtils
+import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.VibrateUtils
 
+interface OnClickItemRcy {
+    fun onClick(data: DetailActionMedia)
+}
 
-class ActionVideoAdapter : BaseAdapter<ItemActionBinding, DetailActionMedia>() {
+class ActionVideoAdapter(private val onClickItemRcy: OnClickItemRcy) : BaseAdapter<ItemActionBinding, DetailActionMedia>() {
     override fun getViewBinding(inflater: LayoutInflater, parent: ViewGroup) =
         ItemActionBinding.inflate(inflater, parent, false)
 
@@ -20,6 +25,12 @@ class ActionVideoAdapter : BaseAdapter<ItemActionBinding, DetailActionMedia>() {
             imageIcon.setImageDrawable(item.icon)
             title.text = item.title
             imgIsSubVip.visibility = if (!item.isSubVip) View.GONE else View.VISIBLE
+            mCConstraint.setOnClickListener {
+                VibrateUtils.vibrate(root.context, 50)
+                AnimUtils.scaleClickView(root){
+                    onClickItemRcy.onClick(item)
+                }
+            }
         }
     }
 }

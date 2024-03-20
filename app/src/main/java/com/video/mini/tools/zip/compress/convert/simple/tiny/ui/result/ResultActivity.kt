@@ -1,24 +1,30 @@
 package com.video.mini.tools.zip.compress.convert.simple.tiny.ui.result
 
 import android.annotation.SuppressLint
+import android.app.RecoverableSecurityException
+import android.content.ContentUris
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.provider.MediaStore
 import android.provider.Settings
 import android.view.MenuItem
+import android.widget.Toast
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.FileProvider
+import androidx.lifecycle.lifecycleScope
 import com.video.mini.tools.zip.compress.convert.simple.tiny.BuildConfig
 import com.video.mini.tools.zip.compress.convert.simple.tiny.R
 import com.video.mini.tools.zip.compress.convert.simple.tiny.ui.main.MainActivity
- import com.video.mini.tools.zip.compress.convert.simple.tiny.core.BaseActivity
+import com.video.mini.tools.zip.compress.convert.simple.tiny.core.BaseActivity
 import com.video.mini.tools.zip.compress.convert.simple.tiny.core.DialogClickListener
 import com.video.mini.tools.zip.compress.convert.simple.tiny.databinding.ActivityResultBinding
 import com.video.mini.tools.zip.compress.convert.simple.tiny.ffmpeg.MediaAction
 import com.video.mini.tools.zip.compress.convert.simple.tiny.model.MediaInfo
 import com.video.mini.tools.zip.compress.convert.simple.tiny.ui.compare.CompareActivity
 import com.video.mini.tools.zip.compress.convert.simple.tiny.ui.select_compress.ItemSpacingDecoration
-import com.video.mini.tools.zip.compress.convert.simple.tiny.ui.sup_vip.SubVipActivity
 import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.DialogUtils
 import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.HandleMediaVideo
 import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.HandleSaveResult
@@ -28,8 +34,12 @@ import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.IntentUtils.g
 import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.Utils
 import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.Utils.shareMultiple
 import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.Utils.startToMainActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileInputStream
+import kotlin.properties.Delegates
 
 
 class ResultActivity : BaseActivity<ActivityResultBinding>(), OnItemMenuMoreSelectedListen {
@@ -50,42 +60,56 @@ class ResultActivity : BaseActivity<ActivityResultBinding>(), OnItemMenuMoreSele
     override fun initView() {
         setToolbar(
             binding.toolbar,
-            getString(R.string.result),
+            "Video Compressed",
             getDrawable(R.drawable.baseline_arrow_back_24)!!
         )
         binding.apply {
             setUpAdapterRs()
-            showNativeAds(binding.container) {}
+            showNativeAds(binding.container) {
+                showMessage("Ok")
+            }
         }
     }
 
-    private val manageAllFilesAccessPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            handleReplace(item)
-        }
-    private lateinit var item: Pair<MediaInfo, MediaInfo>
 
-    private fun showDialogReplace() {
-        DialogUtils.showDialogReplace(this, object : DialogClickListener {
-            override fun onPositive() {
-                val uri = Uri.parse("package:${BuildConfig.APPLICATION_ID}")
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    if (Environment.isExternalStorageManager()) {
-                        handleReplace(item)
-                    } else {
-                        val intent =
-                            Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri)
-                        manageAllFilesAccessPermissionLauncher.launch(intent)
-                    }
+    private val intentSenderLauncher =
+        registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) {
+            if (it.resultCode == RESULT_OK) {
+                handleReplace(itemReplace)
+            } else {
+                Toast.makeText(this@ResultActivity, "Photo couldn't be replace", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+
+    private suspend fun deletePhotoFromExternalStorage(itemId: Long) {
+        withContext(Dispatchers.IO) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                val intentSender = MediaStore.createDeleteRequest(
+                    contentResolver,
+                    listOf(
+                        ContentUris.withAppendedId(
+                            MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                            itemId
+                        )
+                    )
+                )
+                intentSender.let { sender ->
+                    intentSenderLauncher.launch(
+                        IntentSenderRequest.Builder(sender).build()
+                    )
+                }
+            } else {
+                val uriToDelete: Uri =
+                    ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, itemId)
+                val rowsDeleted = contentResolver.delete(uriToDelete, null, null)
+                if (rowsDeleted > 0) {
+                    handleReplace(itemReplace)
                 } else {
-                    handleReplace(item)
+                    showMessage("Error")
                 }
             }
-
-            override fun onNegative() {
-
-            }
-        })
+        }
     }
 
     private fun handleReplace(item: Pair<MediaInfo, MediaInfo>) {
@@ -188,13 +212,20 @@ class ResultActivity : BaseActivity<ActivityResultBinding>(), OnItemMenuMoreSele
         startCompareActivity(item)
     }
 
+    var itemId by Delegates.notNull<Long>()
+    private lateinit var itemReplace: Pair<MediaInfo, MediaInfo>
     override fun onReplace(item: Pair<MediaInfo, MediaInfo>) {
-        if (proApplication.isSubVip) {
-            this@ResultActivity.item = item
-            showDialogReplace()
-        } else {
-            startActivity(Intent(this, SubVipActivity::class.java))
+        itemId = item.first.id
+        itemReplace = item
+        lifecycleScope.launch {
+            deletePhotoFromExternalStorage(itemId)
         }
+//        if (proApplication.isSubVip) {
+//            this@ResultActivity.item = item
+//            showDialogReplace()
+//        } else {
+//            startActivity(Intent(this, SubVipActivity::class.java))
+//        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

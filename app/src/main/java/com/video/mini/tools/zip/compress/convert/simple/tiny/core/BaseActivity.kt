@@ -9,7 +9,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import com.access.pro.activity.BaseActivity
-import com.access.pro.callBack.OnShowInterstitialListener
+ import com.access.pro.adcontrol.AdsBannerView
+ import com.access.pro.callBack.OnShowInterstitialListener
 import com.access.pro.callBack.OnShowNativeListener
 import com.access.pro.config.ConfigModel
 import com.android.billingclient.api.AcknowledgePurchaseParams
@@ -84,37 +85,37 @@ abstract class BaseActivity<VB : ViewBinding> : BaseActivity() {
 
 
     open fun showBannerAds(viewContainer: ViewGroup) {
-//        if (!proApplication.isSubVip) {
-//            val banner = AdsBannerView.getView(windowManager, this, viewContainer)
-//            AdsBannerView.loadAds(AdsBannerView.BANNER_BOTTOM, banner)
-//        }
+        if (!proApplication.isSubVip) {
+            val banner = AdsBannerView.getView(windowManager, this, viewContainer)
+            AdsBannerView.loadAds(AdsBannerView.BANNER_BOTTOM, banner)
+        }
     }
 
     open fun showInterstitial(now: Boolean, call: (Boolean) -> Unit) {
-//        if (!proApplication.isSubVip) {
-//            showAds(now, object : OnShowInterstitialListener {
-//                override fun onCloseAds(hasAds: Boolean) {
-//                    call(hasAds)
-//                }
-//            })
-//        } else {
-//            call(true)
-//        }
+        if (!proApplication.isSubVip) {
+            showAds(now, object : OnShowInterstitialListener {
+                override fun onCloseAds(hasAds: Boolean) {
+                    call(hasAds)
+                }
+            })
+        } else {
+            call(true)
+        }
     }
 
     open fun showNativeAds(viewContainer: ViewGroup, call: (() -> Unit)? = null) {
-//        if (!proApplication.isSubVip) {
-//            nativeRender.prepareNative()
-//            nativeRender.loadNativeAds(object : OnShowNativeListener {
-//                override fun onLoadDone(hasAds: Boolean, currentNativeAd: NativeAd?) {
-//                    // load dc native
-//                    if (call != null) {
-//                        call()
-//                    }
-//                }
-//
-//            }, viewContainer)
-//        }
+        if (!proApplication.isSubVip) {
+            nativeRender.prepareNative()
+            nativeRender.loadNativeAds(object : OnShowNativeListener {
+                override fun onLoadDone(hasAds: Boolean, currentNativeAd: NativeAd?) {
+                    // load dc native
+                    if (call != null) {
+                        call()
+                    }
+                }
+
+            }, viewContainer)
+        }
     }
 
     fun getConfigData(isSplash: Boolean) {

@@ -3,6 +3,7 @@ package com.video.mini.tools.zip.compress.convert.simple.tiny.ui.video_pickers
 import android.content.Context
 import android.os.Build
 import android.text.format.Formatter
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
@@ -14,6 +15,8 @@ import com.video.mini.tools.zip.compress.convert.simple.tiny.R
 import com.video.mini.tools.zip.compress.convert.simple.tiny.databinding.ItemVideoBinding
 import com.video.mini.tools.zip.compress.convert.simple.tiny.ffmpeg.MediaAction
 import com.video.mini.tools.zip.compress.convert.simple.tiny.model.MediaInfo
+import com.video.mini.tools.zip.compress.convert.simple.tiny.model.MediaInfos
+import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.VibrateUtils
 
 interface IOnItemClickListener {
     fun onItemClick(mediaInfo: MediaInfo)
@@ -22,6 +25,7 @@ interface IOnItemClickListener {
 
 class VideoAdapter(
     private val context: Context,
+    private val videosSelected: MediaInfos,
     private val mediaAction: MediaAction,
     private val isPremium: Boolean,
     private val onItemClick: IOnItemClickListener
@@ -32,41 +36,43 @@ class VideoAdapter(
         return ItemVideoBinding.inflate(inflater, parent, false)
     }
 
-    private fun countItemsSelected() = submitData.stream().filter { it.isSelected }.count().toInt()
+    private val countItemsSelected get() = videosSelected.size
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onBind(binding: ItemVideoBinding, item: MediaInfo) {
         binding.apply {
             size.text = Formatter.formatFileSize(context, item.size)
             time.text = item.time
-
+            Log.d("sdadsadads", item.id.toString())
             Glide.with(context)
-                .load("file:///"+item.path)
+                .load("file:///" + item.path)
                 .error(ContextCompat.getDrawable(context, R.drawable.logo))
                 .into(thumbnail)
 
             setImageChecked(binding, item.isSelected)
-            val isCompressOrJoinAction = (mediaAction is MediaAction.CompressVideo || mediaAction is MediaAction.JoinVideo)
 
             mItem.setOnClickListener {
                 val isItemSelected = item.isSelected
-                if (!isPremium && countItemsSelected() == 3 && isCompressOrJoinAction && !isItemSelected) {
-                    onItemClick.showNotification(isPremium, message = "")
-                    return@setOnClickListener
+                if (isItemSelected.not()) {
+                    VibrateUtils.vibrate(it.context, 50)
+                    if (mediaAction is MediaAction.FastForward && countItemsSelected == 1) return@setOnClickListener
+                    if (mediaAction is MediaAction.SlowVideo && countItemsSelected == 1) return@setOnClickListener
+                    if (mediaAction is MediaAction.CutTrim && countItemsSelected == 1) return@setOnClickListener
+                    if (!isPremium) {
+                        when {
+                            mediaAction is MediaAction.JoinVideo && countItemsSelected == 2 -> return@setOnClickListener
+                            mediaAction is MediaAction.CompressVideo && countItemsSelected == 1 -> return@setOnClickListener
+                            mediaAction is MediaAction.ExtractAudio && countItemsSelected == 1 -> return@setOnClickListener
+                        }
+                    }
                 }
-                if (countItemsSelected() == 1 && !(mediaAction is MediaAction.CompressVideo || mediaAction is MediaAction.JoinVideo) && !isItemSelected) {
-                    onItemClick.showNotification(message = "")
-                    return@setOnClickListener
-                }
-
                 val animationResId = if (isItemSelected) R.anim.scale_up else R.anim.scale_down
                 val scaleAnimation = AnimationUtils.loadAnimation(context, animationResId)
                 mItem.startAnimation(scaleAnimation)
-
                 item.isSelected = !isItemSelected
                 setImageChecked(binding, item.isSelected)
                 onItemClick.onItemClick(item)
-             }
+            }
         }
     }
 

@@ -35,6 +35,7 @@ class FastForwardOptionsActivity : BaseActivity<ActivityFastForwardOptionsBindin
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun initView() {
         binding.apply {
+            showBannerAds(bannerAds)
             setToolbar(
                 binding.toolbar, "Edit Video", getDrawable(R.drawable.baseline_arrow_back_24)!!
             )

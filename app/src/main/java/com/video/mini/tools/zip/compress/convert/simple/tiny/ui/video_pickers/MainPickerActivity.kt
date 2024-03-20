@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.provider.MediaStore
 import android.text.format.Formatter
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
@@ -22,6 +23,7 @@ import com.video.mini.tools.zip.compress.convert.simple.tiny.ui.join_video.JoinV
 import com.video.mini.tools.zip.compress.convert.simple.tiny.ui.process.ProcessActivity
 import com.video.mini.tools.zip.compress.convert.simple.tiny.ui.reverse.ReversesActivity
 import com.video.mini.tools.zip.compress.convert.simple.tiny.ui.select_compress.SelectCompressActivity
+import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.AnimUtils
 import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.IntentUtils.getActionMedia
 import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.IntentUtils.passActionMedia
 import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.IntentUtils.passOptionMedia
@@ -53,7 +55,10 @@ class MainPickerActivity : BaseActivity<ActivityMainPickerBinding>() {
             showBannerAds(bannerAds)
 
             close.setOnClickListener {
-                layoutSelected.visibility = View.GONE
+                AnimUtils.pullUpView(binding.layoutSelected) {
+                    layoutSelected.visibility = View.GONE
+                    Log.d("àkjfkldjfkljslf","end")
+                }
                 viewModel.closeLiveData.postValue(true)
             }
 
@@ -61,7 +66,7 @@ class MainPickerActivity : BaseActivity<ActivityMainPickerBinding>() {
                 if (viewModel.size() > 0) {
                     val destination = when (intent.getActionMedia()!!) {
                         is MediaAction.CompressVideo -> SelectCompressActivity::class.java
-                        is MediaAction.CutTrimCrop -> CutTrimActivity::class.java
+                        is MediaAction.CutTrim -> CutTrimActivity::class.java
                         is MediaAction.ExtractAudio -> ExtractAudioActivity::class.java
                         is MediaAction.FastForward, MediaAction.SlowVideo -> FastForwardActivity::class.java
                         is MediaAction.JoinVideo -> JoinVideoActivity::class.java
@@ -97,10 +102,14 @@ class MainPickerActivity : BaseActivity<ActivityMainPickerBinding>() {
     override fun initObserver() {
         viewModel.videosLiveData.observe(this) { info ->
             val sizeListVideos = viewModel.size()
-            binding.layoutSelected.visibility = if (sizeListVideos == 0) {
-                View.GONE
+            if (sizeListVideos == 0) {
+                AnimUtils.pullUpView(binding.layoutSelected) {
+                    binding.layoutSelected.visibility = View.GONE
+                    Log.d("àkjfkldjfkljslf","end")
+                }
             } else {
-                View.VISIBLE
+                binding.layoutSelected.visibility = View.VISIBLE
+                AnimUtils.dropDownView(binding.layoutSelected)
             }
 
             binding.count.text = "$sizeListVideos Selected (${

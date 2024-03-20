@@ -26,7 +26,7 @@ class CompareActivity : BaseActivity<ActivityCompareBinding>() {
             getString(R.string.compare),
             getDrawable(R.drawable.baseline_arrow_back_24)!!
         )
-        showBannerAds(binding.nativeAds)
+        showBannerAds(binding.bannerAds)
         val media: Pair<MediaInfo, MediaInfo> =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 intent.getSerializableExtra("Media", Pair::class.java) as Pair<MediaInfo, MediaInfo>

@@ -1,7 +1,9 @@
 package com.video.mini.tools.zip.compress.convert.simple.tiny.ui.video_pickers
 
+import android.icu.text.Transliterator.Position
 import android.provider.MediaStore
 import android.view.View
+import android.view.animation.AnimationUtils
 import androidx.lifecycle.ViewModelProvider
 import com.video.mini.tools.zip.compress.convert.simple.tiny.R
 import com.video.mini.tools.zip.compress.convert.simple.tiny.core.BaseFragment
@@ -27,9 +29,12 @@ class VideoPickerFragment :
 
     override fun initData() {
         handlerVideo = HandleMediaVideo(requireActivity())
+        val mediaAction = requireActivity().intent.getActionMedia()!!
+        val isSubVip = (requireActivity() as MainPickerActivity).proApplication.isSubVip
         adapter = VideoAdapter(requireActivity(),
-            requireActivity().intent.getActionMedia()!!,
-            (requireActivity() as MainPickerActivity).proApplication.isSubVip,
+            viewModel.videos,
+            mediaAction,
+            isSubVip,
             object : IOnItemClickListener {
                 override fun onItemClick(mediaInfo: MediaInfo) {
                     viewModel.insertVideo(mediaInfo)
@@ -49,23 +54,30 @@ class VideoPickerFragment :
 
         viewModel.closeLiveData.observe(this) { shouldClear ->
             viewModel.videos.forEach { mediaInfo ->
-                val index = adapter.submitData.indexOfLast { it.id == mediaInfo.id }
-                index.takeIf { it != -1 }?.let { idx ->
-                    adapter.notifyItemChanged(
-                        idx,
-                        adapter.submitData[index].apply { isSelected = false })
+                getItemPosition(mediaInfo) { position ->
+                    adapter.submitData[position].isSelected = false
+                    adapter.notifyItemChanged(position)
+                    binding.videoAdapter.findViewHolderForAdapterPosition(position)?.itemView?.startAnimation(
+                        AnimationUtils.loadAnimation(context, R.anim.scale_up)
+                    )
                 }
             }
             viewModel.videos.clear()
         }
 
         viewModel.videosLiveData.observe(this) { info ->
-            val index = adapter.submitData.indexOfLast { it.id == info.id }
-            index.takeIf { it != -1 }?.let { idx ->
+            getItemPosition(info) { position ->
                 adapter.notifyItemChanged(
-                    idx,
-                    adapter.submitData[index].apply { isSelected = info.isSelected })
+                    position,
+                    adapter.submitData[position].apply { isSelected = info.isSelected })
             }
+        }
+    }
+
+    private fun getItemPosition(mediaInfo: MediaInfo, position: (Int) -> Unit) {
+        val index = adapter.submitData.indexOfLast { it.id == mediaInfo.id }
+        index.takeIf { it != -1 }?.let { idx ->
+            position(idx)
         }
     }
 

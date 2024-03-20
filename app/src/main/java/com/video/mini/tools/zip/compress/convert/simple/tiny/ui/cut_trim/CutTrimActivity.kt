@@ -38,8 +38,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.reflect.Field
-import java.lang.reflect.Method
 
 
 class CutTrimActivity : BaseActivity<ActivityCutTrimBinding>(), Listener {
@@ -52,8 +50,8 @@ class CutTrimActivity : BaseActivity<ActivityCutTrimBinding>(), Listener {
     private lateinit var path: String
     private lateinit var optionMedia: OptionMedia
     private lateinit var runnable: Runnable
-    private var idClick = R.id.cutVideo
     private lateinit var exoPlayer: ExoPlayer
+    private var idClick = R.id.cutVideo
     private val isCrop get() = binding.imgCrop.cropRect != null
 
     override fun initData() {
@@ -141,9 +139,8 @@ class CutTrimActivity : BaseActivity<ActivityCutTrimBinding>(), Listener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.done -> clickMenuDone()
-            R.id.crop -> clickMenuCrop(item)
+            R.id.crop -> clickMenuCrop()
             R.id.home -> clickMenuHome()
-
         }
         return true
     }
@@ -153,21 +150,21 @@ class CutTrimActivity : BaseActivity<ActivityCutTrimBinding>(), Listener {
         finish()
     }
 
-    private fun clickMenuCrop(item: MenuItem) {
+    private fun clickMenuCrop() {
         val popupMenu = PopupMenu(this, findViewById(R.id.crop))
         binding.imgCrop.setFixedAspectRatio(true)
         popupMenu.setOnMenuItemClickListener {
             binding.imgCrop.isShowCropOverlay = true
+            val bitmap = Bitmap.createBitmap(
+                exoPlayer.videoSize.width,
+                exoPlayer.videoSize.height,
+                Config.ARGB_8888
+            )
+            binding.imgCrop.setImageBitmap(bitmap)
             when (it.itemId) {
                 R.id.custom -> {
-                    val bitmap = Bitmap.createBitmap(
-                        exoPlayer.videoSize.width,
-                        exoPlayer.videoSize.height,
-                        Config.ARGB_8888
-                    )
-                    binding.imgCrop.setImageBitmap(bitmap)
                     binding.imgCrop.resetCropRect()
-                 }
+                }
 
                 R.id.square -> binding.imgCrop.setAspectRatio(1, 1)
                 R.id.portrait -> binding.imgCrop.setAspectRatio(1, 2)
@@ -182,9 +179,7 @@ class CutTrimActivity : BaseActivity<ActivityCutTrimBinding>(), Listener {
             true
         }
         popupMenu.inflate(R.menu.menu_crop)
-
         popupMenu.show()
-
     }
 
     private fun clickMenuDone() {
@@ -224,25 +219,24 @@ class CutTrimActivity : BaseActivity<ActivityCutTrimBinding>(), Listener {
 
             this.optionMedia.copy(
                 dataOriginal = optionMedia.dataOriginal,
-                mediaAction = if (idClick == R.id.trimVideo) MediaAction.CutTrimCrop.TrimVideo(true) else MediaAction.CutTrimCrop.CutVideo(
-                    true
-                ),
+                mediaAction = if (idClick == R.id.trimVideo) MediaAction.CutTrim.TrimVideo else MediaAction.CutTrim.CutVideo,
                 endTime = (right / 1000).toLong(),
                 startTime = (left / 1000).toLong(),
-                x = pointXOrigin.toInt(),
-                y = pointYOrigin.toInt(),
-                newResolution = Resolution(outWidth, outHeight)
+                cropX = pointXOrigin.toInt(),
+                cropY = pointYOrigin.toInt(),
+                isCropVideo = true,
+                newResolution = Resolution(outWidth, outHeight),
             )
         } else {
             this.optionMedia.copy(
+                isCropVideo = false,
                 dataOriginal = optionMedia.dataOriginal,
-                mediaAction = if (idClick == R.id.trimVideo) MediaAction.CutTrimCrop.TrimVideo() else MediaAction.CutTrimCrop.CutVideo(),
+                mediaAction = if (idClick == R.id.trimVideo) MediaAction.CutTrim.TrimVideo else MediaAction.CutTrim.CutVideo,
                 endTime = (right / 1000).toLong(),
                 startTime = (left / 1000).toLong()
             )
         }
     }
-
 
     val handler = Handler(Looper.getMainLooper()!!)
 
@@ -421,5 +415,4 @@ class CutTrimActivity : BaseActivity<ActivityCutTrimBinding>(), Listener {
             }
         }
     }
-
 }

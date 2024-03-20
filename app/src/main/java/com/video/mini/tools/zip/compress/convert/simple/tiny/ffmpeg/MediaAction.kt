@@ -7,9 +7,9 @@ sealed class MediaAction(val action: String) : Serializable {
 
     }
 
-    data object CutTrimCrop : MediaAction("CutOrTrim") {
-        data class CutVideo(val isCrop: Boolean = false) : MediaAction("Cut video")
-        data class TrimVideo(val isCrop: Boolean = false) : MediaAction("Trim video")
+    data object CutTrim : MediaAction("CutOrTrim") {
+        data object CutVideo  : MediaAction("Cut video")
+        data object TrimVideo  : MediaAction("Trim video")
     }
 
     data object FastForward : MediaAction("Fast Forward")

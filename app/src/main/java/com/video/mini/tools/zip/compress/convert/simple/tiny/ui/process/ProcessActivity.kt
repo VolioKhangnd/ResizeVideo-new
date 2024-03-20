@@ -60,7 +60,7 @@ class ProcessActivity : BaseActivity<ActivityProcessBinding>(), IProcessFFmpeg {
 
     override fun initView() {
         binding.apply {
-            showNativeAds(nativeAds) {}
+            showBannerAds(bannerAds)
             setupViewPager()
         }
     }
@@ -160,7 +160,7 @@ class ProcessActivity : BaseActivity<ActivityProcessBinding>(), IProcessFFmpeg {
     }
 
     override fun onFailure(position: Int, error: String) {
-
+Log.d("ódaodkaosd",error)
         runOnUiThread {
             if (intent.getActionMedia() == MediaAction.JoinVideo) {
                 processAdapter.submitData.forEach { it.stateCompression = StateCompression.Failure }

@@ -1,6 +1,7 @@
 package com.video.mini.tools.zip.compress.convert.simple.tiny.ffmpeg
 
 import android.content.Context
+import android.util.Log
 import com.arthenica.ffmpegkit.FFmpegKit
 import com.arthenica.ffmpegkit.FFmpegKitConfig
 import com.arthenica.ffmpegkit.FFprobeKit
@@ -107,11 +108,11 @@ class VideoProcess {
                 val timeVideo = Utils.convertTimeToMiliSeconds(it.time).toFloat()
                 val duration: Float = (
                         when (optionMedia.mediaAction) {
-                            is MediaAction.CutTrimCrop.CutVideo -> {
+                            is MediaAction.CutTrim.CutVideo -> {
                                 timeVideo - (optionMedia.endTime - optionMedia.startTime)
                             }
 
-                            is MediaAction.CutTrimCrop.TrimVideo -> {
+                            is MediaAction.CutTrim.TrimVideo -> {
                                 optionMedia.endTime - optionMedia.startTime
                             }
 
@@ -131,8 +132,8 @@ class VideoProcess {
                         }
                         ).toFloat()
                  durations.add(duration)
-                if (optionMedia.mediaAction is MediaAction.CutTrimCrop.CutVideo ||
-                    optionMedia.mediaAction is MediaAction.CutTrimCrop.TrimVideo ||
+                if (optionMedia.mediaAction is MediaAction.CutTrim.CutVideo ||
+                    optionMedia.mediaAction is MediaAction.CutTrim.TrimVideo ||
                     optionMedia.mediaAction is MediaAction.FastForward ||
                     optionMedia.mediaAction is MediaAction.JoinVideo
                 ) {
@@ -157,8 +158,8 @@ class VideoProcess {
             commands.forEach { command ->
                 val positionPass2 = command.split("-y -i")
                 if (positionPass2.size >= 2) {
-                    pass1 = "-y -i \"${positionPass2[1].trim()}\""
-                    pass2 = "-y -i \"${positionPass2[2].trim()}\""
+                    pass1 = "-y -i ${positionPass2[1].trim()}"
+                    pass2 = "-y -i ${positionPass2[2].trim()}"
                     pathOutputs.add(command.substring(command.lastIndexOf(" ") + 1))
                     this.commands.addAll(listOf(pass1, pass2))
                 } else {
@@ -177,6 +178,7 @@ class VideoProcess {
                 return
             }
             iProcess.onCurrentElement(currentIndex)
+            Log.d("ssssssssss",commands[currentIndex])
             FFmpegKit.executeAsync(commands[currentIndex]) { session ->
                 handleExecutionResult(session)
             }
@@ -192,8 +194,7 @@ class VideoProcess {
                     if (!isTwoCompress) currentIndex = this.currentIndex
 
                     val pathOutput = pathOutputs[currentIndex]
-                    android.util.Log.d("sầklfaksfjakslfla", pathOutput)
-                    val mediaInfo = FFprobeKit.getMediaInformation(pathOutput)
+                     val mediaInfo = FFprobeKit.getMediaInformation(pathOutput)
                     mediaInfoOutput.add(
                         createMediaInfo(
                             mediaInfo.mediaInformation,
@@ -222,8 +223,8 @@ class VideoProcess {
         }
 
         private fun cleanupAndFail(errorMessage: String) {
-            File(pathOutputs[currentIndex]).delete()
-            iProcess.onFailure(currentIndex, errorMessage)
+             iProcess.onFailure(currentIndex, errorMessage)
+
         }
 
 

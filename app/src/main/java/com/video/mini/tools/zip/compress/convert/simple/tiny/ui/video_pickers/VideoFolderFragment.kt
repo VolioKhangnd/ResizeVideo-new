@@ -35,9 +35,13 @@ class VideoFolderFragment :
         folderInfo = args.FolderInfo
         videos = viewModel.videos
         handlerVideo = HandleMediaVideo(requireActivity())
+        val mediaAction = requireActivity().intent.getActionMedia()!!
+        val isSubVip = (requireActivity() as MainPickerActivity).proApplication.isSubVip
+
         adapter = VideoAdapter(requireActivity(),
-            requireActivity().intent.getActionMedia()!!,
-            (requireActivity() as MainPickerActivity).proApplication.isSubVip,
+            viewModel.videos,
+            mediaAction,
+            isSubVip,
             object : IOnItemClickListener {
                 override fun onItemClick(mediaInfo: MediaInfo) {
                     viewModel.insertVideo(mediaInfo)

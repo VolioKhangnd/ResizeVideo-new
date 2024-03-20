@@ -62,10 +62,10 @@ class VideoCommandProcessor(
         return when (option) {
             is OptionCompressType.CustomFileSize -> {
                 val originalDuration =
-                    FFprobeKit.getMediaInformation("\"$inputPath\"").mediaInformation.duration.toFloat()
+                    FFprobeKit.getMediaInformation("$inputPath").mediaInformation.duration.toFloat()
                         .toLong()
                 val targetBitrate = (fileSizeCompress!! / originalDuration) - 127000
-                val x = compressByFileSize("\"$inputPath\"", targetBitrate)
+                val x = compressByFileSize(inputPath, targetBitrate)
                 x
             }
 
@@ -247,10 +247,6 @@ class VideoCommandProcessor(
         }"
     }
 
-    private fun cropVideo() {
-
-    }
-
     fun createCommandList(optionMedia: OptionMedia): List<String> {
         var resolution: Resolution
 
@@ -271,10 +267,7 @@ class VideoCommandProcessor(
                     mediaItem.mime
                 )
 
-                is MediaAction.CutTrimCrop.CutVideo -> {
-                    val isCrop = optionMedia.mediaAction.isCrop
-                    Log.d("đasssssssssssssssss", isCrop.toString())
-
+                is MediaAction.CutTrim.CutVideo -> {
                     cutVideoCommand(
                         resolution,
                         mediaItem.path,
@@ -282,16 +275,13 @@ class VideoCommandProcessor(
                         optionMedia.endTime,
                         mediaItem.mime,
                         optionMedia.newResolution,
-                        optionMedia.x,
-                        optionMedia.y,
-                        isCrop
+                        optionMedia.cropX,
+                        optionMedia.cropY,
+                        optionMedia.isCropVideo
                     )
                 }
 
-                is MediaAction.CutTrimCrop.TrimVideo -> {
-                    val isCrop = optionMedia.mediaAction.isCrop
-                    Log.d("đasssssssssssssssss", isCrop.toString())
-
+                is MediaAction.CutTrim.TrimVideo -> {
                     trimVideoCommand(
                         resolution,
                         mediaItem.path,
@@ -299,9 +289,9 @@ class VideoCommandProcessor(
                         optionMedia.endTime,
                         mediaItem.mime,
                         optionMedia.newResolution,
-                        optionMedia.x,
-                        optionMedia.y,
-                        isCrop
+                        optionMedia.cropX,
+                        optionMedia.cropY,
+                        optionMedia.isCropVideo
                     )
                 }
 
@@ -340,18 +330,14 @@ class VideoCommandProcessor(
         // Khởi tạo giá trị resolution ban đầu
         var resolution = Resolution()
 
-        if (optionMedia.mediaAction is MediaAction.CutTrimCrop.CutVideo) {
-            if (optionMedia.mediaAction.isCrop) return resolution
-        }
-
-        if (optionMedia.mediaAction is MediaAction.CutTrimCrop.TrimVideo) {
-            if (optionMedia.mediaAction.isCrop) return resolution
+        if (optionMedia.isCropVideo) {
+            return resolution
         }
 
         if ((optionMedia.mediaAction is MediaAction.CompressVideo &&
                     optionMedia.optionCompressType != OptionCompressType.CustomFileSize) ||
-            optionMedia.mediaAction is MediaAction.CutTrimCrop.CutVideo ||
-            optionMedia.mediaAction is MediaAction.CutTrimCrop.TrimVideo ||
+            optionMedia.mediaAction is MediaAction.CutTrim.CutVideo ||
+            optionMedia.mediaAction is MediaAction.CutTrim.TrimVideo ||
             optionMedia.mediaAction is MediaAction.FastForward ||
             optionMedia.mediaAction is MediaAction.SlowVideo
 

@@ -21,9 +21,10 @@ data class OptionMedia(
     var reverseAudio: Boolean = false,
     var withAudio: Boolean = true,
     var isFastVideo: Boolean = true,
+    var isCropVideo: Boolean = false,
     val isPickMultiple: Boolean = dataOriginal.size > 0,
-    val x: Int = 0,
-    val y: Int = 0
+    val cropX: Int = 0,
+    val cropY: Int = 0
 ) : Serializable {
 
 }

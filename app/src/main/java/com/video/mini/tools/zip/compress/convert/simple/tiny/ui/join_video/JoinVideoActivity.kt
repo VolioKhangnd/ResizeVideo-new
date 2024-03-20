@@ -36,7 +36,7 @@ class JoinVideoActivity : BaseActivity<ActivityJoinVideoBinding>() {
                 "Join Video",
                 getDrawable(R.drawable.baseline_arrow_back_24)!!
             )
-
+            showBannerAds(bannerAds)
             setUpAdapter()
 
 

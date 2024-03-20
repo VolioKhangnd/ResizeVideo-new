@@ -2,10 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission
-        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
@@ -19,6 +17,7 @@
         android:fullBackupContent="@xml/backup_rules"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
+        android:appCategory="video"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
@@ -94,7 +93,7 @@
             android:exported="false" />
         <activity
             android:name="com.video.mini.tools.zip.compress.convert.simple.tiny.ui.select_compress.SelectCompressActivity"
-            android:exported="false" />
+            android:exported="false"  />
         <activity
             android:name="com.video.mini.tools.zip.compress.convert.simple.tiny.ui.splash.SplashActivity"
             android:exported="true"

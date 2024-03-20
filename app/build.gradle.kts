@@ -89,7 +89,7 @@ dependencies {
 
 // Google Play Services dependencies
     implementation("com.google.android.gms:play-services-ads-identifier:18.0.1")
-    implementation("com.google.android.gms:play-services-ads:23.0.0")
+    implementation("com.google.android.gms:play-services-ads:22.6.0")
 
 // ExoPlayer for media playback
     implementation("com.google.android.exoplayer:exoplayer:2.19.1")

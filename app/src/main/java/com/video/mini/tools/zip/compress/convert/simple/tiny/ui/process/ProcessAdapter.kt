@@ -25,22 +25,27 @@ class ProcessAdapter(val context: Context) : BaseAdapter<ItemVideoCompressingBin
         binding.apply {
             name.text = item.name
             size.text = Formatter.formatFileSize(context, item.size)
+
             Glide.with(context)
                 .load(item.path)
                 .error(context.getDrawable(R.drawable.logo)!!.setTint(Color.GRAY))
                 .into(binding.thumbnail);
+
             val drawState = when (item.stateCompression) {
-                StateCompression.Processing -> R.drawable.ic_compress_video
+                StateCompression.Processing -> {
+                    val animUtils = android.view.animation.AnimationUtils.loadAnimation(
+                        context,
+                        R.anim.anim_zoom_in_out
+                    )
+                    state.startAnimation(animUtils)
+                    R.drawable.ic_compress_video
+                }
+
                 StateCompression.Waiting -> R.drawable.baseline_access_time_24
                 StateCompression.Failure -> R.drawable.ic_close_24
                 StateCompression.Success -> R.drawable.baseline_done_24
             }
             state.setImageResource(drawState)
-            val animUtils = android.view.animation.AnimationUtils.loadAnimation(
-                context,
-                R.anim.anim_zoom_in_out
-            )
-            state.startAnimation(animUtils)
         }
     }
 }

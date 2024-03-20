@@ -7,8 +7,11 @@ import com.video.mini.tools.zip.compress.convert.simple.tiny.R
 import com.video.mini.tools.zip.compress.convert.simple.tiny.core.BaseFragment
 import com.video.mini.tools.zip.compress.convert.simple.tiny.databinding.FragmentHomeBinding
 import com.video.mini.tools.zip.compress.convert.simple.tiny.ffmpeg.MediaAction
+import com.video.mini.tools.zip.compress.convert.simple.tiny.model.DetailActionMedia
 import com.video.mini.tools.zip.compress.convert.simple.tiny.model.getListDetailsActionMedia
 import com.video.mini.tools.zip.compress.convert.simple.tiny.ui.sup_vip.SubVipActivity
+import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.AnimUtils
+import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.VibrateUtils
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     override fun getViewBinding(view: View) = FragmentHomeBinding.bind(view)
@@ -21,7 +24,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     override fun initView() {
         binding.apply {
             compressVideo.setOnClickListener {
-                mainActivity.startPickerVideo(MediaAction.CompressVideo)
+                VibrateUtils.vibrate(it.context, 50)
+                AnimUtils.scaleClickView(it) {
+                    mainActivity.startPickerVideo(MediaAction.CompressVideo)
+                }
             }
             mainActivity.showNativeAds(container, {})
         }
@@ -29,14 +35,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private fun setUpAdapter() {
-        val actionAdapter = ActionVideoAdapter()
-        actionAdapter.submitData = ArrayList(requireContext().getListDetailsActionMedia())
-        actionAdapter.setOnClickListener { detailActionMedia, i ->
-            if (detailActionMedia.isSubVip) {
-                startActivity(Intent(requireContext(), SubVipActivity::class.java))
+        val actionAdapter = ActionVideoAdapter(object : OnClickItemRcy {
+            override fun onClick(data: DetailActionMedia) {
+                if (data.isSubVip) {
+                    startActivity(Intent(requireContext(), SubVipActivity::class.java))
+                }
+                mainActivity.startPickerVideo(data.media)
             }
-            mainActivity.startPickerVideo(detailActionMedia.media)
-        }
+        })
+        actionAdapter.submitData = ArrayList(requireContext().getListDetailsActionMedia())
         binding.rcyAction.adapter = actionAdapter
     }
 

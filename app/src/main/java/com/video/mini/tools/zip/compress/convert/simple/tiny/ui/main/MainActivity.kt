@@ -73,6 +73,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private fun setupAds() {
         binding.apply {
             showInterstitial(true) {}
+            showBannerAds(bannerAds)
         }
     }
 
@@ -117,7 +118,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             }
 
             R.id.share -> {
-                val textToShare = "Nội dung bạn muốn chia sẻ"
+                val textToShare = "Content you want to share"
 
                 val shareIntent = Intent().apply {
                     action = Intent.ACTION_SEND
@@ -129,7 +130,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
             R.id.star -> {
                 val url =
-                    "http://play.google.com/store/apps/details?id=com.appsuite.video.size.reducer"
+                    "http://play.google.com/store/apps/details?id=com.video.mini.tools.zip.compress.convert.simple.tiny"
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                 startActivity(intent)
             }
@@ -141,12 +142,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun onResume() {
         super.onResume()
-
-        proApplication.showOpenAds(this@MainActivity, object : OnShowAdsOpenListener {
-            override fun onShowAdComplete() {
-                showMessage("Loading")
-            }
-        })
     }
 
     override fun initObserver() {

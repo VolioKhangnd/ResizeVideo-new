@@ -53,4 +53,8 @@ Drag&amp;Drop them to the timeline orderly "
         android:orientation="vertical"
         android:paddingHorizontal="15dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bannerAds"/>
 </androidx.appcompat.widget.LinearLayoutCompat>

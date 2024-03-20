@@ -20,7 +20,7 @@ data class DetailActionMedia(
 fun Context.getListDetailsActionMedia(): List<DetailActionMedia> {
     return listOf(
         DetailActionMedia(
-            MediaAction.CutTrimCrop,
+            MediaAction.CutTrim,
             "Video Cutter",
             getDrawable(R.drawable.ic_cutter)!!,
             getColor(R.color.bg_video_cutter),

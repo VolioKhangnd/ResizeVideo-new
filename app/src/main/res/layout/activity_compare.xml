@@ -215,7 +215,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <FrameLayout
-            android:id="@+id/nativeAds"
+            android:id="@+id/bannerAds"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@color/white"

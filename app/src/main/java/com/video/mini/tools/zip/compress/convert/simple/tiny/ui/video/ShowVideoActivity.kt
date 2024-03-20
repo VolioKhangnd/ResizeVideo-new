@@ -20,13 +20,13 @@ class ShowVideoActivity : BaseActivity<ActivityShowVideoBinding>() {
                 getDrawable(R.drawable.baseline_arrow_back_24)!!
             )
             showVideo()
+            showBannerAds(bannerAds)
         }
     }
 
     private fun showVideo() {
         val path = intent.getStringExtra("path")!!
-        Log.d("Âffsdfdffs", path)
-        val videoController = VideoController(binding.video)
+         val videoController = VideoController(binding.video)
         videoController.setUpVideoController(path)
     }
 

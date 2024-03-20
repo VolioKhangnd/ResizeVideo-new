@@ -45,7 +45,6 @@ class ResultAdapter(
         this.binding = binding
         val mediaBefore = item.first
         val mediaAfter = item.second
-        Log.d("sjahdjksak", mediaAfter.toString())
         if (mediaAfter.isVideo) binding.resolutionAfter.text = mediaAfter.resolution.toString()
         if (mediaBefore.isVideo) binding.resolutionBefore.text = mediaBefore.resolution.toString()
         val sizeBefore = if (this.sizeBefore != 0L) this.sizeBefore else mediaBefore.size
