@@ -167,7 +167,7 @@ class CutTrimActivity : BaseActivity<ActivityCutTrimBinding>(), Listener {
                     )
                     binding.imgCrop.setImageBitmap(bitmap)
                     binding.imgCrop.resetCropRect()
-                 }
+                }
 
                 R.id.square -> binding.imgCrop.setAspectRatio(1, 1)
                 R.id.portrait -> binding.imgCrop.setAspectRatio(1, 2)
