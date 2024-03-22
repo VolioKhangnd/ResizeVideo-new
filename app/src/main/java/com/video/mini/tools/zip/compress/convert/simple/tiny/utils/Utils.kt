@@ -3,6 +3,7 @@ package com.video.mini.tools.zip.compress.convert.simple.tiny.utils
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
 import android.widget.ImageView
@@ -24,6 +25,14 @@ import java.text.SimpleDateFormat
 import java.util.TimeZone
 
 object Utils {
+    fun getAppVersion(context: Context): String {
+        return try {
+            val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+            packageInfo.versionName // Lấy tên phiên bản
+        } catch (e: PackageManager.NameNotFoundException) {
+            "N/A" // Trường hợp không tìm thấy phiên bản
+        }
+    }
     val formatVideos = hashMapOf(
         "MP4" to listOf(
             "h264baseline",

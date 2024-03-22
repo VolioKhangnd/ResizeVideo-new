@@ -12,4 +12,5 @@ sealed class DialogAction {
     data object REPLACE : DialogAction()
     data object ANSWER : DialogAction()
     data object BACK : DialogAction()
+    data object BACK_SAVE : DialogAction()
 }

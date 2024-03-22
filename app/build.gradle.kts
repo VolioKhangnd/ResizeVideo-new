@@ -22,8 +22,8 @@ android {
         applicationId = "com.video.mini.tools.zip.compress.convert.simple.tiny"
         minSdk = 24
         targetSdk = 34
-        versionCode = 102
-        versionName = "1.0.2"
+        versionCode = 103
+        versionName = "1.0.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "GG_APP_OPEN", apikeyProperties["GG_APP_OPEN"] as String)
@@ -32,9 +32,9 @@ android {
         buildConfigField("String", "GG_FULL", apikeyProperties["GG_FULL"] as String)
         buildConfigField("String", "GG_REWARDED", apikeyProperties["GG_REWARDED"] as String)
 
-//        ndk {
-//            abiFilters.add("arm64-v8a")
-//        }
+        ndk {
+            abiFilters.add("arm64-v8a")
+        }
     }
 
 

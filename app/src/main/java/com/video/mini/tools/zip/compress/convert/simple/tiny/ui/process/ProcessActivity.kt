@@ -35,9 +35,9 @@ class ProcessActivity : BaseActivity<ActivityProcessBinding>(), IProcessFFmpeg {
 
     private lateinit var optionMedia: OptionMedia
 
+    @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
-        super.onBackPressed()
-        showBackDialog()
+
     }
 
     private fun showBackDialog() {
@@ -109,7 +109,6 @@ class ProcessActivity : BaseActivity<ActivityProcessBinding>(), IProcessFFmpeg {
             }
         }
     }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
             showBackDialog()
@@ -160,8 +159,7 @@ class ProcessActivity : BaseActivity<ActivityProcessBinding>(), IProcessFFmpeg {
     }
 
     override fun onFailure(position: Int, error: String) {
-Log.d("ódaodkaosd",error)
-        runOnUiThread {
+         runOnUiThread {
             if (intent.getActionMedia() == MediaAction.JoinVideo) {
                 processAdapter.submitData.forEach { it.stateCompression = StateCompression.Failure }
                 processAdapter.notifyDataSetChanged()

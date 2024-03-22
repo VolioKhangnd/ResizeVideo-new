@@ -38,18 +38,23 @@ object DialogUtils {
             context.getString(R.string.dismiss),
             context.getString(R.string.replace)
         )
+        dialogs[DialogAction.BACK_SAVE] = DialogModel(
+            context.getString(R.string.are_you_sure),
+            "Do you want to exit without saving?",
+            context.getString(R.string.dismiss),
+            "Exit"
+        )
     }
 
     private lateinit var dialogDelete: BaseDialog
     private lateinit var dialogBack: BaseDialog
+    private lateinit var dialogBackSave: BaseDialog
     private lateinit var dialogReplace: BaseDialog
     fun showDialogDelete(
         activity: FragmentActivity,
         callback: DialogClickListener? = null
     ) {
-        if (!this::dialogDelete.isInitialized) {
-            dialogDelete = BaseDialog(dialogs[DialogAction.DELETE]!!, callback)
-        }
+        dialogDelete = BaseDialog(dialogs[DialogAction.DELETE]!!, callback)
         dialogDelete.show(activity)
     }
 
@@ -57,19 +62,23 @@ object DialogUtils {
         activity: FragmentActivity,
         callback: DialogClickListener? = null
     ) {
-        if (!this::dialogBack.isInitialized) {
-            dialogBack = BaseDialog(dialogs[DialogAction.BACK]!!, callback)
-        }
+        dialogBack = BaseDialog(dialogs[DialogAction.BACK]!!, callback)
         dialogBack.show(activity)
+    }
+
+    fun showDialogBackSave(
+        activity: FragmentActivity,
+        callback: DialogClickListener? = null
+    ) {
+        dialogBackSave = BaseDialog(dialogs[DialogAction.BACK_SAVE]!!, callback)
+        dialogBackSave.show(activity)
     }
 
     fun showDialogReplace(
         activity: FragmentActivity,
         callback: DialogClickListener? = null
     ) {
-        if (!this::dialogReplace.isInitialized) {
-            dialogReplace = BaseDialog(dialogs[DialogAction.REPLACE]!!, callback)
-        }
+        dialogReplace = BaseDialog(dialogs[DialogAction.REPLACE]!!, callback)
         dialogReplace.show(activity)
     }
 

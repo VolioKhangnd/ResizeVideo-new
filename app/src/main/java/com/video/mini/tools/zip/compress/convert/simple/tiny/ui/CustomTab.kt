@@ -20,6 +20,7 @@ class CustomTab : ConstraintLayout {
     private var binding: TabCustomBinding =
         TabCustomBinding.inflate(LayoutInflater.from(context), this, true)
     private var onTabSelectedListener: OnTabSelectedListener? = null
+    private var idClick = binding.tab1.id
 
     init {
         val tabClickListener = OnClickListener { view ->
@@ -54,20 +55,23 @@ class CustomTab : ConstraintLayout {
     }
 
     fun setOnTabSelectedListener(listener: OnTabSelectedListener) {
-         this.onTabSelectedListener = listener
+        this.onTabSelectedListener = listener
     }
 
     private fun handleButtonClick(clickedButton: View) {
         val activeButton = clickedButton as MaterialButton
         val inactiveButton = if (clickedButton == binding.tab1) binding.tab2 else binding.tab1
+        if (idClick != clickedButton.id) {
+            val transitionResId =
+                if (clickedButton == binding.tab1) R.anim.trim_transition else R.anim.cut_transition
+            val animation = AnimationUtils.loadAnimation(context, transitionResId)
+            binding.overlay.startAnimation(animation)
 
-        val transitionResId =
-            if (clickedButton == binding.tab1) R.anim.trim_transition else R.anim.cut_transition
-        val animation = AnimationUtils.loadAnimation(context, transitionResId)
-        binding.overlay.startAnimation(animation)
+            activeButton.setTextColor(ContextCompat.getColor(context, R.color.text_home_click))
+            inactiveButton.setTextColor(ContextCompat.getColor(context, R.color.text_home_unclick))
+            idClick = clickedButton.id
+        }
 
-        activeButton.setTextColor(ContextCompat.getColor(context, R.color.text_home_click))
-        inactiveButton.setTextColor(ContextCompat.getColor(context, R.color.text_home_unclick))
     }
 
     fun setTabSelected(position: Int) {
@@ -99,5 +103,5 @@ class CustomTab : ConstraintLayout {
 
             }
         })
-     }
+    }
 }

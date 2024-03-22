@@ -32,29 +32,6 @@ import kotlinx.coroutines.withContext
 class SubVipActivity : BaseActivity<ActivitySubVipBinding>() {
     override fun getViewBinding() = ActivitySubVipBinding.inflate(layoutInflater)
     private var restore = false
-
-    private val purchasesUpdatedListener =
-        PurchasesUpdatedListener { billingResult, purchases ->
-            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
-                for (purchase in purchases) {
-                    if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
-                        proApplication.isSubVip = true
-                        //update UI hiển thị đã mua
-                        if (!purchase.isAcknowledged) {
-                            val acknowledgePurchaseParams =
-                                AcknowledgePurchaseParams.newBuilder()
-                                    .setPurchaseToken(purchase.purchaseToken).build()
-
-                            billingClient?.acknowledgePurchase(acknowledgePurchaseParams) { billingResult ->
-                            }
-                        }
-                    }
-                }
-            } else if (billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
-            } else {
-            }
-        }
-
     private val billingClientStateListener = object : BillingClientStateListener {
         override fun onBillingSetupFinished(billingResult: BillingResult) {
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
@@ -95,12 +72,28 @@ class SubVipActivity : BaseActivity<ActivitySubVipBinding>() {
             ).show()
         }
     }
+    private val purchasesUpdatedListener =
+        PurchasesUpdatedListener { billingResult, purchases ->
+            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
+                for (purchase in purchases) {
+                    if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
+                        proApplication.isSubVip = true
+                        //update UI hiển thị đã mua
+                        if (!purchase.isAcknowledged) {
+                            val acknowledgePurchaseParams =
+                                AcknowledgePurchaseParams.newBuilder()
+                                    .setPurchaseToken(purchase.purchaseToken).build()
 
-    private var subWeekProduct: ProductDetails? = null
-    private var subMonthProduct: ProductDetails? = null
-    private var lifeTimeProduct: ProductDetails? = null
-    private var currentProduct: ProductDetails? = null
+                            billingClient?.acknowledgePurchase(acknowledgePurchaseParams) { billingResult ->
 
+                            }
+                        }
+                    }
+                }
+            } else if (billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
+            } else {
+            }
+        }
     private fun setupBilling() {
         billingClient = BillingClient.newBuilder(this)
             .setListener(purchasesUpdatedListener)
@@ -108,6 +101,12 @@ class SubVipActivity : BaseActivity<ActivitySubVipBinding>() {
             .build()
         billingClient!!.startConnection(billingClientStateListener)
     }
+    private var subWeekProduct: ProductDetails? = null
+    private var subMonthProduct: ProductDetails? = null
+    private var lifeTimeProduct: ProductDetails? = null
+    private var currentProduct: ProductDetails? = null
+
+
 
     suspend fun processPurchases() {
         subMonthProduct =

@@ -11,6 +11,7 @@ class IntroActivity : BaseActivity<ActivityIntroBinding>() {
     override fun initView() {
 
         binding.apply {
+            showBannerAds(bannerAds)
             val introAdapter = IntroAdapter(this@IntroActivity)
             viewPager2.adapter = introAdapter
             circleIndicator3.setViewPager(viewPager2)

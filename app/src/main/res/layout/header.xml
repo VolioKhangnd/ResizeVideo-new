@@ -19,6 +19,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
+         android:text="By Teras Apps "
+        android:textColor="@color/black" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:id="@+id/version"
         android:text="By Teras Apps\nVersion 1.0"
         android:textColor="@color/black" />
 </androidx.appcompat.widget.LinearLayoutCompat>

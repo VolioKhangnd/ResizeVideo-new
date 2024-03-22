@@ -11,14 +11,14 @@
         android:id="@+id/textView22"
         style="@style/TextAppearance.Material3.TitleLarge"
         android:layout_width="0dp"
-        android:gravity="center"
-
-        android:textSize="35dp"
-        android:lines="1"
-        android:autoSizeTextType="uniform"
         android:layout_height="wrap_content"
+
         android:layout_margin="15dp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
+        android:lines="1"
         android:text="Powerful Compression App"
+        android:textSize="35dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -55,9 +55,16 @@
         android:text="Get started"
         android:textColor="@color/maintream"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bannerAds"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <FrameLayout
+        android:id="@+id/bannerAds"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

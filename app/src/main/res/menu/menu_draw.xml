@@ -23,6 +23,7 @@
             android:id="@+id/premium"
             android:icon="@drawable/icon_premium"
             android:title="@string/upgrade_to_premium_title"
+            android:visible="false"
             app:showAsAction="always" />
         <item
             android:id="@+id/settings"

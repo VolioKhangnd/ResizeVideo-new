@@ -8,22 +8,28 @@ import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.GravityCompat
-import com.access.pro.callBack.OnShowAdsOpenListener
 import com.video.mini.tools.zip.compress.convert.simple.tiny.R
+import com.video.mini.tools.zip.compress.convert.simple.tiny.core.AppOpenAdManager
 
 import com.video.mini.tools.zip.compress.convert.simple.tiny.core.BaseActivity
 import com.video.mini.tools.zip.compress.convert.simple.tiny.databinding.ActivityMainBinding
 import com.video.mini.tools.zip.compress.convert.simple.tiny.ffmpeg.MediaAction
+import com.video.mini.tools.zip.compress.convert.simple.tiny.google.AdsHelper
 import com.video.mini.tools.zip.compress.convert.simple.tiny.ui.OnTabSelectedListener
 import com.video.mini.tools.zip.compress.convert.simple.tiny.ui.extract_audio.ShowAudioActivity
 import com.video.mini.tools.zip.compress.convert.simple.tiny.ui.setting.SettingActivity
 import com.video.mini.tools.zip.compress.convert.simple.tiny.ui.video_pickers.MainPickerActivity
+import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.HandleMediaVideo
 import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.IntentUtils.passActionMedia
 import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.READ_EXTERNAL_STORAGE
 import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.READ_MEDIA_VIDEO
 import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.RequestPermission
+import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.Utils
 import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.WRITE_EXTERNAL_STORAGE
 import com.video.mini.tools.zip.compress.convert.simple.tiny.utils.checkPermission
 
@@ -38,6 +44,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private lateinit var mediaAction: MediaAction
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun initView() {
         binding.apply {
             setupToolbar()
@@ -49,7 +56,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                     viewPager.setCurrentItem(position, true)
                 }
             })
-            mTab.attach(viewPager, "Home", "Files")
+            mTab.attach(viewPager, "Home", "Files Saved")
             mTab.setTabSelected(0)
         }
     }
@@ -72,12 +79,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private fun setupAds() {
         binding.apply {
-            showInterstitial(true) {}
             showBannerAds(bannerAds)
+            if (SHOW_OPEN_FIRST_MAIN) showInterstitial(true) {}
         }
     }
 
     private fun setupNavigation() {
+        binding.navigationView.inflateHeaderView(R.layout.header).apply {
+            this.findViewById<TextView>(R.id.version).text =
+                "Version:" + Utils.getAppVersion(this.context)
+        }
         binding.navigationView.apply {
             setCheckedItem(R.id.home)
             setNavigationItemSelectedListener { menuItem ->
@@ -86,7 +97,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             }
         }
     }
-
 
     private fun handleNavigationItemSelected(menuItem: MenuItem) {
         when (menuItem.itemId) {
@@ -106,15 +116,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             )
 
             R.id.info -> {
-                val email = "khangndph20612@fpt.edu.vn"
+                val email = "khangnguyen.teras@gmail.com"
 
                 val intent = Intent(Intent.ACTION_SENDTO).apply {
                     data = Uri.parse("mailto:$email")
                 }
 
-                if (intent.resolveActivity(packageManager) != null) {
-                    startActivity(intent)
-                }
+                startActivity(intent)
             }
 
             R.id.share -> {
@@ -140,8 +148,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         binding.drawerLayout.closeDrawers()
     }
 
+    val videoHandler = HandleMediaVideo(this)
+
     override fun onResume() {
         super.onResume()
+        binding.mTab.visibility =
+            if (videoHandler.getVideoSave().isEmpty()) View.GONE else View.VISIBLE
+        binding.viewPager.isUserInputEnabled = videoHandler.getVideoSave().isNotEmpty()
+
+        if (videoHandler.getVideoSave().isEmpty()) {
+            binding.viewPager.currentItem = 0
+        }
+
     }
 
     override fun initObserver() {

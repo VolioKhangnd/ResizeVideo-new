@@ -238,7 +238,7 @@ class HandleMediaVideo(private val context: Context) : IVideo {
 
     override fun getVideoByPath(name: String): MediaInfo? {
         val selection = "${Media.DATA} like ?"
-        val selectionArg = arrayOf("$name")  // Thư mục cụ thể
+        val selectionArg = arrayOf("$name")
         return if (getVideo(selection, selectionArg).isNotEmpty()) getVideo(
             selection,
             selectionArg

@@ -72,6 +72,10 @@ class CutTrimActivity : BaseActivity<ActivityCutTrimBinding>(), Listener {
                 "Edit Video",
                 getDrawable(R.drawable.baseline_arrow_back_24)!!
             )
+            binding.toolbar.setNavigationOnClickListener {
+                finish()
+            }
+
             imgCrop.isAutoZoomEnabled = false
             setUpDefaultRangeSeekBar(path)
 

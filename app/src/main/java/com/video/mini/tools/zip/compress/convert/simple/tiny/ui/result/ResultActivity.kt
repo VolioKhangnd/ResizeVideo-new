@@ -69,6 +69,9 @@ class ResultActivity : BaseActivity<ActivityResultBinding>(), OnItemMenuMoreSele
                 showMessage("Ok")
             }
         }
+        binding.toolbar.setNavigationOnClickListener {
+            handleBack()
+        }
     }
 
 
@@ -142,6 +145,7 @@ class ResultActivity : BaseActivity<ActivityResultBinding>(), OnItemMenuMoreSele
                     File(mediaInfo.path).delete()
                 }
             }
+            isSave=true
         }
     }
 
@@ -195,9 +199,28 @@ class ResultActivity : BaseActivity<ActivityResultBinding>(), OnItemMenuMoreSele
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-        startToMainActivity()
-        finish()
+        handleBack()
+    }
+
+    var isSave = false
+
+    private fun handleBack() {
+        if (!isSave) {
+            DialogUtils.showDialogBackSave(this, object : DialogClickListener {
+                override fun onPositive() {
+                    startToMainActivity()
+                    finish()
+                }
+
+                override fun onNegative() {
+
+                }
+
+            })
+        } else {
+            startToMainActivity()
+            finish()
+        }
     }
 
     override fun getMenu(): Int {

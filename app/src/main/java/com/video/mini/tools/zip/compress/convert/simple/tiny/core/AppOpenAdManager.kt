@@ -2,6 +2,7 @@ package com.video.mini.tools.zip.compress.convert.simple.tiny.core
 
 import android.app.Activity
 import android.app.Application
+import android.content.Context
 import android.os.Bundle
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.appopen.AppOpenAd
@@ -11,10 +12,14 @@ import com.google.android.gms.ads.AdError
 
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.video.mini.tools.zip.compress.convert.simple.tiny.BuildConfig
-import javax.inject.Inject
-import javax.inject.Singleton
+import com.video.mini.tools.zip.compress.convert.simple.tiny.google.AdsHelper
+import com.video.mini.tools.zip.compress.convert.simple.tiny.ui.main.MainActivity
 
-class AppOpenAdManager constructor(val application: Application) :
+class AppOpenAdManager(
+    private val application: Context,
+    private val isSub: Boolean,
+    private val isEnableAds: Boolean
+) :
     Application.ActivityLifecycleCallbacks {
 
     private var isShowingAd = false
@@ -33,6 +38,7 @@ class AppOpenAdManager constructor(val application: Application) :
 
 
     private fun fetchAd() {
+        if (isSub || !isEnableAds) return
         // Have unused ad, no need to fetch another.
         if (appOpenAd != null) {
             return
@@ -44,6 +50,7 @@ class AppOpenAdManager constructor(val application: Application) :
     }
 
     fun showAdIfAvailable() {
+        if (isSub || !isEnableAds) return
         if (!isShowingAd && currentActivity != null && appOpenAd != null) {
             appOpenAd!!.fullScreenContentCallback = object : FullScreenContentCallback() {
                 override fun onAdDismissedFullScreenContent() {
@@ -70,10 +77,16 @@ class AppOpenAdManager constructor(val application: Application) :
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {}
 
-    override fun onActivityStarted(activity: Activity) {}
+    override fun onActivityStarted(activity: Activity) {
+        currentActivity = activity
+        if (activity is MainActivity && !AdsHelper.SHOW_OPEN_FIRST_MAIN) {
+            showAdIfAvailable()
+            AdsHelper.SHOW_OPEN_FIRST_MAIN = true
+        }
+    }
 
     override fun onActivityResumed(activity: Activity) {
-        currentActivity = activity
+
     }
 
     override fun onActivityPaused(activity: Activity) {}
